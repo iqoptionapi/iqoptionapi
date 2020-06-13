@@ -1064,10 +1064,10 @@
 <span class="c1">#for type=&quot;limit&quot;/&quot;stop&quot;</span>
 
 <span class="c1"># only working by set type=&quot;limit&quot;</span>
-<span class="n">limit_price</span><span class="o">=</span><span class="bp">None</span><span class="c1">#input:None/value(float/int)</span>
+<span class="n">limit_price</span><span class="o">=</span><span class="kc">None</span><span class="c1">#input:None/value(float/int)</span>
 
 <span class="c1"># only working by set type=&quot;stop&quot;</span>
-<span class="n">stop_price</span><span class="o">=</span><span class="bp">None</span><span class="c1">#input:None/value(float/int)</span>
+<span class="n">stop_price</span><span class="o">=</span><span class="kc">None</span><span class="c1">#input:None/value(float/int)</span>
 
 <span class="c1">#&quot;percent&quot;=Profit Percentage</span>
 <span class="c1">#&quot;price&quot;=Asset Price</span>
@@ -1076,20 +1076,20 @@
 <span class="n">stop_lose_kind</span><span class="o">=</span><span class="s2">&quot;percent&quot;</span><span class="c1">#input:None/&quot;price&quot;/&quot;diff&quot;/&quot;percent&quot;</span>
 <span class="n">stop_lose_value</span><span class="o">=</span><span class="mi">95</span><span class="c1">#input:None/value(float/int)</span>
 
-<span class="n">take_profit_kind</span><span class="o">=</span><span class="bp">None</span><span class="c1">#input:None/&quot;price&quot;/&quot;diff&quot;/&quot;percent&quot;</span>
-<span class="n">take_profit_value</span><span class="o">=</span><span class="bp">None</span><span class="c1">#input:None/value(float/int)</span>
+<span class="n">take_profit_kind</span><span class="o">=</span><span class="kc">None</span><span class="c1">#input:None/&quot;price&quot;/&quot;diff&quot;/&quot;percent&quot;</span>
+<span class="n">take_profit_value</span><span class="o">=</span><span class="kc">None</span><span class="c1">#input:None/value(float/int)</span>
 
 <span class="c1">#&quot;use_trail_stop&quot;=&quot;Trailing Stop&quot;</span>
-<span class="n">use_trail_stop</span><span class="o">=</span><span class="bp">True</span><span class="c1">#True/False</span>
+<span class="n">use_trail_stop</span><span class="o">=</span><span class="kc">True</span><span class="c1">#True/False</span>
 
 <span class="c1">#&quot;auto_margin_call&quot;=&quot;Use Balance to Keep Position Open&quot;</span>
-<span class="n">auto_margin_call</span><span class="o">=</span><span class="bp">False</span><span class="c1">#True/False</span>
+<span class="n">auto_margin_call</span><span class="o">=</span><span class="kc">False</span><span class="c1">#True/False</span>
 <span class="c1">#if you want &quot;take_profit_kind&quot;&amp;</span>
 <span class="c1">#            &quot;take_profit_value&quot;&amp;</span>
 <span class="c1">#            &quot;stop_lose_kind&quot;&amp;</span>
 <span class="c1">#            &quot;stop_lose_value&quot; all being &quot;Not Set&quot;,&quot;auto_margin_call&quot; need to set:True</span>
 
-<span class="n">use_token_for_commission</span><span class="o">=</span><span class="bp">False</span><span class="c1">#True/False</span>
+<span class="n">use_token_for_commission</span><span class="o">=</span><span class="kc">False</span><span class="c1">#True/False</span>
 
 <span class="n">check</span><span class="p">,</span><span class="n">order_id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_order</span><span class="p">(</span><span class="n">instrument_type</span><span class="o">=</span><span class="n">instrument_type</span><span class="p">,</span> <span class="n">instrument_id</span><span class="o">=</span><span class="n">instrument_id</span><span class="p">,</span>
             <span class="n">side</span><span class="o">=</span><span class="n">side</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="n">amount</span><span class="p">,</span><span class="n">leverage</span><span class="o">=</span><span class="n">leverage</span><span class="p">,</span>
@@ -1098,12 +1098,12 @@
             <span class="n">take_profit_value</span><span class="o">=</span><span class="n">take_profit_value</span><span class="p">,</span> <span class="n">take_profit_kind</span><span class="o">=</span><span class="n">take_profit_kind</span><span class="p">,</span>
             <span class="n">use_trail_stop</span><span class="o">=</span><span class="n">use_trail_stop</span><span class="p">,</span> <span class="n">auto_margin_call</span><span class="o">=</span><span class="n">auto_margin_call</span><span class="p">,</span>
             <span class="n">use_token_for_commission</span><span class="o">=</span><span class="n">use_token_for_commission</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_order</span><span class="p">(</span><span class="n">order_id</span><span class="p">))</span> 
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_position_history</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_available_leverages</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">,</span><span class="s2">&quot;BTCUSD&quot;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">close_position</span><span class="p">(</span><span class="n">order_id</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_overnight_fee</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">,</span><span class="s2">&quot;BTCUSD&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_order</span><span class="p">(</span><span class="n">order_id</span><span class="p">))</span> 
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_position_history</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_available_leverages</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">,</span><span class="s2">&quot;BTCUSD&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">close_position</span><span class="p">(</span><span class="n">order_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_overnight_fee</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">,</span><span class="s2">&quot;BTCUSD&quot;</span><span class="p">))</span>
 </code></pre></div>
 
 <h2 id="buy_order">buy_order()<a class="headerlink" href="#buy_order" title="Permanent link">&para;</a></h2>
@@ -1328,12 +1328,12 @@
 </table>
 <h3 id="sample_1">sample<a class="headerlink" href="#sample_1" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="n">ID_Name</span><span class="o">=</span><span class="s2">&quot;order_id&quot;</span><span class="c1">#&quot;position_id&quot;/&quot;order_id&quot;</span>
-<span class="n">stop_lose_kind</span><span class="o">=</span><span class="bp">None</span>
-<span class="n">stop_lose_value</span><span class="o">=</span><span class="bp">None</span>
+<span class="n">stop_lose_kind</span><span class="o">=</span><span class="kc">None</span>
+<span class="n">stop_lose_value</span><span class="o">=</span><span class="kc">None</span>
 <span class="n">take_profit_kind</span><span class="o">=</span><span class="s2">&quot;percent&quot;</span>
 <span class="n">take_profit_value</span><span class="o">=</span><span class="mi">200</span>
-<span class="n">use_trail_stop</span><span class="o">=</span><span class="bp">False</span>
-<span class="n">auto_margin_call</span><span class="o">=</span><span class="bp">True</span>
+<span class="n">use_trail_stop</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">auto_margin_call</span><span class="o">=</span><span class="kc">True</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">change_order</span><span class="p">(</span><span class="n">ID_Name</span><span class="o">=</span><span class="n">ID_Name</span><span class="p">,</span><span class="n">order_id</span><span class="o">=</span><span class="n">order_id</span><span class="p">,</span>
                 <span class="n">stop_lose_kind</span><span class="o">=</span><span class="n">stop_lose_kind</span><span class="p">,</span><span class="n">stop_lose_value</span><span class="o">=</span><span class="n">stop_lose_value</span><span class="p">,</span>
                 <span class="n">take_profit_kind</span><span class="o">=</span><span class="n">take_profit_kind</span><span class="p">,</span><span class="n">take_profit_value</span><span class="o">=</span><span class="n">take_profit_value</span><span class="p">,</span>
@@ -1374,7 +1374,7 @@
 <p><img alt="" src="../image/get_position_history.png" /></p>
 <h3 id="get_position_history_1">get_position_history()<a class="headerlink" href="#get_position_history_1" title="Permanent link">&para;</a></h3>
 <p>return (True/False,position_history,None)</p>
-<div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="p">.</span><span class="n">get_position_history</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="err">I_want_money.get_position_history(instrument_type)</span>
 </code></pre></div>
 
 <h3 id="get_position_history_v2">get_position_history_v2<a class="headerlink" href="#get_position_history_v2" title="Permanent link">&para;</a></h3>
@@ -1385,7 +1385,7 @@
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="c1">#instrument_type=&quot;crypto&quot;,&quot;forex&quot;,&quot;fx-option&quot;,&quot;turbo-option&quot;,&quot;multi-option&quot;,&quot;cfd&quot;,&quot;digital-option&quot;  </span>
@@ -1396,7 +1396,7 @@
 <span class="n">end</span><span class="o">=</span><span class="mi">0</span><span class="c1">#Timestamp</span>
 <span class="n">data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_position_history_v2</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">,</span><span class="n">limit</span><span class="p">,</span><span class="n">offset</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
 <span class="c1">#--------- this will get data start from 2019/7/1(end) to 2019/1/1(start) and only get 2(limit) data and offset is 0</span>
 <span class="n">instrument_type</span><span class="o">=</span><span class="s2">&quot;digital-option&quot;</span>
@@ -1405,7 +1405,7 @@
 <span class="n">start</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;2019/1/1&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y/%m/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()))</span>
 <span class="n">end</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;2019/7/1&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y/%m/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()))</span>
 <span class="n">data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_position_history_v2</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">,</span><span class="n">limit</span><span class="p">,</span><span class="n">offset</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="get_available_leverages">get_available_leverages()<a class="headerlink" href="#get_available_leverages" title="Permanent link">&para;</a></h2>

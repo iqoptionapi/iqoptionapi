@@ -1063,71 +1063,75 @@
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">reset_practice_balance</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">reset_practice_balance</span><span class="p">())</span>
 </code></pre></div>
 
 <h2 id="change-realpractice-account">Change real/practice Account<a class="headerlink" href="#change-realpractice-account" title="Permanent link">&para;</a></h2>
-<p>MODE="PRACTICE"/"REAL"
-<div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="o">.</span><span class="n">change_balance</span><span class="p">(</span><span class="n">MODE</span><span class="p">)</span>
-                        <span class="c1">#MODE: &quot;PRACTICE&quot;/&quot;REAL&quot;</span>
-</code></pre></div></p>
+<p>MODE="PRACTICE"/"REAL"/"TOURNAMENT"<br/>
+PRACTICE - it is demo account<br/>
+REAL - It is our money in risk<br/>
+TOURNAMENT - Tournaments account<br/></p>
+<div class="codehilite"><pre><span></span><code><span class="n">balance_type</span><span class="o">=</span><span class="s2">&quot;PRACTICE&quot;</span>
+<span class="n">I_want_money</span><span class="o">.</span><span class="n">change_balance</span><span class="p">(</span><span class="n">balance_type</span><span class="p">)</span>
+</code></pre></div>
+
 <h2 id="get-other-people-stratagy">get Other People stratagy<a class="headerlink" href="#get-other-people-stratagy" title="Permanent link">&para;</a></h2>
 <h3 id="sample">sample<a class="headerlink" href="#sample" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
- 
+
 <span class="c1">#logging.basicConfig(level=logging.DEBUG,format=&#39;%(asctime)s %(message)s&#39;)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">while_run_time</span><span class="o">=</span><span class="mi">10</span>
- 
+
 <span class="c1">#For digital option</span>
- 
+
 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;live-deal-digital-option&quot;</span> <span class="c1">#&quot;live-deal-binary-option-placed&quot;/&quot;live-deal-digital-option&quot;</span>
 <span class="n">active</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">_type</span><span class="o">=</span><span class="s2">&quot;PT1M&quot;</span><span class="c1">#&quot;PT1M&quot;/&quot;PT5M&quot;/&quot;PT15M&quot;</span>
 <span class="n">buffersize</span><span class="o">=</span><span class="mi">10</span><span class="c1">#</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">,</span><span class="n">buffersize</span><span class="p">)</span>
 
- 
+
 <span class="n">start_t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="c1">#data size is below buffersize</span>
     <span class="c1">#data[0] is the last data</span>
     <span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;__For_digital_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__For_digital_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_t</span><span class="o">&gt;</span><span class="n">while_run_time</span><span class="p">:</span>
         <span class="k">break</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)</span>
 
 
 <span class="c1">#For binary option</span>
- 
+
 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;live-deal-binary-option-placed&quot;</span>
 <span class="n">active</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">_type</span><span class="o">=</span><span class="s2">&quot;turbo&quot;</span><span class="c1">#&quot;turbo&quot;/&quot;binary&quot;</span>
 <span class="n">buffersize</span><span class="o">=</span><span class="mi">10</span><span class="c1">#</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">,</span><span class="n">buffersize</span><span class="p">)</span>
 
 <span class="n">start_t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="c1">#data size is below buffersize</span>
     <span class="c1">#data[0] is the last data</span>
     <span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;__For_binary_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__For_binary_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_t</span><span class="o">&gt;</span><span class="n">while_run_time</span><span class="p">:</span>
         <span class="k">break</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1144,60 +1148,62 @@
 </code></pre></div>
 
 <h3 id="pop_live_deal">pop_live_deal<a class="headerlink" href="#pop_live_deal" title="Permanent link">&para;</a></h3>
-<p>pop the data from list
+<p>pop the data from list</p>
 <div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="o">.</span><span class="n">pop_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)</span>
-</code></pre></div></p>
+</code></pre></div>
+
 <h2 id="get-other-people-detail">get Other people detail<a class="headerlink" href="#get-other-people-detail" title="Permanent link">&para;</a></h2>
 <h3 id="sample_1">sample<a class="headerlink" href="#sample_1" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
- 
+
 <span class="c1">#logging.basicConfig(level=logging.DEBUG,format=&#39;%(asctime)s %(message)s&#39;)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">while_run_time</span><span class="o">=</span><span class="mi">10</span>
- 
+
 <span class="c1">#For binary option</span>
 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;live-deal-binary-option-placed&quot;</span>
 <span class="n">active</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">_type</span><span class="o">=</span><span class="s2">&quot;turbo&quot;</span><span class="c1">#&quot;turbo&quot;/&quot;binary&quot;</span>
 <span class="n">buffersize</span><span class="o">=</span><span class="mi">10</span><span class="c1">#</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">,</span><span class="n">buffersize</span><span class="p">)</span>
 
 <span class="n">last_trade_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
- 
+
 <span class="n">user_id</span><span class="o">=</span><span class="n">last_trade_data</span><span class="p">[</span><span class="s2">&quot;user_id&quot;</span><span class="p">]</span>
 <span class="n">counutry_id</span><span class="o">=</span><span class="n">last_trade_data</span><span class="p">[</span><span class="s2">&quot;country_id&quot;</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_______get_user_profile_client__________&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_user_profile_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_______get_user_profile_client__________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_user_profile_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
 <span class="n">pro_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_user_profile_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;___________request_leaderboard_userinfo_deals_client______&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">request_leaderboard_userinfo_deals_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="n">counutry_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;___________request_leaderboard_userinfo_deals_client______&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">request_leaderboard_userinfo_deals_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="n">counutry_id</span><span class="p">))</span>
 <span class="n">user_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">request_leaderboard_userinfo_deals_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="n">counutry_id</span><span class="p">)</span>
 <span class="n">worldwide</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="s2">&quot;entries_by_country&quot;</span><span class="p">][</span><span class="s2">&quot;0&quot;</span><span class="p">][</span><span class="s2">&quot;position&quot;</span><span class="p">]</span>
 <span class="n">profit</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="s2">&quot;entries_by_country&quot;</span><span class="p">][</span><span class="s2">&quot;0&quot;</span><span class="p">][</span><span class="s2">&quot;score&quot;</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;user_name:&quot;</span><span class="o">+</span><span class="n">pro_data</span><span class="p">[</span><span class="s2">&quot;user_name&quot;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;This week worldwide:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">worldwide</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;This week&#39;s gross profit:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">profit</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;user_name:&quot;</span><span class="o">+</span><span class="n">pro_data</span><span class="p">[</span><span class="s2">&quot;user_name&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This week worldwide:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">worldwide</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This week&#39;s gross profit:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">profit</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;___________get_users_availability____________&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_users_availability</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;___________get_users_availability____________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_users_availability</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)</span>
 </code></pre></div>
 
 <h3 id="get_user_profile_client">get_user_profile_client()<a class="headerlink" href="#get_user_profile_client" title="Permanent link">&para;</a></h3>
-<p>this api can get user name and image
+<p>this api can get user name and image</p>
 <div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_user_profile_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</code></pre></div></p>
+</code></pre></div>
+
 <h3 id="request_leaderboard_userinfo_deals_client">request_leaderboard_userinfo_deals_client()<a class="headerlink" href="#request_leaderboard_userinfo_deals_client" title="Permanent link">&para;</a></h3>
 <p>this api can get user detail</p>
 <div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="o">.</span><span class="n">request_leaderboard_userinfo_deals_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="n">counutry_id</span><span class="p">)</span>

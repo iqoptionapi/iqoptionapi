@@ -1015,37 +1015,37 @@
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">random</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">ALL_Asset</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_all_open_time</span><span class="p">()</span>
 
 <span class="c1">#Comprobar si está abierto o no</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;forex&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span> 
-<span class="k">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;cfd&quot;</span><span class="p">][</span><span class="s2">&quot;FACEBOOK&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span><span class="c1">#Stock,Commodities,ETFs</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;crypto&quot;</span><span class="p">][</span><span class="s2">&quot;BTCUSD-L&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;digital&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD-OTC&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;forex&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span> 
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;cfd&quot;</span><span class="p">][</span><span class="s2">&quot;FACEBOOK&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span><span class="c1">#Stock,Commodities,ETFs</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;crypto&quot;</span><span class="p">][</span><span class="s2">&quot;BTCUSD-L&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;digital&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD-OTC&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
 
 <span class="c1">#La binarias tienes doss tipos -&gt; type:&quot;turbo&quot;,&quot;binary&quot;</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;turbo&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD-OTC&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD-OTC&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;turbo&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD-OTC&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">][</span><span class="s2">&quot;EURUSD-OTC&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
 
 
 <span class="c1">#!!!! Excepciój &quot;&quot;</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">][</span><span class="s2">&quot;not exist asset&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span><span class="c1">#Devolverá &quot;{}&quot; a None de un dict</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ALL_Asset</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">][</span><span class="s2">&quot;not exist asset&quot;</span><span class="p">][</span><span class="s2">&quot;open&quot;</span><span class="p">])</span><span class="c1">#Devolverá &quot;{}&quot; a None de un dict</span>
 
 <span class="c1">#!!!!Imprimir todo!!!</span>
 <span class="k">for</span> <span class="n">type_name</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">ALL_Asset</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">Asset</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span><span class="n">Asset</span><span class="p">,</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span><span class="n">Asset</span><span class="p">,</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">])</span>
 </code></pre></div>
 
 <h2 id="ver-todos-los-nombress-de-lo-activos-actives">Ver todos los nombress de lo Activos (ACTIVES)<a class="headerlink" href="#ver-todos-los-nombress-de-lo-activos-actives" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><code><span class="n">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="p">.</span><span class="n">get_all_ACTIVES_OPCODE</span><span class="p">())</span>
+<div class="codehilite"><pre><span></span><code><span class="err">print(I_want_money.get_all_ACTIVES_OPCODE())</span>
 </code></pre></div>
 
 <h2 id="actualizar-opcode-de-los-activos-actives">Actualizar OPCODE de los Activos (ACTIVES)<a class="headerlink" href="#actualizar-opcode-de-los-activos-actives" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="p">.</span><span class="n">update_ACTIVES_OPCODE</span><span class="p">()</span>
+<div class="codehilite"><pre><span></span><code><span class="err">I_want_money.update_ACTIVES_OPCODE()</span>
 </code></pre></div>
 
 <h2 id="get_async_order">get_async_order()<a class="headerlink" href="#get_async_order" title="Permanent link">&para;</a></h2>
@@ -1060,37 +1060,37 @@
 <span class="n">amount</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">action</span><span class="o">=</span><span class="s2">&quot;call&quot;</span><span class="c1">#put</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;__Para_Opciones_Binarias__&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__Para_Opciones_Binarias__&quot;</span><span class="p">)</span>
 <span class="n">_</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
-<span class="k">while</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+<span class="k">while</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
     <span class="k">pass</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;__Para_Opciones_Digitales__spot&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__Para_Opciones_Digitales__spot&quot;</span><span class="p">)</span>
 <span class="n">_</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_digital_spot</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
-<span class="k">while</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+<span class="k">while</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
     <span class="k">pass</span>
 <span class="n">order_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;__Para_Forex_Mercado_MateriasPrimas_Crypto_ETFs&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__Para_Forex_Mercado_MateriasPrimas_Crypto_ETFs&quot;</span><span class="p">)</span>
 <span class="n">instrument_type</span><span class="o">=</span><span class="s2">&quot;crypto&quot;</span>
 <span class="n">instrument_id</span><span class="o">=</span><span class="s2">&quot;BTCUSD&quot;</span>
 <span class="n">side</span><span class="o">=</span><span class="s2">&quot;buy&quot;</span>
 <span class="n">amount</span><span class="o">=</span><span class="mf">1.23</span>
 <span class="n">leverage</span><span class="o">=</span><span class="mi">3</span>
 <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;market&quot;</span>
-<span class="n">limit_price</span><span class="o">=</span><span class="bp">None</span> 
-<span class="n">stop_price</span><span class="o">=</span><span class="bp">None</span> 
+<span class="n">limit_price</span><span class="o">=</span><span class="kc">None</span> 
+<span class="n">stop_price</span><span class="o">=</span><span class="kc">None</span> 
 <span class="n">stop_lose_kind</span><span class="o">=</span><span class="s2">&quot;percent&quot;</span> 
 <span class="n">stop_lose_value</span><span class="o">=</span><span class="mi">95</span> 
-<span class="n">take_profit_kind</span><span class="o">=</span><span class="bp">None</span> 
-<span class="n">take_profit_value</span><span class="o">=</span><span class="bp">None</span> 
-<span class="n">use_trail_stop</span><span class="o">=</span><span class="bp">True</span> 
-<span class="n">auto_margin_call</span><span class="o">=</span><span class="bp">False</span> 
-<span class="n">use_token_for_commission</span><span class="o">=</span><span class="bp">False</span> 
+<span class="n">take_profit_kind</span><span class="o">=</span><span class="kc">None</span> 
+<span class="n">take_profit_value</span><span class="o">=</span><span class="kc">None</span> 
+<span class="n">use_trail_stop</span><span class="o">=</span><span class="kc">True</span> 
+<span class="n">auto_margin_call</span><span class="o">=</span><span class="kc">False</span> 
+<span class="n">use_token_for_commission</span><span class="o">=</span><span class="kc">False</span> 
 <span class="n">check</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_order</span><span class="p">(</span><span class="n">instrument_type</span><span class="o">=</span><span class="n">instrument_type</span><span class="p">,</span> <span class="n">instrument_id</span><span class="o">=</span><span class="n">instrument_id</span><span class="p">,</span>
             <span class="n">side</span><span class="o">=</span><span class="n">side</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="n">amount</span><span class="p">,</span><span class="n">leverage</span><span class="o">=</span><span class="n">leverage</span><span class="p">,</span>
             <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span><span class="n">limit_price</span><span class="o">=</span><span class="n">limit_price</span><span class="p">,</span> <span class="n">stop_price</span><span class="o">=</span><span class="n">stop_price</span><span class="p">,</span>
@@ -1098,10 +1098,10 @@
             <span class="n">take_profit_value</span><span class="o">=</span><span class="n">take_profit_value</span><span class="p">,</span> <span class="n">take_profit_kind</span><span class="o">=</span><span class="n">take_profit_kind</span><span class="p">,</span>
             <span class="n">use_trail_stop</span><span class="o">=</span><span class="n">use_trail_stop</span><span class="p">,</span> <span class="n">auto_margin_call</span><span class="o">=</span><span class="n">auto_margin_call</span><span class="p">,</span>
             <span class="n">use_token_for_commission</span><span class="o">=</span><span class="n">use_token_for_commission</span><span class="p">)</span>
-<span class="k">while</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+<span class="k">while</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
     <span class="k">pass</span>
 <span class="n">order_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_async_order</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
 </code></pre></div>
 
 <h2 id="get_commission_change">get_commission_change()<a class="headerlink" href="#get_commission_change" title="Permanent link">&para;</a></h2>
@@ -1116,8 +1116,8 @@
 <span class="n">instrument_type</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;binary-option&quot;</span><span class="p">,</span><span class="s2">&quot;turbo-option&quot;</span><span class="p">,</span><span class="s2">&quot;digital-option&quot;</span><span class="p">,</span><span class="s2">&quot;crypto&quot;</span><span class="p">,</span><span class="s2">&quot;forex&quot;</span><span class="p">,</span><span class="s2">&quot;cfd&quot;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">ins</span> <span class="ow">in</span> <span class="n">instrument_type</span><span class="p">:</span>
     <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_commission_changed</span><span class="p">(</span><span class="n">ins</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Start stream please wait profit change...&quot;</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Start stream please wait profit change...&quot;</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">ins</span> <span class="ow">in</span> <span class="n">instrument_type</span><span class="p">:</span>
         <span class="n">commissio_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_commission_change</span><span class="p">(</span><span class="n">ins</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">commissio_data</span><span class="o">!=</span><span class="p">{}:</span>
@@ -1126,7 +1126,7 @@
                     <span class="n">the_min_timestamp</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">commissio_data</span><span class="p">[</span><span class="n">active_name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                     <span class="n">commissio</span><span class="o">=</span><span class="n">commissio_data</span><span class="p">[</span><span class="n">active_name</span><span class="p">][</span><span class="n">the_min_timestamp</span><span class="p">]</span>
                     <span class="n">profit</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="o">-</span><span class="n">commissio</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;instrument_type: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ins</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; active_name: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">active_name</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; profit change to: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">profit</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;instrument_type: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ins</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; active_name: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">active_name</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; profit change to: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">profit</span><span class="p">))</span>
                     <span class="c1">#Data have been update so need del</span>
                     <span class="k">del</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_commission_change</span><span class="p">(</span><span class="n">ins</span><span class="p">)[</span><span class="n">active_name</span><span class="p">][</span><span class="n">the_min_timestamp</span><span class="p">]</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -1144,11 +1144,11 @@
 <span class="n">instrument_type</span><span class="o">=</span><span class="s2">&quot;digital-option&quot;</span><span class="c1">#&quot;binary-option&quot;/&quot;digital-option&quot;/&quot;forex&quot;/&quot;cfd&quot;/&quot;crypto&quot;</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;__Please_wait_for_sec__&quot;</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">))</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__Please_wait_for_sec__&quot;</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unsubscribe_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span>
 </code></pre></div></p>
@@ -1186,9 +1186,9 @@
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span>
 
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;__Please_wait_for_sec__&quot;</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__Please_wait_for_sec__&quot;</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
         <span class="k">break</span>
 
 <span class="n">top_assets</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span>
@@ -1204,9 +1204,9 @@
  
  
 <span class="n">sorted_popularity</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">popularity</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;__Popularidad_min_to_max__&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__Popularidad_min_to_max__&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">lis</span> <span class="ow">in</span> <span class="n">sorted_popularity</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">lis</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">lis</span><span class="p">)</span>
 
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unsubscribe_top_assets_updated</span><span class="p">(</span><span class="n">instrument_type</span><span class="p">)</span>
 </code></pre></div>
@@ -1222,7 +1222,7 @@
 <span class="n">to_position</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">near_traders_count</span><span class="o">=</span><span class="mi">0</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_leader_board</span><span class="p">(</span><span class="n">country</span><span class="p">,</span><span class="n">from_position</span><span class="p">,</span><span class="n">to_position</span><span class="p">,</span><span class="n">near_traders_count</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_leader_board</span><span class="p">(</span><span class="n">country</span><span class="p">,</span><span class="n">from_position</span><span class="p">,</span><span class="n">to_position</span><span class="p">,</span><span class="n">near_traders_count</span><span class="p">))</span>
 </code></pre></div>
 
 <div class="admonition country">

@@ -948,11 +948,11 @@
             <h1 id="candle">Candle<a class="headerlink" href="#candle" title="Permanent link">&para;</a></h1>
 <h2 id="get-candles">get candles<a class="headerlink" href="#get-candles" title="Permanent link">&para;</a></h2>
 <p>only get close clndle, not realtime</p>
-<div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="p">.</span><span class="n">get_candles</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="nb">interval</span><span class="p">,</span><span class="k">count</span><span class="p">,</span><span class="n">endtime</span><span class="p">)</span>
-            <span class="o">#</span><span class="n">ACTIVES</span><span class="p">:</span><span class="n">sample</span> <span class="k">input</span> <span class="ss">&quot;EURUSD&quot;</span> <span class="k">OR</span> <span class="ss">&quot;EURGBP&quot;</span><span class="p">....</span> <span class="n">youcan</span>
-            <span class="o">#</span><span class="nb">interval</span><span class="p">:</span><span class="n">duration</span> <span class="k">of</span> <span class="n">candles</span>
-            <span class="o">#</span><span class="k">count</span><span class="p">:</span><span class="n">how</span> <span class="n">many</span> <span class="n">candles</span> <span class="n">you</span> <span class="n">want</span> <span class="k">to</span> <span class="k">get</span> <span class="k">from</span> <span class="n">now</span> <span class="k">to</span> <span class="n">past</span>
-            <span class="o">#</span><span class="n">endtime</span><span class="p">:</span><span class="k">get</span> <span class="n">candles</span> <span class="k">from</span> <span class="n">past</span> <span class="k">to</span> <span class="ss">&quot;endtime&quot;</span>
+<div class="codehilite"><pre><span></span><code><span class="err">I_want_money.get_candles(ACTIVES,interval,count,endtime)</span>
+<span class="err">            #ACTIVES:sample input &quot;EURUSD&quot; OR &quot;EURGBP&quot;.... youcan</span>
+<span class="err">            #interval:duration of candles</span>
+<span class="err">            #count:how many candles you want to get from now to past</span>
+<span class="err">            #endtime:get candles from past to &quot;endtime&quot;</span>
 </code></pre></div>
 
 <h3 id="sample">sample<a class="headerlink" href="#sample" title="Permanent link">&para;</a></h3>
@@ -966,7 +966,7 @@
     <span class="n">data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_candles</span><span class="p">(</span><span class="s2">&quot;EURUSD&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">end_from_time</span><span class="p">)</span>
     <span class="n">ANS</span> <span class="o">=</span><span class="n">data</span><span class="o">+</span><span class="n">ANS</span>
     <span class="n">end_from_time</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;from&quot;</span><span class="p">])</span><span class="o">-</span><span class="mi">1</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ANS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ANS</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="get-realtime-candles">get realtime candles<a class="headerlink" href="#get-realtime-candles" title="Permanent link">&para;</a></h2>
@@ -974,18 +974,18 @@
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">talib.abstract</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">goal</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="c1">#size=[1,5,10,15,30,60,120,300,600,900,1800,3600,7200,14400,28800,43200,86400,604800,2592000,&quot;all&quot;]</span>
 <span class="n">timeperiod</span><span class="o">=</span><span class="mi">10</span>
 <span class="n">maxdict</span><span class="o">=</span><span class="mi">20</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;start stream...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start stream...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">start_candles_stream</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">maxdict</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Start EMA Sample&quot;</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Start EMA Sample&quot;</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">candles</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_realtime_candles</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="n">size</span><span class="p">)</span>
     
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
@@ -1004,9 +1004,9 @@
         <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">],</span><span class="n">candles</span><span class="p">[</span><span class="n">timestamp</span><span class="p">][</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="p">)</span>
         
  
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Show EMA&quot;</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">EMA</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">timeperiod</span><span class="o">=</span><span class="n">timeperiod</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Show EMA&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">EMA</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">timeperiod</span><span class="o">=</span><span class="n">timeperiod</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">stop_candles_stream</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="n">size</span><span class="p">)</span>
 </code></pre></div>
@@ -1016,23 +1016,23 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="c1">#logging.basicConfig(level=logging.DEBUG,format=&#39;%(asctime)s %(message)s&#39;)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">goal</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">size</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="c1">#size=[1,5,10,15,30,60,120,300,600,900,1800,3600,7200,14400,28800,43200,86400,604800,2592000,&quot;all&quot;]</span>
 <span class="n">maxdict</span><span class="o">=</span><span class="mi">10</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;start stream...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start stream...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">start_candles_stream</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">maxdict</span><span class="p">)</span>
 <span class="c1">#DO something</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Do something...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Do something...&quot;</span><span class="p">)</span>
 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;print candles&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;print candles&quot;</span><span class="p">)</span>
 <span class="n">cc</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_realtime_candles</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="n">size</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cc</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">cc</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;stop candle&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">cc</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stop candle&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">stop_candles_stream</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="n">size</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1042,13 +1042,13 @@
 <div class="codehilite"><pre><span></span><code><span class="n">goal</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">size</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="c1">#size=[1,5,10,15,30,60,120,300,600,900,1800,3600,7200,14400,28800,43200,86400,604800,2592000,&quot;all&quot;]</span>
 <span class="n">maxdict</span><span class="o">=</span><span class="mi">10</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;start stream...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start stream...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">start_candles_stream</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">maxdict</span><span class="p">)</span>
 </code></pre></div>
 
 <h3 id="get_realtime_candles">get_realtime_candles()<a class="headerlink" href="#get_realtime_candles" title="Permanent link">&para;</a></h3>
 <p>get_realtime_candles() after call start_candles_stream()</p>
-<div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="p">.</span><span class="n">get_realtime_candles</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="k">size</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="err">I_want_money.get_realtime_candles(goal,size)</span>
 </code></pre></div>
 
 <h3 id="stop_candles_stream">stop_candles_stream()<a class="headerlink" href="#stop_candles_stream" title="Permanent link">&para;</a></h3>

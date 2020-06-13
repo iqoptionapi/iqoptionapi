@@ -1190,11 +1190,11 @@
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;pass&quot;</span><span class="p">)</span>
 <span class="n">goal</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;get candles&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_candles</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">111</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;get candles&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_candles</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">111</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
 <span class="n">Money</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">ACTIVES</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">ACTION</span><span class="o">=</span><span class="s2">&quot;call&quot;</span><span class="c1">#or &quot;put&quot;</span>
@@ -1202,9 +1202,9 @@
 
 <span class="n">check</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy</span><span class="p">(</span><span class="n">Money</span><span class="p">,</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">ACTION</span><span class="p">,</span><span class="n">expirations_mode</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">check</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;!buy!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;!buy!&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;buy fail&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;buy fail&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy</span><span class="p">(</span><span class="n">Money</span><span class="p">,</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">ACTION</span><span class="p">,</span><span class="n">expirations</span><span class="p">)</span>
@@ -1234,11 +1234,11 @@
 <span class="n">ACTION</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;call&quot;</span><span class="p">)</span>
 <span class="n">expirations_mode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;buy multi&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;buy multi&quot;</span><span class="p">)</span>
 <span class="n">id_list</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_multi</span><span class="p">(</span><span class="n">Money</span><span class="p">,</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">ACTION</span><span class="p">,</span><span class="n">expirations_mode</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;check win only one id (id_list[0])&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_v2</span><span class="p">(</span><span class="n">id_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;check win only one id (id_list[0])&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_v2</span><span class="p">(</span><span class="n">id_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
 </code></pre></div>
 
 <h3 id="buy_by_raw_expirations">buy_by_raw_expirations()<a class="headerlink" href="#buy_by_raw_expirations" title="Permanent link">&para;</a></h3>
@@ -1260,7 +1260,7 @@
 <span class="n">ACTIVES</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">ACTION</span><span class="o">=</span><span class="s2">&quot;call&quot;</span><span class="c1">#or &quot;put&quot;</span>
 <span class="n">expirations_mode</span><span class="o">=</span><span class="mi">1</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">remaning_time</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_remaning</span><span class="p">(</span><span class="n">expirations_mode</span><span class="p">)</span>
     <span class="n">purchase_time</span><span class="o">=</span><span class="n">remaning_time</span><span class="o">-</span><span class="mi">30</span>
     <span class="k">if</span> <span class="n">purchase_time</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">:</span><span class="c1">#comprar las opciones binarias con un tiempo de compra menor a 4 min</span>
@@ -1273,7 +1273,7 @@
 Ejemplo</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#conectar a iqoption</span>
 <span class="n">Money</span><span class="o">=</span><span class="mi">1</span>
@@ -1288,7 +1288,7 @@ Ejemplo</p>
 <span class="n">sell_all</span><span class="o">=</span><span class="p">[]</span>
 <span class="n">sell_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 <span class="n">sell_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id2</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">sell_option</span><span class="p">(</span><span class="n">sell_all</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">sell_option</span><span class="p">(</span><span class="n">sell_all</span><span class="p">))</span>
 </code></pre></div>
 
 <h2 id="check-win">check win<a class="headerlink" href="#check-win" title="Permanent link">&para;</a></h2>
@@ -1298,8 +1298,8 @@ Ejemplo</p>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">check</span><span class="p">,</span><span class="nb">id</span> <span class="o">=</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">buy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;EURUSD&quot;</span><span class="p">,</span> <span class="s2">&quot;call&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Empezando a comprobar la operación...&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Empezando a comprobar la operación...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
 </code></pre></div>
 
 <div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win</span><span class="p">(</span><span class="mi">23243221</span><span class="p">)</span>
@@ -1313,9 +1313,9 @@ Ejemplo</p>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#conectar a iqoption</span>
 <span class="n">check</span><span class="p">,</span><span class="nb">id</span> <span class="o">=</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">buy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;EURUSD&quot;</span><span class="p">,</span> <span class="s2">&quot;call&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Empezando a comprobar la operación...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Empezando a comprobar la operación...&quot;</span><span class="p">)</span>
 <span class="n">polling_time</span><span class="o">=</span><span class="mi">3</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_v2</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span><span class="n">polling_time</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_v2</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span><span class="n">polling_time</span><span class="p">))</span>
 </code></pre></div>
 
 <h3 id="check_win_v3">check_win_v3()<a class="headerlink" href="#check_win_v3" title="Permanent link">&para;</a></h3>
@@ -1325,36 +1325,36 @@ la operación</p>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">check</span><span class="p">,</span><span class="nb">id</span> <span class="o">=</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">buy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;EURUSD&quot;</span><span class="p">,</span> <span class="s2">&quot;call&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Empezando a comprobar la operación...&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_v3</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Empezando a comprobar la operación...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_v3</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
 </code></pre></div>
 
 <h2 id="get_binary_option_detail">get_binary_option_detail()<a class="headerlink" href="#get_binary_option_detail" title="Permanent link">&para;</a></h2>
 <p><img alt="" src="../expiration_time.png" /></p>
 <p>sample
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">d</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_binary_option_detail</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;turbo&quot;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;binary&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;turbo&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;binary&quot;</span><span class="p">])</span>
 </code></pre></div></p>
 <h2 id="get_all_init">get_all_init()<a class="headerlink" href="#get_all_init" title="Permanent link">&para;</a></h2>
 <p>get_binary_option_detail es la base en eta api</p>
 <p>Tu obtendrás los detalle sobre la opción binaria</p>
-<div class="codehilite"><pre><span></span><code><span class="n">I_want_money</span><span class="p">.</span><span class="n">get_all_init</span><span class="p">()</span>
+<div class="codehilite"><pre><span></span><code><span class="err">I_want_money.get_all_init()</span>
 </code></pre></div>
 
 <h2 id="get_all_profit">get_all_profit()<a class="headerlink" href="#get_all_profit" title="Permanent link">&para;</a></h2>
 <p>sample</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;login...&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">d</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_all_profit</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;turbo&quot;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;binary&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;turbo&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;CADCHF&quot;</span><span class="p">][</span><span class="s2">&quot;binary&quot;</span><span class="p">])</span>
 </code></pre></div>
 
 <p>Si tu quieres saber el profit en tiempo real
@@ -1370,12 +1370,12 @@ if order not close yet or wrong id it will return False
 <h2 id="get_optioninfo">get_optioninfo<a class="headerlink" href="#get_optioninfo" title="Permanent link">&para;</a></h2>
 <h3 id="get_optioninfo_1">get_optioninfo()<a class="headerlink" href="#get_optioninfo_1" title="Permanent link">&para;</a></h3>
 <p>Introduce cuántos datos quieres obtener del historial de Trading (solo para opciones binarias)</p>
-<div class="codehilite"><pre><span></span><code><span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_optioninfo</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<div class="codehilite"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_optioninfo</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 </code></pre></div>
 
 <h3 id="get_optioninfo_v2">get_optioninfo_v2()<a class="headerlink" href="#get_optioninfo_v2" title="Permanent link">&para;</a></h3>
 <p>Introduce cuántos datos quieres obtener del historial de Trading (solo para opciones binarias)</p>
-<div class="codehilite"><pre><span></span><code><span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_optioninfo_v2</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<div class="codehilite"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_optioninfo_v2</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 </code></pre></div>
 
 <h3 id="get_option_open_by_other_pc">get_option_open_by_other_pc()<a class="headerlink" href="#get_option_open_by_other_pc" title="Permanent link">&para;</a></h3>
@@ -1385,18 +1385,18 @@ if order not close yet or wrong id it will return False
 <span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#conectar a iqoption</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="c1">#Por favor accede a la web de iqoption y abre alguna opción binaria</span>
     <span class="k">if</span> <span class="n">I_want_money</span><span class="o">.</span><span class="n">get_option_open_by_other_pc</span><span class="p">()</span><span class="o">!=</span><span class="p">{}:</span>
         <span class="k">break</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Obtener la opción abierta de otra sesión y de la misma cuenta&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_option_open_by_other_pc</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Obtener la opción abierta de otra sesión y de la misma cuenta&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_option_open_by_other_pc</span><span class="p">())</span>
 
 <span class="nb">id</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_option_open_by_other_pc</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">del_option_open_by_other_pc</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Depués de la id&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_option_open_by_other_pc</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Depués de la id&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_option_open_by_other_pc</span><span class="p">())</span>
 </code></pre></div>
 
 <h2 id="obtener-indicador">Obtener indicador<a class="headerlink" href="#obtener-indicador" title="Permanent link">&para;</a></h2>
@@ -1406,7 +1406,7 @@ if order not close yet or wrong id it will return False
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">goal</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">start_mood_stream</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_traders_mood</span><span class="p">(</span><span class="n">goal</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_traders_mood</span><span class="p">(</span><span class="n">goal</span><span class="p">))</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">stop_mood_stream</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span>
 </code></pre></div>
 

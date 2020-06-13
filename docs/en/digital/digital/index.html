@@ -1082,8 +1082,8 @@
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
 <span class="c1">#get strike_list</span>
 <span class="n">data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_realtime_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;get strike data&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;get strike data&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;data</span>
 <span class="sd">{&#39;1.127100&#39;: </span>
 <span class="sd">    {  &#39;call&#39;: </span>
@@ -1105,26 +1105,26 @@
 <span class="n">instrument_id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">choose_price</span><span class="p">][</span><span class="s2">&quot;call&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
 <span class="c1">#get profit</span>
 <span class="n">profit</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">choose_price</span><span class="p">][</span><span class="s2">&quot;call&quot;</span><span class="p">][</span><span class="s2">&quot;profit&quot;</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;choose you want to buy&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;price:&quot;</span><span class="p">,</span><span class="n">choose_price</span><span class="p">,</span><span class="s2">&quot;side:call&quot;</span><span class="p">,</span><span class="s2">&quot;instrument_id:&quot;</span><span class="p">,</span><span class="n">instrument_id</span><span class="p">,</span><span class="s2">&quot;profit:&quot;</span><span class="p">,</span><span class="n">profit</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;choose you want to buy&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;price:&quot;</span><span class="p">,</span><span class="n">choose_price</span><span class="p">,</span><span class="s2">&quot;side:call&quot;</span><span class="p">,</span><span class="s2">&quot;instrument_id:&quot;</span><span class="p">,</span><span class="n">instrument_id</span><span class="p">,</span><span class="s2">&quot;profit:&quot;</span><span class="p">,</span><span class="n">profit</span><span class="p">)</span>
 <span class="c1">#put instrument_id to buy</span>
 <span class="n">buy_check</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_digital</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="n">instrument_id</span><span class="p">)</span>
 <span class="n">polling_time</span><span class="o">=</span><span class="mi">5</span>
 <span class="k">if</span> <span class="n">buy_check</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;wait for check win&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;wait for check win&quot;</span><span class="p">)</span>
     <span class="c1">#check win</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">check_close</span><span class="p">,</span><span class="n">win_money</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_digital_v2</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span><span class="n">polling_time</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">check_close</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">win_money</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
                 <span class="n">win_money</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">win_money</span><span class="p">))</span>
-                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;you win&quot;</span><span class="p">,</span><span class="n">win_money</span><span class="p">,</span><span class="s2">&quot;money&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;you win&quot;</span><span class="p">,</span><span class="n">win_money</span><span class="p">,</span><span class="s2">&quot;money&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;you loose&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;you loose&quot;</span><span class="p">)</span>
             <span class="k">break</span>
     <span class="n">I_want_money</span><span class="o">.</span><span class="n">unsubscribe_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;fail to buy,please run again&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fail to buy,please run again&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h3 id="get-all-strike-list-data">Get all strike list data<a class="headerlink" href="#get-all-strike-list-data" title="Permanent link">&para;</a></h3>
@@ -1136,10 +1136,10 @@
 <span class="n">ACTIVES</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="c1">#minute 1 or 5</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_realtime_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;price&quot;</span><span class="p">,</span><span class="n">price</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="n">price</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;price&quot;</span><span class="p">,</span><span class="n">price</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="n">price</span><span class="p">])</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unsubscribe_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
 </code></pre></div></p>
@@ -1173,7 +1173,7 @@
 <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="c1">#minute 1 or 5</span>
 <span class="n">amount</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">action</span><span class="o">=</span><span class="s2">&quot;call&quot;</span><span class="c1">#put</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_digital_spot</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">duration</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_digital_spot</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">duration</span><span class="p">))</span>
 </code></pre></div>
 
 <h3 id="get_digital_spot_profit_after_sale">get_digital_spot_profit_after_sale()<a class="headerlink" href="#get_digital_spot_profit_after_sale" title="Permanent link">&para;</a></h3>
@@ -1190,10 +1190,10 @@
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
 <span class="n">_</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_digital_spot</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span> 
  
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">PL</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_digital_spot_profit_after_sale</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">PL</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">PL</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
 </code></pre></div>
 
 <h3 id="get_digital_current_profit">get_digital_current_profit()<a class="headerlink" href="#get_digital_current_profit" title="Permanent link">&para;</a></h3>
@@ -1206,9 +1206,9 @@
 <span class="n">ACTIVES</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="c1">#minute 1 or 5</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_digital_current_profit</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="c1">#from first print it may be get false,just wait a second you can get the profit</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="c1">#from first print it may be get false,just wait a second you can get the profit</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unsubscribe_strike_list</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span>
 </code></pre></div>
@@ -1243,18 +1243,18 @@
 <span class="n">amount</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">action</span><span class="o">=</span><span class="s2">&quot;call&quot;</span><span class="c1">#put</span>
 <span class="n">_</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_digital_spot</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">duration</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 <span class="k">if</span> <span class="nb">id</span> <span class="o">!=</span><span class="s2">&quot;error&quot;</span><span class="p">:</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">check</span><span class="p">,</span><span class="n">win</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_digital_v2</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">check</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">check</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
             <span class="k">break</span>
     <span class="k">if</span> <span class="n">win</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;you loss &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;$&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;you loss &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;$&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;you win &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;$&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;you win &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">win</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;$&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;please try again&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;please try again&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="close_digital_option">close_digital_option()<a class="headerlink" href="#close_digital_option" title="Permanent link">&para;</a></h2>
@@ -1277,17 +1277,17 @@
  
 <span class="n">_</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">buy_digital_spot</span><span class="p">(</span><span class="n">ACTIVES</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">action</span><span class="p">,</span><span class="n">duration</span><span class="p">)</span> 
 
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">check</span><span class="p">,</span><span class="n">_</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_digital</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">check</span><span class="p">:</span>
         <span class="k">break</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_digital_position</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_digital</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_digital_position</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">check_win_digital</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
 </code></pre></div></p>
 <p>sample2</p>
-<div class="codehilite"><pre><span></span><code><span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="s2">&quot;digital-option&quot;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_digital_position</span><span class="p">(</span><span class="mi">2323433</span><span class="p">))</span><span class="c1">#in put the id</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_position_history</span><span class="p">(</span><span class="s2">&quot;digital-option&quot;</span><span class="p">))</span>
+<div class="codehilite"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_positions</span><span class="p">(</span><span class="s2">&quot;digital-option&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_digital_position</span><span class="p">(</span><span class="mi">2323433</span><span class="p">))</span><span class="c1">#in put the id</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_position_history</span><span class="p">(</span><span class="s2">&quot;digital-option&quot;</span><span class="p">))</span>
 </code></pre></div>
             
             

@@ -952,7 +952,7 @@
             <h1 id="get-start">Get start<a class="headerlink" href="#get-start" title="Permanent link">&para;</a></h1>
 <h2 id="install-iqoptionapi">Install iqoptionapi<a class="headerlink" href="#install-iqoptionapi" title="Permanent link">&para;</a></h2>
 <p>download the source code and run this</p>
-<div class="codehilite"><pre><span></span><code><span class="n">python</span> <span class="n">setup</span><span class="p">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="codehilite"><pre><span></span><code><span class="err">python setup.py install</span>
 </code></pre></div>
 
 <h2 id="little-sample">little sample<a class="headerlink" href="#little-sample" title="Permanent link">&para;</a></h2>
@@ -961,8 +961,8 @@
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
 <span class="n">goal</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;get candles&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_candles</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">111</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;get candles&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_candles</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">111</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
 </code></pre></div>
 
 <h2 id="import">Import<a class="headerlink" href="#import" title="Permanent link">&para;</a></h2>
@@ -976,15 +976,15 @@
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">check</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
-<span class="k">print</span><span class="p">(</span><span class="n">check</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">check</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="debug-mode-on">Debug mode on<a class="headerlink" href="#debug-mode-on" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="connectcheck-connect">Connect&amp;Check connect<a class="headerlink" href="#connectcheck-connect" title="Permanent link">&para;</a></h2>
@@ -995,33 +995,33 @@
 <span class="n">iqoption</span> <span class="o">=</span> <span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">check</span><span class="p">,</span><span class="n">reason</span><span class="o">=</span><span class="n">iqoption</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="k">if</span> <span class="n">check</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Start your robot&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Start your robot&quot;</span><span class="p">)</span>
     <span class="c1">#if see this you can close network for test</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">iqoption</span><span class="o">.</span><span class="n">check_connect</span><span class="p">()</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span><span class="c1">#detect the websocket is close</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;try reconnect&quot;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">iqoption</span><span class="o">.</span><span class="n">check_connect</span><span class="p">()</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span><span class="c1">#detect the websocket is close</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;try reconnect&quot;</span><span class="p">)</span>
             <span class="n">check</span><span class="p">,</span><span class="n">reason</span><span class="o">=</span><span class="n">iqoption</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">check</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Reconnect successfully&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconnect successfully&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">reason</span><span class="o">==</span><span class="n">error_password</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Error Password&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error Password&quot;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;No Network&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Network&quot;</span><span class="p">)</span>
 
 <span class="k">else</span><span class="p">:</span>
 
     <span class="k">if</span> <span class="n">reason</span><span class="o">==</span><span class="s2">&quot;[Errno -2] Name or service not known&quot;</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;No Network&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Network&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">reason</span><span class="o">==</span><span class="n">error_password</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Error Password&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error Password&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="set_session">set_session<a class="headerlink" href="#set_session" title="Permanent link">&para;</a></h2>
 <p>Default User-Agent is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 
@@ -1037,12 +1037,12 @@
 
 <h2 id="check-version">Check version<a class="headerlink" href="#check-version" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
-<span class="k">print</span><span class="p">(</span><span class="n">IQ_Option</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">IQ_Option</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="check-connect">Check connect<a class="headerlink" href="#check-connect" title="Permanent link">&para;</a></h2>
 <p>return True/False</p>
-<div class="codehilite"><pre><span></span><code><span class="n">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="p">.</span><span class="n">check_connect</span><span class="p">())</span>
+<div class="codehilite"><pre><span></span><code><span class="err">print(I_want_money.check_connect())</span>
 </code></pre></div>
 
 <h2 id="reconnect">Reconnect<a class="headerlink" href="#reconnect" title="Permanent link">&para;</a></h2>

@@ -1,6 +1,7 @@
 # Account
 
 ## get_balance()
+
 ```python
 I_want_money.get_balance()
 ```
@@ -23,7 +24,7 @@ I_want_money.get_currency()
 
 ## reset_practice_balance()
 
-reset practice balance to $10000
+reset practice balance to \$10000
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
@@ -34,28 +35,32 @@ print(I_want_money.reset_practice_balance())
 
 ## Change real/practice Account
 
-MODE="PRACTICE"/"REAL"
+MODE="PRACTICE"/"REAL"/"TOURNAMENT"<br/>
+PRACTICE - it is demo account<br/>
+REAL - It is our money in risk<br/>
+TOURNAMENT - Tournaments account<br/>
+
 ```python
-I_want_money.change_balance(MODE)
-                        #MODE: "PRACTICE"/"REAL"
+balance_type="PRACTICE"
+I_want_money.change_balance(balance_type)
 ```
 
 ## get Other People stratagy
 
- 
 ### sample
+
 ```python
 from iqoptionapi.stable_api import IQ_Option
 import logging
 import time
- 
+
 #logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("email","password")
 I_want_money.connect()#connect to iqoption
 while_run_time=10
- 
+
 #For digital option
- 
+
 name="live-deal-digital-option" #"live-deal-binary-option-placed"/"live-deal-digital-option"
 active="EURUSD"
 _type="PT1M"#"PT1M"/"PT5M"/"PT15M"
@@ -63,7 +68,7 @@ buffersize=10#
 print("_____________subscribe_live_deal_______________")
 I_want_money.subscribe_live_deal(name,active,_type,buffersize)
 
- 
+
 start_t=time.time()
 while True:
     #data size is below buffersize
@@ -80,7 +85,7 @@ I_want_money.unscribe_live_deal(name,active,_type)
 
 
 #For binary option
- 
+
 name="live-deal-binary-option-placed"
 active="EURUSD"
 _type="turbo"#"turbo"/"binary"
@@ -120,25 +125,29 @@ I_want_money.unscribe_live_deal(name,active,_type)
 ```python
 I_want_money.get_live_deal(name,active,_type)
 ```
+
 ### pop_live_deal
 
 pop the data from list
+
 ```python
 I_want_money.pop_live_deal(name,active,_type)
 ```
+
 ## get Other people detail
 
-### sample 
+### sample
+
 ```python
 from iqoptionapi.stable_api import IQ_Option
 import logging
 import time
- 
+
 #logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 I_want_money=IQ_Option("email","password")
 I_want_money.connect()#connect to iqoption
 while_run_time=10
- 
+
 #For binary option
 name="live-deal-binary-option-placed"
 active="EURUSD"
@@ -149,7 +158,7 @@ print("\n\n")
 I_want_money.subscribe_live_deal(name,active,_type,buffersize)
 
 last_trade_data=I_want_money.get_live_deal(name,active,_type)[0]
- 
+
 user_id=last_trade_data["user_id"]
 counutry_id=last_trade_data["country_id"]
 print("_______get_user_profile_client__________")
@@ -177,12 +186,15 @@ I_want_money.unscribe_live_deal(name,active,_type)
 ```
 
 ### get_user_profile_client()
+
 this api can get user name and image
+
 ```python
 I_want_money.get_user_profile_client(user_id)
 ```
 
 ### request_leaderboard_userinfo_deals_client()
+
 this api can get user detail
 
 ```python

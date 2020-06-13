@@ -1067,7 +1067,7 @@
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">iqoptionapi.stable_api</span> <span class="kn">import</span> <span class="n">IQ_Option</span>
 <span class="n">I_want_money</span><span class="o">=</span><span class="n">IQ_Option</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="c1">#connect to iqoption</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">reset_practice_balance</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">reset_practice_balance</span><span class="p">())</span>
 </code></pre></div>
 
 <h2 id="cambiar-tu-cuenta-entre-los-smodos-realpractica">Cambiar tu cuenta entre los smodos Real/Práctica<a class="headerlink" href="#cambiar-tu-cuenta-entre-los-smodos-realpractica" title="Permanent link">&para;</a></h2>
@@ -1091,20 +1091,20 @@
 <span class="n">active</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">_type</span><span class="o">=</span><span class="s2">&quot;PT1M&quot;</span><span class="c1">#&quot;PT1M&quot;/&quot;PT5M&quot;/&quot;PT15M&quot;</span>
 <span class="n">buffersize</span><span class="o">=</span><span class="mi">10</span><span class="c1">#</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">,</span><span class="n">buffersize</span><span class="p">)</span>
 
  
 <span class="n">start_t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;__For_digital_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__For_digital_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_t</span><span class="o">&gt;</span><span class="n">while_run_time</span><span class="p">:</span>
         <span class="k">break</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)</span>
 
 
@@ -1113,19 +1113,19 @@
 <span class="n">active</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">_type</span><span class="o">=</span><span class="s2">&quot;turbo&quot;</span><span class="c1">#&quot;turbo&quot;/&quot;binary&quot;</span>
 <span class="n">buffersize</span><span class="o">=</span><span class="mi">10</span><span class="c1">#</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">,</span><span class="n">buffersize</span><span class="p">)</span>
 
 <span class="n">start_t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;__For_binary_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__For_binary_option__ data size:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_t</span><span class="o">&gt;</span><span class="n">while_run_time</span><span class="p">:</span>
         <span class="k">break</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1165,34 +1165,34 @@
 <span class="n">active</span><span class="o">=</span><span class="s2">&quot;EURUSD&quot;</span>
 <span class="n">_type</span><span class="o">=</span><span class="s2">&quot;turbo&quot;</span><span class="c1">#&quot;turbo&quot;/&quot;binary&quot;</span>
 <span class="n">buffersize</span><span class="o">=</span><span class="mi">10</span><span class="c1">#</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________subscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">subscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">,</span><span class="n">buffersize</span><span class="p">)</span>
 
 <span class="n">last_trade_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
  
 <span class="n">user_id</span><span class="o">=</span><span class="n">last_trade_data</span><span class="p">[</span><span class="s2">&quot;user_id&quot;</span><span class="p">]</span>
 <span class="n">counutry_id</span><span class="o">=</span><span class="n">last_trade_data</span><span class="p">[</span><span class="s2">&quot;country_id&quot;</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_______get_user_profile_client__________&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_user_profile_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_______get_user_profile_client__________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_user_profile_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
 <span class="n">pro_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_user_profile_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;___________request_leaderboard_userinfo_deals_client______&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">request_leaderboard_userinfo_deals_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="n">counutry_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;___________request_leaderboard_userinfo_deals_client______&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">request_leaderboard_userinfo_deals_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="n">counutry_id</span><span class="p">))</span>
 <span class="n">user_data</span><span class="o">=</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">request_leaderboard_userinfo_deals_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="n">counutry_id</span><span class="p">)</span>
 <span class="n">worldwide</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="s2">&quot;entries_by_country&quot;</span><span class="p">][</span><span class="s2">&quot;0&quot;</span><span class="p">][</span><span class="s2">&quot;position&quot;</span><span class="p">]</span>
 <span class="n">profit</span><span class="o">=</span><span class="n">user_data</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">][</span><span class="s2">&quot;entries_by_country&quot;</span><span class="p">][</span><span class="s2">&quot;0&quot;</span><span class="p">][</span><span class="s2">&quot;score&quot;</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;user_name:&quot;</span><span class="o">+</span><span class="n">pro_data</span><span class="p">[</span><span class="s2">&quot;user_name&quot;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Esta semana en todo el mundo: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">worldwide</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Esta semana beneficios en bruto: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">profit</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;user_name:&quot;</span><span class="o">+</span><span class="n">pro_data</span><span class="p">[</span><span class="s2">&quot;user_name&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Esta semana en todo el mundo: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">worldwide</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Esta semana beneficios en bruto: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">profit</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;___________get_users_availability____________&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_users_availability</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;___________get_users_availability____________&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">I_want_money</span><span class="o">.</span><span class="n">get_users_availability</span><span class="p">(</span><span class="n">user_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;_____________unscribe_live_deal_______________&quot;</span><span class="p">)</span>
 <span class="n">I_want_money</span><span class="o">.</span><span class="n">unscribe_live_deal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">active</span><span class="p">,</span><span class="n">_type</span><span class="p">)</span>
 </code></pre></div>
 
