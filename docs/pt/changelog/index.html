@@ -215,65 +215,6 @@
       
       
 
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-tabs__inner md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  <li class="md-tabs__item">
-    
-      <a href="../.." class="md-tabs__link md-tabs__link--active">
-        Home
-      </a>
-    
-  </li>
-
-      
-        
-  
-  
-    <li class="md-tabs__item">
-      
-        <a href="../../en/" class="md-tabs__link">
-          English
-        </a>
-      
-    </li>
-  
-
-      
-        
-  
-  
-    <li class="md-tabs__item">
-      
-        <a href="../" class="md-tabs__link">
-          Portugues
-        </a>
-      
-    </li>
-  
-
-      
-        
-  
-  
-    <li class="md-tabs__item">
-      
-        <a href="../../es/" class="md-tabs__link">
-          Espanol
-        </a>
-      
-    </li>
-  
-
-      
-    </ul>
-  </div>
-</nav>
-      
-      
-
       
       
       
@@ -812,8 +753,8 @@
 <span class="n">user</span> <span class="o">=</span> <span class="n">userdata</span><span class="o">.</span><span class="n">mainUser</span>
 <span class="n">Iq</span><span class="o">=</span> <span class="n">IQ_Option</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])</span>
 <span class="n">indicators</span> <span class="o">=</span> <span class="n">Iq</span><span class="o">.</span><span class="n">get_technical_indicators</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">indicators</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;passou while bot&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">indicators</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;passou while bot&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <h3 id="version-511">Version: 5.1.1<a class="headerlink" href="#version-511" title="Permanent link">&para;</a></h3>
@@ -864,8 +805,8 @@ add get_async_order api</p>
 update websocket-client==0.56
 :exclamation:
 please uninstall all websocket-client and update up websocket-client==0.56</p>
-<div class="codehilite"><pre><span></span><code><span class="n">sudo</span> <span class="n">pip</span> <span class="n">uninstall</span> <span class="n">websocket</span><span class="o">-</span><span class="n">client</span>
-<span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">websocket</span><span class="o">-</span><span class="n">client</span><span class="o">==</span><span class="mi">0</span><span class="p">.</span><span class="mi">56</span>
+<div class="codehilite"><pre><span></span><code><span class="err">sudo pip uninstall websocket-client</span>
+<span class="err">sudo pip install websocket-client==0.56</span>
 </code></pre></div>
 
 <p>:exclamation:</p>
@@ -908,22 +849,13 @@ please uninstall all websocket-client and update up websocket-client==0.56</p>
     </div>
     
     <script src="../../assets/javascripts/vendor.8caa27b7.min.js"></script>
-    <script src="../../assets/javascripts/bundle.193efd2f.min.js"></script><script id="__lang" type="application/json">
-      {
-        {
-          -translations | tojson -
-        }
-      }
-    </script>
+    <script src="../../assets/javascripts/bundle.193efd2f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+    
     
     <script>
       app = initialize({
         base: "../..",
-        features: {
-          {
-            config.theme.features | tojson
-          }
-        },
+        features: [],
         search: Object.assign({
           worker: "../../assets/javascripts/worker/search.37585f48.min.js"
         }, typeof search !== "undefined" && search)

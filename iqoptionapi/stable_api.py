@@ -402,12 +402,15 @@ class IQ_Option:
     def get_balance_mode(self):
         # self.api.profile.balance_type=None
         profile = self.get_profile_ansyc()
-        for balance in profile["balances"]:
+        for balance in profile.get("balances"):
             if balance["id"] == global_value.balance_id:
                 if balance["type"] == 1:
                     return "REAL"
                 elif balance["type"] == 4:
                     return "PRACTICE"
+
+                elif balance["type"] == 2:
+                    return "TOURNAMENT"
 
     def reset_practice_balance(self):
         self.api.training_balance_reset_request = None
@@ -442,6 +445,7 @@ class IQ_Option:
 
         real_id = None
         practice_id = None
+        tournament_id = None
 
         for balance in self.get_profile_ansyc()["balances"]:
             if balance["type"] == 1:
@@ -449,12 +453,17 @@ class IQ_Option:
             if balance["type"] == 4:
                 practice_id = balance["id"]
 
+            if balance["type"] == 2:
+                tournament_id = balance["id"]
+
         if Balance_MODE == "REAL":
             set_id(real_id)
 
         elif Balance_MODE == "PRACTICE":
-
             set_id(practice_id)
+
+        elif Balance_MODE == "TOURNAMENT":
+            set_id(tournament_id)
 
         else:
             logging.error("ERROR doesn't have this mode")

@@ -19,12 +19,12 @@ from iqoptionapi.stable_api import IQ_Option
 import logging
 import random
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
-ALL_Asset=I_want_money.get_all_open_time()
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
+ALL_Asset=Iq.get_all_open_time()
 
 #Comprobar si está abierto o no
-print(ALL_Asset["forex"]["EURUSD"]["open"]) 
+print(ALL_Asset["forex"]["EURUSD"]["open"])
 print(ALL_Asset["cfd"]["FACEBOOK"]["open"])#Stock,Commodities,ETFs
 print(ALL_Asset["crypto"]["BTCUSD-L"]["open"])
 print(ALL_Asset["digital"]["EURUSD-OTC"]["open"])
@@ -46,11 +46,11 @@ for type_name, data in ALL_Asset.items():
 ## Ver todos los nombress de lo Activos (ACTIVES)
 
 ```
-print(I_want_money.get_all_ACTIVES_OPCODE())
+print(Iq.get_all_ACTIVES_OPCODE())
 ```
 ##  Actualizar OPCODE de los Activos (ACTIVES)
 ```
-I_want_money.update_ACTIVES_OPCODE()
+Iq.update_ACTIVES_OPCODE()
 ```
 ## get_async_order()
 
@@ -59,26 +59,26 @@ from iqoptionapi.stable_api import IQ_Option
 import logging
 import time
 #logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
 ACTIVES="EURUSD"
 duration=1#minute 1 or 5
 amount=1
 action="call"#put
 
 print("__Para_Opciones_Binarias__")
-_,id=I_want_money.buy(amount,ACTIVES,action,duration)
-while I_want_money.get_async_order(id)==None:
+_,id=Iq.buy(amount,ACTIVES,action,duration)
+while Iq.get_async_order(id)==None:
     pass
-print(I_want_money.get_async_order(id))
+print(Iq.get_async_order(id))
 print("\n\n")
 
 print("__Para_Opciones_Digitales__spot")
-_,id=I_want_money.buy_digital_spot(ACTIVES,amount,action,duration)
-while I_want_money.get_async_order(id)==None:
+_,id=Iq.buy_digital_spot(ACTIVES,amount,action,duration)
+while Iq.get_async_order(id)==None:
     pass
-order_data=I_want_money.get_async_order(id)
-print(I_want_money.get_async_order(id))
+order_data=Iq.get_async_order(id)
+print(Iq.get_async_order(id))
 print("\n\n")
 
 print("__Para_Forex_Mercado_MateriasPrimas_Crypto_ETFs")
@@ -88,49 +88,49 @@ side="buy"
 amount=1.23
 leverage=3
 type="market"
-limit_price=None 
-stop_price=None 
-stop_lose_kind="percent" 
-stop_lose_value=95 
-take_profit_kind=None 
-take_profit_value=None 
-use_trail_stop=True 
-auto_margin_call=False 
-use_token_for_commission=False 
-check,id=I_want_money.buy_order(instrument_type=instrument_type, instrument_id=instrument_id,
+limit_price=None
+stop_price=None
+stop_lose_kind="percent"
+stop_lose_value=95
+take_profit_kind=None
+take_profit_value=None
+use_trail_stop=True
+auto_margin_call=False
+use_token_for_commission=False
+check,id=Iq.buy_order(instrument_type=instrument_type, instrument_id=instrument_id,
             side=side, amount=amount,leverage=leverage,
             type=type,limit_price=limit_price, stop_price=stop_price,
             stop_lose_value=stop_lose_value, stop_lose_kind=stop_lose_kind,
             take_profit_value=take_profit_value, take_profit_kind=take_profit_kind,
             use_trail_stop=use_trail_stop, auto_margin_call=auto_margin_call,
             use_token_for_commission=use_token_for_commission)
-while I_want_money.get_async_order(id)==None:
+while Iq.get_async_order(id)==None:
     pass
-order_data=I_want_money.get_async_order(id)
-print(I_want_money.get_async_order(id))
+order_data=Iq.get_async_order(id)
+print(Iq.get_async_order(id))
 ```
 
 ## get_commission_change()
 
 instrument_type: "binary-option"/"turbo-option"/"digital-option"/"crypto"/"forex"/"cfd"
 
-I_want_money.subscribe_commission_changed(instrument_type) I_want_money.get_commission_change(instrument_type) I_want_money.unsubscribe_commission_changed(instrument_type)
+Iq.subscribe_commission_changed(instrument_type) Iq.get_commission_change(instrument_type) Iq.unsubscribe_commission_changed(instrument_type)
 
 Código de ejemplo
 
 ```python
 import time
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
 #instrument_type: "binary-option"/"turbo-option"/"digital-option"/"crypto"/"forex"/"cfd"
 instrument_type=["binary-option","turbo-option","digital-option","crypto","forex","cfd"]
 for ins in instrument_type:
-    I_want_money.subscribe_commission_changed(ins)
+    Iq.subscribe_commission_changed(ins)
 print("Start stream please wait profit change...")
 while True:
     for ins in instrument_type:
-        commissio_data=I_want_money.get_commission_change(ins)
+        commissio_data=Iq.get_commission_change(ins)
         if commissio_data!={}:
             for active_name in commissio_data:
                 if commissio_data[active_name]!={}:
@@ -139,7 +139,7 @@ while True:
                     profit=(100-commissio)/100
                     print("instrument_type: "+str(ins)+" active_name: "+str(active_name)+" profit change to: "+str(profit))
                     #Data have been update so need del
-                    del I_want_money.get_commission_change(ins)[active_name][the_min_timestamp]
+                    del Iq.get_commission_change(ins)[active_name][the_min_timestamp]
     time.sleep(1)
 ```
 
@@ -147,7 +147,7 @@ while True:
 ## Obtener top_assets_updated
 
 
-### Ejemplo 
+### Ejemplo
 
 instrument_type="binary-option"/"digital-option"/"forex"/"cfd"/"crypto"
 ```python
@@ -155,31 +155,31 @@ from iqoptionapi.stable_api import IQ_Option
 import logging
 import time
 #logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
 instrument_type="digital-option"#"binary-option"/"digital-option"/"forex"/"cfd"/"crypto"
-I_want_money.subscribe_top_assets_updated(instrument_type)
+Iq.subscribe_top_assets_updated(instrument_type)
 
 print("__Please_wait_for_sec__")
 while True:
-    if I_want_money.get_top_assets_updated(instrument_type)!=None:
-        print(I_want_money.get_top_assets_updated(instrument_type))
+    if Iq.get_top_assets_updated(instrument_type)!=None:
+        print(Iq.get_top_assets_updated(instrument_type))
         print("\n\n")
     time.sleep(1)
-I_want_money.unsubscribe_top_assets_updated(instrument_type)
+Iq.unsubscribe_top_assets_updated(instrument_type)
 ```
 ### subscribe_top_assets_updated()
 
 ```python
 instrument_type="digital-option"#"binary-option"/"digital-option"/"forex"/"cfd"/"crypto"
-I_want_money.subscribe_top_assets_updated(instrument_type)
+Iq.subscribe_top_assets_updated(instrument_type)
 ```
 
 ### get_top_assets_updated()
 
 se necesista llamar a get_top_assets_updated() después de subscribe_top_assets_updated()
 ```python
-I_want_money.get_top_assets_updated(instrument_type)
+Iq.get_top_assets_updated(instrument_type)
 ```
 
 
@@ -187,40 +187,40 @@ I_want_money.get_top_assets_updated(instrument_type)
 
 Si no vas a uarlo, ciérralo para una conexión sesgura
 ```python
-I_want_money.unsubscribe_top_assets_updated(instrument_type)
+Iq.unsubscribe_top_assets_updated(instrument_type)
 ```
 
-### orderar par popularidad 
+### orderar par popularidad
 
 ![](image/top_assets_updated.png)
 
 
-#### Ejemplo 
+#### Ejemplo
 ```python
 from iqoptionapi.stable_api import IQ_Option
 import logging
 import time
 import operator
- 
+
 #logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 def opcode_to_name(opcode_data,opcode):
-    return list(opcode_data.keys())[list(opcode_data.values()).index(opcode)]            
+    return list(opcode_data.keys())[list(opcode_data.values()).index(opcode)]
 
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
-I_want_money.update_ACTIVES_OPCODE()
-opcode_data=I_want_money.get_all_ACTIVES_OPCODE()
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
+Iq.update_ACTIVES_OPCODE()
+opcode_data=Iq.get_all_ACTIVES_OPCODE()
 
 instrument_type="digital-option"#"binary-option"/"digital-option"/"forex"/"cfd"/"crypto"
-I_want_money.subscribe_top_assets_updated(instrument_type)
+Iq.subscribe_top_assets_updated(instrument_type)
 
 
 print("__Please_wait_for_sec__")
 while True:
-    if I_want_money.get_top_assets_updated(instrument_type)!=None:
+    if Iq.get_top_assets_updated(instrument_type)!=None:
         break
 
-top_assets=I_want_money.get_top_assets_updated(instrument_type)
+top_assets=Iq.get_top_assets_updated(instrument_type)
 popularity={}
 for asset in top_assets:
     opcode=asset["active_id"]
@@ -230,14 +230,14 @@ for asset in top_assets:
         popularity[name]=popularity_value
     except:
         pass
- 
- 
+
+
 sorted_popularity = sorted(popularity.items(), key=operator.itemgetter(1))
 print("__Popularidad_min_to_max__")
 for lis in sorted_popularity:
     print(lis)
 
-I_want_money.unsubscribe_top_assets_updated(instrument_type)
+Iq.unsubscribe_top_assets_updated(instrument_type)
 ```
 
 ## get_leader_board
@@ -246,15 +246,15 @@ Obtener el ranking the líders
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option(email,password)
-I_want_money.connect()#connect to iqoption
- 
+Iq=IQ_Option(email,password)
+Iq.connect()#connect to iqoption
+
 country="TW"
 from_position=1
 to_position=1
 near_traders_count=0
 
-print(I_want_money.get_leader_board(country,from_position,to_position,near_traders_count))
+print(Iq.get_leader_board(country,from_position,to_position,near_traders_count))
 ```
 
 !!! country

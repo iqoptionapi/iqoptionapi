@@ -14,16 +14,16 @@ from iqoptionapi.stable_api import IQ_Option
 import logging
 import time
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("email","pass")
+Iq=IQ_Option("email","pass")
 goal="EURUSD"
 print("get candles")
-print(I_want_money.get_candles(goal,60,111,time.time()))
+print(Iq.get_candles(goal,60,111,time.time()))
 Money=1
 ACTIVES="EURUSD"
 ACTION="call"#or "put"
 expirations_mode=1
 
-check,id=I_want_money.buy(Money,ACTIVES,ACTION,expirations_mode)
+check,id=Iq.buy(Money,ACTIVES,ACTION,expirations_mode)
 if check:
     print("!buy!")
 else:
@@ -31,19 +31,19 @@ else:
 ```
 
 ```python
-I_want_money.buy(Money,ACTIVES,ACTION,expirations)
+Iq.buy(Money,ACTIVES,ACTION,expirations)
                 #Money:Cantidad de dinero type(int)
                 #ACTIVES:Ejemplo de entrada "EURUSD" OR "EURGBP".... puedes ver todos loa ACTIVE con -> get_all_ACTIVES_OPCODE
                 #ACTION:"call"/"put" type(str) call -> sube, put -> baja
                 #expirations:Introduce minutos, cuidado con los timpos muy largos ya que fallará al comprar (Tiempo de cierre de merrcado) Gracias a Darth-Carrotpie's code (int)https://github.com/Lu-Yi-Hsun/iqoptionapi/issues/6
-                #return:if sucess return (True,id_number) esle return(Fale,None) 
+                #return:if sucess return (True,id_number) esle return(Fale,None)
 ```
 ### buy_multi()
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#conectar a iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#conectar a iqoption
 Money=[]
 ACTIVES=[]
 ACTION=[]
@@ -60,10 +60,10 @@ ACTION.append("call")
 expirations_mode.append(1)
 
 print("buy multi")
-id_list=I_want_money.buy_multi(Money,ACTIVES,ACTION,expirations_mode)
+id_list=Iq.buy_multi(Money,ACTIVES,ACTION,expirations_mode)
 
 print("check win only one id (id_list[0])")
-print(I_want_money.check_win_v2(id_list[0],2))
+print(Iq.check_win_v2(id_list[0],2))
 ```
 ### buy_by_raw_expirations()
 
@@ -75,7 +75,7 @@ active="EURUSD"
 direction="call"
 option="turbo"#binary
 expired=1293923# Este tiempo de expiración necesitas contarlo o obtenerlo por tu mismo
-I_want_money.buy_by_raw_expirations(price, active, direction, option,expired)
+Iq.buy_by_raw_expirations(price, active, direction, option,expired)
 ```
 
 ## get_remaning()
@@ -83,24 +83,24 @@ I_want_money.buy_by_raw_expirations(price, active, direction, option,expired)
 purchase time=remaning time - 30
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#conectar a iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#conectar a iqoption
 Money=1
 ACTIVES="EURUSD"
 ACTION="call"#or "put"
 expirations_mode=1
 while True:
-    remaning_time=I_want_money.get_remaning(expirations_mode)
+    remaning_time=Iq.get_remaning(expirations_mode)
     purchase_time=remaning_time-30
     if purchase_time<4:#comprar las opciones binarias con un tiempo de compra menor a 4 min
-        I_want_money.buy(Money,ACTIVES,ACTION,expirations_mode)
+        Iq.buy(Money,ACTIVES,ACTION,expirations_mode)
         break
 ```
 
 ## sell_option()
 
 ```python
-I_want_money.sell_option(sell_all)#Introduce int o una lista de id de órdenes
+Iq.sell_option(sell_all)#Introduce int o una lista de id de órdenes
 ```
 Ejemplo
 
@@ -108,21 +108,21 @@ Ejemplo
 from iqoptionapi.stable_api import IQ_Option
 import time
 print("login...")
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#conectar a iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#conectar a iqoption
 Money=1
 ACTIVES="EURUSD"
 ACTION="call"#or "put"
 expirations_mode=1
 
-id=I_want_money.buy(Money,ACTIVES,ACTION,expirations_mode)
-id2=I_want_money.buy(Money,ACTIVES,ACTION,expirations_mode)
+id=Iq.buy(Money,ACTIVES,ACTION,expirations_mode)
+id2=Iq.buy(Money,ACTIVES,ACTION,expirations_mode)
 
 time.sleep(5)
 sell_all=[]
 sell_all.append(id)
 sell_all.append(id2)
-print(I_want_money.sell_option(sell_all))
+print(Iq.sell_option(sell_all))
 ```
 
 ## check win
@@ -133,17 +133,17 @@ Entrará en bucle hasta que la respuesta sea ganadora (win) o sin beneficios (lo
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
-check,id = I_want_money.buy(1, "EURUSD", "call", 1)
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
+check,id = Iq.buy(1, "EURUSD", "call", 1)
 print("Empezando a comprobar la operación...")
-print(I_want_money.check_win(id))
-``` 
+print(Iq.check_win(id))
+```
 
 ```python
-I_want_money.check_win(23243221)
+Iq.check_win(23243221)
 #""Necesitas obtener el id_number de la función buy()""
-#I_want_money.check_win(id_number)
+#Iq.check_win(id_number)
 #Esta función entrará en un bucle hasta que el resultado sea: win/equal/loose
 ```
 
@@ -151,12 +151,12 @@ I_want_money.check_win(23243221)
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#conectar a iqoption
-check,id = I_want_money.buy(1, "EURUSD", "call", 1)
+Iq=IQ_Option("email","password")
+Iq.connect()#conectar a iqoption
+check,id = Iq.buy(1, "EURUSD", "call", 1)
 print("Empezando a comprobar la operación...")
 polling_time=3
-print(I_want_money.check_win_v2(id,polling_time))
+print(Iq.check_win_v2(id,polling_time))
 ```
 
 ### check_win_v3()
@@ -166,13 +166,13 @@ la operación
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
-check,id = I_want_money.buy(1, "EURUSD", "call", 1)
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
+check,id = Iq.buy(1, "EURUSD", "call", 1)
 print("Empezando a comprobar la operación...")
-print(I_want_money.check_win_v3(id))
+print(Iq.check_win_v3(id))
 ```
- 
+
 ## get_binary_option_detail()
 ![](expiration_time.png)
 
@@ -180,9 +180,9 @@ sample
 ```python
 from iqoptionapi.stable_api import IQ_Option
 print("login...")
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
-d=I_want_money.get_binary_option_detail()
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
+d=Iq.get_binary_option_detail()
 print(d["CADCHF"]["turbo"])
 print(d["CADCHF"]["binary"])
 ```
@@ -193,7 +193,7 @@ get_binary_option_detail es la base en eta api
 Tu obtendrás los detalle sobre la opción binaria
 
 ```
-I_want_money.get_all_init()
+Iq.get_all_init()
 ```
 
 ## get_all_profit()
@@ -203,9 +203,9 @@ sample
 ```python
 from iqoptionapi.stable_api import IQ_Option
 print("login...")
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
-d=I_want_money.get_all_profit()
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
+d=Iq.get_all_profit()
 print(d["CADCHF"]["turbo"])
 print(d["CADCHF"]["binary"])
 ```
@@ -218,8 +218,8 @@ Si tu quieres saber el profit en tiempo real
 Si la opción no cierra todavía o el id es incorrecto, devolverá False
 if order not close yet or wrong id it will return False
 ```python
-isSuccessful,dict=I_want_money.get_betinfo(4452272449)
-#I_want_money.get_betinfo 
+isSuccessful,dict=Iq.get_betinfo(4452272449)
+#Iq.get_betinfo
 #ENTRADA: order id
 #SALIDA:isSuccessful,dict
 ```
@@ -230,7 +230,7 @@ isSuccessful,dict=I_want_money.get_betinfo(4452272449)
 Introduce cuántos datos quieres obtener del historial de Trading (solo para opciones binarias)
 
 ```python
-print(I_want_money.get_optioninfo(10))
+print(Iq.get_optioninfo(10))
 ```
 
 ### get_optioninfo_v2()
@@ -238,7 +238,7 @@ print(I_want_money.get_optioninfo(10))
 Introduce cuántos datos quieres obtener del historial de Trading (solo para opciones binarias)
 
 ```python
-print(I_want_money.get_optioninfo_v2(10))
+print(Iq.get_optioninfo_v2(10))
 ```
 ### get_option_open_by_other_pc()
 
@@ -249,20 +249,20 @@ Tu puedes obtener la opción con esta función
 ```python
 import time
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#conectar a iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#conectar a iqoption
 while True:
     #Por favor accede a la web de iqoption y abre alguna opción binaria
-    if I_want_money.get_option_open_by_other_pc()!={}:
+    if Iq.get_option_open_by_other_pc()!={}:
         break
     time.sleep(1)
 print("Obtener la opción abierta de otra sesión y de la misma cuenta")
-print(I_want_money.get_option_open_by_other_pc())
+print(Iq.get_option_open_by_other_pc())
 
-id=list(I_want_money.get_option_open_by_other_pc().keys())[0]
-I_want_money.del_option_open_by_other_pc(id)
+id=list(Iq.get_option_open_by_other_pc().keys())[0]
+Iq.del_option_open_by_other_pc(id)
 print("Depués de la id")
-print(I_want_money.get_option_open_by_other_pc())
+print(Iq.get_option_open_by_other_pc())
 ```
 
 ## Obtener indicador
@@ -271,18 +271,18 @@ print(I_want_money.get_option_open_by_other_pc())
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
 goal="EURUSD"
-I_want_money.start_mood_stream(goal)
-print(I_want_money.get_traders_mood(goal))
-I_want_money.stop_mood_stream(goal)
+Iq.start_mood_stream(goal)
+print(Iq.get_traders_mood(goal))
+Iq.stop_mood_stream(goal)
 ```
 
 ### start_mood_stream()
 
 ```python
-I_want_money.start_mood_stream(goal)
+Iq.start_mood_stream(goal)
 ```
 
 ### get_traders_mood()
@@ -290,7 +290,7 @@ I_want_money.start_mood_stream(goal)
 call get_traders_mood() after start_mood_stream
 
 ```python
-I_want_money.get_traders_mood(goal)
+Iq.get_traders_mood(goal)
 ```
 
 ### get_all_traders_mood()
@@ -298,7 +298,7 @@ I_want_money.get_traders_mood(goal)
 Obtendrá todo el indicador de operaciones en que hayas activado el stream
 
 ```python
-I_want_money.get_all_traders_mood()
+Iq.get_all_traders_mood()
 #output:(dict) all mood you start
 ```
 
@@ -307,6 +307,6 @@ I_want_money.get_all_traders_mood()
 Si no está usando el indicador, porfavor páralo para una mejor conexión.
 
 ```python
-I_want_money.stop_mood_stream(goal)
+Iq.stop_mood_stream(goal)
 ```
 

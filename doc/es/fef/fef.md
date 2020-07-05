@@ -9,8 +9,8 @@ buscar [instrument_type and instrument_id](instrument.txt)
 
 ```python
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#conectar a iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#conectar a iqoption
 instrument_type="crypto"
 instrument_id="BTCUSD"
 side="buy"#Introducir:"buy"/"sell"
@@ -51,19 +51,19 @@ auto_margin_call=False#True/False
 
 use_token_for_commission=False#True/False
 
-check,order_id=I_want_money.buy_order(instrument_type=instrument_type, instrument_id=instrument_id,
+check,order_id=Iq.buy_order(instrument_type=instrument_type, instrument_id=instrument_id,
             side=side, amount=amount,leverage=leverage,
             type=type,limit_price=limit_price, stop_price=stop_price,
             stop_lose_value=stop_lose_value, stop_lose_kind=stop_lose_kind,
             take_profit_value=take_profit_value, take_profit_kind=take_profit_kind,
             use_trail_stop=use_trail_stop, auto_margin_call=auto_margin_call,
             use_token_for_commission=use_token_for_commission)
-print(I_want_money.get_order(order_id)) 
-print(I_want_money.get_positions("crypto"))
-print(I_want_money.get_position_history("crypto"))
-print(I_want_money.get_available_leverages("crypto","BTCUSD"))
-print(I_want_money.close_position(order_id))
-print(I_want_money.get_overnight_fee("crypto","BTCUSD"))
+print(Iq.get_order(order_id))
+print(Iq.get_positions("crypto"))
+print(Iq.get_position_history("crypto"))
+print(Iq.get_available_leverages("crypto","BTCUSD"))
+print(Iq.close_position(order_id))
+print(Iq.get_overnight_fee("crypto","BTCUSD"))
 ```
 
 ## buy_order()
@@ -97,7 +97,7 @@ auto_margin_call|True|False
 use_token_for_commission|True|False
 
 ```python
-check,order_id=I_want_money.buy_order(
+check,order_id=Iq.buy_order(
             instrument_type=instrument_type, instrument_id=instrument_id,
             side=side, amount=amount,leverage=leverage,
             type=type,limit_price=limit_price, stop_price=stop_price,
@@ -115,7 +115,7 @@ ID_Name=""order_id" |  ID_Name="position_id"
 :-------------------------:|:-------------------------:
 ![](image/change_ID_Name_order_id.png)  |  ![](image/change_ID_Name_position_id.png)
 
- 
+
 |parameter|||||
 --|--|--|--|--|
 ID_Name|"position_id"|"order_id"
@@ -137,7 +137,7 @@ take_profit_kind="percent"
 take_profit_value=200
 use_trail_stop=False
 auto_margin_call=True
-I_want_money.change_order(ID_Name=ID_Name,order_id=order_id,
+Iq.change_order(ID_Name=ID_Name,order_id=order_id,
                 stop_lose_kind=stop_lose_kind,stop_lose_value=stop_lose_value,
                 take_profit_kind=take_profit_kind,take_profit_value=take_profit_value,
                 use_trail_stop=use_trail_stop,auto_margin_call=auto_margin_call)
@@ -150,7 +150,7 @@ Obtener información sobre buy_order_id
 devuelve (True/False,get_order,None)
 
 ```python
-I_want_money.get_order(buy_order_id)
+Iq.get_order(buy_order_id)
 ```
 
 ## get_pending()
@@ -160,7 +160,7 @@ Obtendrás los dato
 ![](image/get_pending.png)
 
 ```python
-I_want_money.get_pending(instrument_type)
+Iq.get_pending(instrument_type)
 ```
 
 ## get_positions()
@@ -177,7 +177,7 @@ no soporte para ""turbo-option""
 instrument_type="crypto","forex","fx-option","multi-option","cfd","digital-option"
 
 ```python
-I_want_money.get_positions(instrument_type)
+Iq.get_positions(instrument_type)
 ```
 
 ## get_position()
@@ -191,7 +191,7 @@ Obtendráss una possición por buy_order_id
 devuelve (True/False,position data,None)
 
 ```python
-I_want_money.get_positions(buy_order_id)
+Iq.get_positions(buy_order_id)
 ```
 
 ## get_position_history
@@ -200,11 +200,11 @@ Obtendrás los datos
 ![](image/get_position_history.png)
 
 ### get_position_history()
- 
+
 devuelve (True/False,position_history,None)
 
 ```
-I_want_money.get_position_history(instrument_type)
+Iq.get_position_history(instrument_type)
 ```
 
 ### get_position_history_v2
@@ -220,15 +220,15 @@ import random
 import time
 import datetime
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#conectar a iqoption
-#instrument_type="crypto","forex","fx-option","turbo-option","multi-option","cfd","digital-option"  
+Iq=IQ_Option("email","password")
+Iq.connect()#conectar a iqoption
+#instrument_type="crypto","forex","fx-option","turbo-option","multi-option","cfd","digital-option"
 instrument_type="digital-option"
 limit=2#Cuántos quieres obtener
 offset=0#offset de tiempo final, si el tiempo final es 0,significa que se obtendrán los datos desde ahora
 start=0#Empezar el tiempo en Timestamp
 end=0#Timestamp
-data=I_want_money.get_position_history_v2(instrument_type,limit,offset,start,end)
+data=Iq.get_position_history_v2(instrument_type,limit,offset,start,end)
 
 print(data)
 
@@ -238,7 +238,7 @@ limit=2#Cuántos quieres obtener
 offset=0#offset de tiempo final, si el tiempo final es 0, significa que se obtendrán los datos desde ahora
 start=int(time.mktime(datetime.datetime.strptime("2019/1/1", "%Y/%m/%d").timetuple()))
 end=int(time.mktime(datetime.datetime.strptime("2019/7/1", "%Y/%m/%d").timetuple()))
-data=I_want_money.get_position_history_v2(instrument_type,limit,offset,start,end)
+data=Iq.get_position_history_v2(instrument_type,limit,offset,start,end)
 print(data)
 ```
 
@@ -249,7 +249,7 @@ Obtener apalancamiento disponible
 devuelve (True/False,available_leverages,None)
 
 ```python
-I_want_money.get_available_leverages(instrument_type,actives)
+Iq.get_available_leverages(instrument_type,actives)
 ```
 
 ## cancel_order()
@@ -261,7 +261,7 @@ Cancelarás la orden
 devuelve (True/False)
 
 ```python
-I_want_money.cancel_order(buy_order_id)
+Iq.cancel_order(buy_order_id)
 ```
 
 ## close_position()
@@ -273,7 +273,7 @@ Cancelarás la poición
 devuelve (True/False)
 
 ```python
-I_want_money.close_position(buy_order_id)
+Iq.close_position(buy_order_id)
 ```
 
 ## get_overnight_fee()
@@ -281,5 +281,5 @@ I_want_money.close_position(buy_order_id)
 devuelve (True/False,overnight_fee,None)
 
 ```python
-I_want_money.get_overnight_fee(instrument_type,active)
+Iq.get_overnight_fee(instrument_type,active)
 ```

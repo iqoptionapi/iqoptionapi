@@ -2,10 +2,14 @@
 
 ## Install iqoptionapi
 
-download the source code and run this
+You can download the source code and run this
 
 ```
 python setup.py install
+```
+or  install using (you need [git installed](https://git-scm.com/downloads)):
+```
+pip install -U git+git://github.com/iqoptionapi/iqoptionapi.git
 ```
 
 ## little sample
@@ -13,11 +17,11 @@ python setup.py install
 ```python
 import time
 from iqoptionapi.stable_api import IQ_Option
-I_want_money=IQ_Option("email","password")
-I_want_money.connect()#connect to iqoption
+Iq=IQ_Option("email","password")
+Iq.connect()#connect to iqoption
 goal="EURUSD"
 print("get candles")
-print(I_want_money.get_candles(goal,60,111,time.time()))
+print(Iq.get_candles(goal,60,111,time.time()))
 ```
 
 ## Import
@@ -28,7 +32,7 @@ from iqoptionapi.stable_api import IQ_Option
 
 ## Login
 
-I_want_money.connect() will return (check,reason)
+Iq.connect() will return (check,reason)
 
 if connect sucess return True,None
 
@@ -39,8 +43,8 @@ from iqoptionapi.stable_api import IQ_Option
 import logging
 
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
-I_want_money=IQ_Option("email","password")
-check, reason=I_want_money.connect()#connect to iqoption
+Iq=IQ_Option("email","password")
+check, reason=Iq.connect()#connect to iqoption
 print(check, reason)
 ```
 
@@ -94,16 +98,16 @@ from iqoptionapi.stable_api import IQ_Option
 import logging
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 
-I_want_money=IQ_Option("email","password")
+Iq=IQ_Option("email","password")
 
 #Default is "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
 
 header={"User-Agent":r"Mozilla/5.0 (X11; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0"}
-cookie={"I_want_money":"GOOD"}
+cookie={"Iq":"GOOD"}
 
-I_want_money.set_session(header,cookie)
+Iq.set_session(header,cookie)
 
-I_want_money.connect()#connect to iqoption
+Iq.connect()#connect to iqoption
 ```
 
 ## Check version
@@ -118,13 +122,13 @@ print(IQ_Option.__version__)
 return True/False
 
 ```
-print(I_want_money.check_connect())
+print(Iq.check_connect())
 ```
 
 ## Reconnect
 
 ```python
-I_want_money.connect()
+Iq.connect()
 ```
 
 ## time
@@ -133,5 +137,5 @@ get_server_timestamp
 the get_server_timestamp time is sync with iqoption
 
 ```python
-I_want_money.get_server_timestamp()
+Iq.get_server_timestamp()
 ```

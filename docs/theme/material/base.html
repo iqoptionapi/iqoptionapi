@@ -306,21 +306,14 @@
     {%- set _ = translations.update({ key: lang.t(key) }) -%}
     {%- endfor -%}
     <script id="__lang" type="application/json">
-      {
-        {
-          -translations | tojson -
-        }
-      }
+      {{- translations | tojson -}}
     </script>
     {% block config %}{% endblock %}
+    {% set features = config.theme.features | tojson %}
     <script>
       app = initialize({
         base: "{{ base_url }}",
-        features: {
-          {
-            config.theme.features | tojson
-          }
-        },
+        features: {{ config.theme.features | tojson }},
         search: Object.assign({
           worker: "{{ 'assets/javascripts/worker/search.37585f48.min.js' | url }}"
         }, typeof search !== "undefined" && search)

@@ -27,8 +27,7 @@ theme:
   palette:
     primary: "indigo"
     accent: "Blue Grey"
-  features:
-    tabs: false
+  features: []
   font:
     text: "Roboto"
     code: "Roboto Mono"
