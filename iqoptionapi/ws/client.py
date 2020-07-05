@@ -39,11 +39,12 @@ class WebsocketClient(object):
                     del dict[key1][key2][sorted(
                         dict[key1][key2].keys(), reverse=False)[0]]
 
-    def api_dict_clean(self, key_name):
-        if len(self.api[key_name]) > 5000:
-            for k in self.api[key_name].keys():
-                del self.api[key_name][k]
+    def api_dict_clean(self, obj):
+        if len(obj) > 5000:
+            for k in obj.keys():
+                del obj[k]
                 break
+        print('fim clean')
 
     def on_message(self, message):  # pylint: disable=unused-argument
         """Method to process websocket messages."""
@@ -251,7 +252,7 @@ class WebsocketClient(object):
 
         elif message["name"] == "technical-indicators":
             if message["msg"].get("indicators") != None:
-                self.api_dict_clean('technical_indicators')
+                self.api_dict_clean(self.api.technical_indicators)
                 self.api.technical_indicators[message["request_id"]
                                               ] = message["msg"]["indicators"]
             else:
@@ -284,7 +285,7 @@ class WebsocketClient(object):
             self.api.auto_margin_call_changed_respond = message
         elif message["name"] == "digital-option-placed":
             if message["msg"].get("id") != None:
-                self.api_dict_clean('digital_option_placed_id')
+                self.api_dict_clean(self.api.digital_option_placed_id)
                 self.api.digital_option_placed_id[message["request_id"]
                                                   ] = message["msg"]["id"]
             else:
