@@ -1014,7 +1014,7 @@ class IQ_Option:
             exp).strftime("%Y%m%d%H%M"))
         instrument_id = "do" + active + dateFormated + \
                         "PT" + str(duration) + "M" + action + "SPT"
-        self.api.digital_option_placed_id = None
+        # self.api.digital_option_placed_id = None
 
         request_id = self.api.place_digital_option(instrument_id, amount)
 
