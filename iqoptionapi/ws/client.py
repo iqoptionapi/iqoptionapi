@@ -44,7 +44,6 @@ class WebsocketClient(object):
             for k in obj.keys():
                 del obj[k]
                 break
-        print('fim clean')
 
     def on_message(self, message):  # pylint: disable=unused-argument
         """Method to process websocket messages."""
