@@ -234,7 +234,7 @@ while True:
 
 ---
 ## Como realizar login com 2 fatores
-```
+```python
 from iqoptionapi.stable_api import IQ_Option
 
 print("Conectando...")
