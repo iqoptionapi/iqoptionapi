@@ -11,6 +11,9 @@ from collections import deque
 from iqoptionapi.http.login import Login
 from iqoptionapi.http.loginv2 import Loginv2
 from iqoptionapi.http.logout import Logout
+from iqoptionapi.http.login2fa import Login2FA
+from iqoptionapi.http.send_sms import SMS_Sender
+from iqoptionapi.http.verify import Verify
 from iqoptionapi.http.getprofile import Getprofile
 from iqoptionapi.http.auth import Auth
 from iqoptionapi.http.token import Token
@@ -165,6 +168,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
         self.session.trust_env = False
         self.username = username
         self.password = password
+        self.token_login2fa = None
+        self.token_sms = None
         self.proxies = proxies
         # is used to determine if a buyOrder was set  or failed. If
         # it is None, there had been no buy order yet or just send.
@@ -289,6 +294,33 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
             <iqoptionapi.http.login.Login>`.
         """
         return Login(self)
+
+    @property
+    def login_2fa(self):
+        """Property for get IQ Option http login 2FA resource.
+
+        :returns: The instance of :class:`Login2FA
+            <iqoptionapi.http.login2fa.Login2FA>`.
+        """
+        return Login2FA(self)
+
+    @property
+    def send_sms_code(self):
+        """Property for get IQ Option http send sms code resource.
+
+        :returns: The instance of :class:`SMS_Sender
+            <iqoptionapi.http.send_sms.SMS_Sender>`.
+        """
+        return SMS_Sender(self)
+
+    @property
+    def verify_2fa(self):
+        """Property for get IQ Option http verify 2fa resource.
+
+        :returns: The instance of :class:`Verify
+            <iqoptionapi.http.verify.Verify>`.
+        """
+        return Verify(self)
 
     @property
     def loginv2(self):
@@ -760,11 +792,25 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
 
             pass
 
+    # @tokensms.setter
+    def setTokenSMS(self, response):
+        token_sms = response.json()['token']
+        self.token_sms = token_sms
+
+    # @token2fa.setter
+    def setToken2FA(self, response):
+        token_2fa = response.json()['token']
+        self.token_login2fa = token_2fa
+
     def get_ssid(self):
         response = None
         try:
-            response = self.login(
-                self.username, self.password)  # pylint: disable=not-callable
+            if self.token_login2fa is None:
+                response = self.login(
+                    self.username, self.password)# pylint: disable=not-callable
+            else:
+                response = self.login_2fa(
+                    self.username, self.password, self.token_login2fa)
         except Exception as e:
             logger = logging.getLogger(__name__)
             logger.error(e)
@@ -833,6 +879,18 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
                     break
             except:
                 pass
+        return True, None
+
+    def connect2fa(self, sms_code):
+        response = self.verify_2fa(sms_code, self.token_sms)
+
+        if response.json()['code'] != 'success':
+            return False, response.json()['message']
+
+        # token_2fa
+        self.setToken2FA(response)
+        if self.token_login2fa is None:
+            return False, None
         return True, None
 
     def close(self):

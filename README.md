@@ -233,6 +233,33 @@ while True:
 ````
 
 ---
+## Como realizar login com 2 fatores
+```
+from iqoptionapi.stable_api import IQ_Option
+
+print("Conectando...")
+api = IQ_Option("email", "password")
+status, reason = api.connect()
+print('##### Primeira tentativa #####')
+print('Status:', status)
+print('Reason:', reason)
+print("Email:", api.email)
+
+if reason == "2FA":
+    print('##### 2FA HABILITADO #####')
+    print("Um sms foi enviado com um código para seu número")
+
+    code_sms = input("Digite o código recebido: ")
+    status, reason = api.connect_2fa(code_sms)
+
+    print('##### Segunda tentativa #####')
+    print('Status:', status)
+    print('Reason:', reason)
+    print("Email:", api.email)
+
+print("Banca:", api.get_balance())
+print("##############################")
+```
 
 ### Check version
 
