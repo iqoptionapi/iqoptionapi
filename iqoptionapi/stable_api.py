@@ -1011,6 +1011,24 @@ class IQ_Option:
                 return profit[key]
         return False
 
+    def get_digital_current_profit_v2(self, ativo, timeframe, limit=2):
+        limit *= 4
+        count_timeout = 0
+        self.subscribe_strike_list(ativo, timeframe)
+        # timeout
+        resp = False
+        while True:
+            d = self.get_digital_current_profit(ativo, timeframe)
+            if d is not False:
+                resp = d
+                break
+            if count_timeout >= limit:
+                break
+            count_timeout += 1
+            time.sleep(0.25)
+        self.unsubscribe_strike_list(ativo, timeframe)
+        return resp
+
     # thank thiagottjv
     # https://github.com/Lu-Yi-Hsun/iqoptionapi/issues/65#issuecomment-513998357
 
