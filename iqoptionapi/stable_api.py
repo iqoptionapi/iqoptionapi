@@ -1016,7 +1016,7 @@ class IQ_Option:
         count_timeout = 0
         self.subscribe_strike_list(ativo, timeframe)
         # timeout
-        resp = False
+        resp = None
         while True:
             d = self.get_digital_current_profit(ativo, timeframe)
             if d is not False:
