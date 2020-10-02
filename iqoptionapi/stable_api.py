@@ -1037,13 +1037,14 @@ class IQ_Option:
         # And need to be on GMT time
 
         # Type - P or C
+        action = action.lower()
         if action == 'put':
             action = 'P'
         elif action == 'call':
             action = 'C'
         else:
             logging.error('buy_digital_spot active error')
-            return -1
+            return None, -1
         # doEURUSD201907191250PT5MPSPT
         timestamp = int(self.api.timesync.server_timestamp)
         if duration == 1:
