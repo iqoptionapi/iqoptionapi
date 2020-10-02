@@ -1044,7 +1044,7 @@ class IQ_Option:
             action = 'C'
         else:
             logging.error('buy_digital_spot active error')
-            return None, -1
+            return -1, None
         # doEURUSD201907191250PT5MPSPT
         timestamp = int(self.api.timesync.server_timestamp)
         if duration == 1:
