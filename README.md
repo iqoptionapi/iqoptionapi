@@ -190,12 +190,6 @@ Iq=IQ_Option("email","password")
 
 ---
 
-### <a id=setmaxreconnect>set_max_reconnect</a>
-
-default number is 5
-
-https://github.com/Lu-Yi-Hsun/iqoptionapi/issues/22
-
 ## Como realizar login
 
 ```python
@@ -204,7 +198,7 @@ from iqoptionapi.stable_api import IQ_Option
 API = IQ_Option("email", "senha")
 ```
 
-Iq.set_max_reconnect(number)
+Iq.connect()
 
 ````
 
@@ -222,7 +216,7 @@ from iqoptionapi.stable_api import IQ_Option
 import time
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(message)s')
 Iq=IQ_Option("email","password")
-Iq.set_max_reconnect(-1)#allow unlimited reconnect
+Iq.connect()
 while True:
     #you can !!close yuor network!! to simulation network fails
     if Iq.check_connect()==False:#detect the websocket is close
@@ -288,6 +282,12 @@ Iq.connect()
 ```
 
 ---
+
+### <a id=reconnect>Close Connection</a>
+
+```python
+Iq.close_connection()
+```
 
 ---
 
