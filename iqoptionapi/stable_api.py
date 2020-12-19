@@ -22,7 +22,7 @@ def nested_dict(n, type):
 
 
 class IQ_Option:
-    __version__ = "6.8.9.1"
+    __version__ = "7.0"
 
     def __init__(self, email, password, active_account_type="PRACTICE"):
         self.size = [1, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800,
@@ -1534,3 +1534,7 @@ class IQ_Option:
             self.api.Get_Users_Availability(user_id)
             time.sleep(0.2)
         return self.api.users_availability
+
+    def close_connection(self):
+        self.api.close()
+
