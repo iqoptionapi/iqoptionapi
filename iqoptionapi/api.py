@@ -896,6 +896,7 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def close(self):
         self.websocket.close()
         self.websocket_thread.join()
+        self.logout()
 
     def websocket_alive(self):
         return self.websocket_thread.is_alive()
