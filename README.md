@@ -701,6 +701,14 @@ print(Iq.get_option_open_by_other_pc())
 
 ### <a id=digital>For Digital</a>
 
+#### capturar payout atual, sample code
+```python
+ACTIVE="EURUSD"
+payout = Iq.get_digital_payout(ACTIVE)
+print(f"Payout {ACTIVE}: {payout}%")
+```
+
+
 [Digital options buy with actual price sample code](https://github.com/Lu-Yi-Hsun/iqoptionapi/issues/65#issuecomment-511660908)
 
 ### Para digitais

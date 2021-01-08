@@ -197,8 +197,6 @@ class WebsocketClient(object):
             self.api.api_option_init_all_result_v2 = message["msg"]
         elif message["name"] == "underlying-list":
             self.api.underlying_list_data = message["msg"]
-        elif message["name"] == "instruments":
-            self.api.instruments = message["msg"]
         elif message["name"] == "financial-information":
             self.api.financial_information = message
         elif message["name"] == "position-changed":
@@ -394,6 +392,12 @@ class WebsocketClient(object):
             self.api.leaderboard_userinfo_deals_client = message["msg"]
         elif message["name"] == "users-availability":
             self.api.users_availability = message["msg"]
+        elif message["name"] == "instruments":
+            self.api.instruments = message["msg"]
+        elif message["name"] == "client-price-generated":
+            ask_price = [d for d in message["msg"]["prices"] if d['strike'] == 'SPT'][0]['call']['ask']
+            self.api.digital_payout = int(((100-ask_price)*100)/ask_price)
+            self.api.client_price_generated = message["msg"]
         else:
             pass
         global_value.ssl_Mutual_exclusion = False

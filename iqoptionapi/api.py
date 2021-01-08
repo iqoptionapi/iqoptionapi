@@ -34,7 +34,7 @@ from iqoptionapi.ws.chanels.buyv2 import Buyv2
 from iqoptionapi.ws.chanels.buyv3 import *
 from iqoptionapi.ws.chanels.user import *
 from iqoptionapi.ws.chanels.api_game_betinfo import Game_betinfo
-from iqoptionapi.ws.chanels.instruments import Get_instruments
+from iqoptionapi.ws.chanels.instruments import Get_instruments, GetDigitalInstruments
 from iqoptionapi.ws.chanels.get_financial_information import GetFinancialInformation
 from iqoptionapi.ws.chanels.strike_list import Strike_list
 from iqoptionapi.ws.chanels.leaderboard import Leader_Board
@@ -152,6 +152,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     leaderboard_userinfo_deals_client = None
     users_availability = None
     # ------------------
+
+    digital_payout = None
 
     def __init__(self, host, username, password, proxies=None):
         """
@@ -911,3 +913,16 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     @property
     def Get_Users_Availability(self):
         return Get_users_availability(self)
+
+    @property
+    def get_digital_instruments(self):
+        return GetDigitalInstruments(self)
+
+    @property
+    def subscribe_digital_price_splitter(self):
+        return Subscribe_Digital_Price_Splitter(self)
+
+    @property
+    def unsubscribe_digital_price_splitter(self):
+        return Unsubscribe_Digital_Price_Splitter(self)
+
