@@ -277,8 +277,14 @@ print(Iq.check_connect())
 Iq.connect()
 ```
 
----
+### <a id=payout_digital>Nova função de captura payout digital</a>
 
+---
+```python
+active = 'EURUSD'
+payout = Iq.get_digital_payout(active)
+print(payout)
+```
 ---
 
 ### Retornar ativos e verificar se estão aberto

@@ -130,3 +130,21 @@ class Unscribe_live_deal(Base):
             "version": "2.0"
         }
         self.send_websocket_request(self.name, data)
+
+
+class UnsubscribeDigitalPriceSplitter(Base):
+    name = "unsubscribeMessage"
+
+    def __call__(self, asset_id):
+        data = {
+            "name": "price-splitter.client-price-generated",
+            "version": "1.0",
+            "params": {
+                "routingFilters": {
+                    "instrument_type": "digital-option",
+                    "asset_id": int(asset_id)
+                }
+            }
+        }
+
+        self.send_websocket_request(self.name, msg=data)
