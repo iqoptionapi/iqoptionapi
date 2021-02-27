@@ -1550,3 +1550,43 @@ class IQ_Option:
     def logout(self):
         self.api.logout()
 
+    def buy_digital_spot_v2(self, active, amount, action, duration):
+        action = action.lower()
+
+        if action == 'put':
+            action = 'P'
+        elif action == 'call':
+            action = 'C'
+        else:
+            logging.error('buy_digital_spot_v2 active error')
+            return -1, None
+
+        timestamp = int(self.api.timesync.server_timestamp)
+
+        if duration == 1:
+            exp, _ = get_expiration_time(timestamp, duration)
+        else:
+            now_date = datetime.fromtimestamp(timestamp) + timedelta(minutes=1, seconds=30)
+
+            while True:
+                if now_date.minute % duration == 0 and time.mktime(now_date.timetuple()) - timestamp > 30:
+                    break
+                now_date = now_date + timedelta(minutes=1)
+
+            exp = time.mktime(now_date.timetuple())
+
+        date_formated = str(datetime.utcfromtimestamp(exp).strftime("%Y%m%d%H%M"))
+        active_id = str(OP_code.ACTIVES[active])
+        instrument_id = "do" + active_id + "A" + date_formated[:8] + "D" + date_formated[8:] + "00T" + str(duration) + "M" + action + "SPT"
+        logger = logging.getLogger(__name__)
+        logger.info(instrument_id)
+        request_id = self.api.place_digital_option_v2(instrument_id, active_id, amount)
+
+        while self.api.digital_option_placed_id.get(request_id) is None:
+            pass
+
+        digital_order_id = self.api.digital_option_placed_id.get(request_id)
+        if isinstance(digital_order_id, int):
+            return True, digital_order_id
+        else:
+            return False, digital_order_id

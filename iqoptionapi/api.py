@@ -920,3 +920,7 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     @property
     def unsubscribe_digital_price_splitter(self):
         return UnsubscribeDigitalPriceSplitter(self)
+
+    @property
+    def place_digital_option_v2(self):
+        return DigitalOptionsPlaceDigitalOptionV2(self)
