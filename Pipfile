@@ -9,18 +9,15 @@ websocket_client = "==0.56"
 
 [dev-packages]
 pylint = "*"
-black = "==20.8b1"
 flake8 = "*"
 isort = "*"
 mypy = "*"
 pre-commit = "*"
 pytest = "*"
 pytest-cov = "*"
-snakeviz = "*"
-
 
 [requires]
 python_version = "3.9"
 
 [scripts]
-test = "sh -c 'isort iqoptionapi && black iqoptionapi && flake8 --exclude .venv && mypy --ignore-missing-imports && pytest'"
+test = "sh -c 'isort iqoptionapi && flake8 --exclude .venv && mypy --ignore-missing-imports'"

@@ -17,27 +17,11 @@ jobs:
         with:
           python-version: 3.9
 
-      - uses: actions/cache@v2
-        id: cache-it
-        with:
-          path: |
-            .venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('**/Pipefile') }}
-          restore-keys: |
-            ${{ runner.os }}-venv
-
       - name: Install pipenv
-        run: |
-          pip install pipenv
+        run: pip install pipenv
 
       - name: Install dependencies
-        if: steps.cache-it.outputs.cache-hit != 'true'
         run: pipenv install --deploy --dev
-
-#       - run: pipenv run pylint iqoptionapi
-#       - run: pipenv run isort --recursive --diff .
-#       - run: pipenv run black --check .
-#       - run: pipenv run flake8
-#       - run: pipenv run mypy
-#       - run: pipenv run pytest --cov --cov-fail-under=100
+      
+      - run: pipenv run test
 

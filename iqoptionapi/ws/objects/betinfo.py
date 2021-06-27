@@ -1,4 +1,4 @@
-#python
+# python
 """Module for IQ Option Profile websocket object."""
 from iqoptionapi.ws.objects.base import Base
 
@@ -10,7 +10,7 @@ class Game_betinfo_data(Base):
         super(Game_betinfo_data, self).__init__()
         self.__isSuccessful = None
         self.__dict = {}
- 
+
     @property
     def isSuccessful(self):
         return self.__isSuccessful
@@ -19,7 +19,8 @@ class Game_betinfo_data(Base):
     def isSuccessful(self, isSuccessful):
 
         self.__isSuccessful = isSuccessful
-#--------------------------------------
+
+    # --------------------------------------
     @property
     def dict(self):
         return self.__dict
@@ -27,6 +28,3 @@ class Game_betinfo_data(Base):
     @dict.setter
     def dict(self, dict):
         self.__dict = dict
- 
-
- 

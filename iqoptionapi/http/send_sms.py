@@ -1,11 +1,20 @@
 """Module for IQ Option http sms resource."""
 
-from iqoptionapi.http.resource import Resource
 import json
+
+from iqoptionapi.http.resource import Resource
+
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 6.3; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/77.0.3865.90 "
+    "Safari/537.36"
+)
 
 
 class SMS_Sender(Resource):
     """Class for IQ option sms resource."""
+
     # pylint: disable=too-few-public-methods
 
     url = ""
@@ -15,7 +24,12 @@ class SMS_Sender(Resource):
 
         :returns: The instance of :class:`requests.Response`.
         """
-        return self.api.send_http_request_v2(method="POST", url="https://auth.iqoption.com/api/v2/verify/2fa",data=json.dumps(data), headers=headers)
+        return self.api.send_http_request_v2(
+            method="POST",
+            url="https://auth.iqoption.com/api/v2/verify/2fa",
+            data=json.dumps(data),
+            headers=headers,
+        )
 
     def __call__(self, token_reason):
         """Method to get IQ Option API sms http request.
@@ -25,15 +39,14 @@ class SMS_Sender(Resource):
 
         :returns: The instance of :class:`requests.Response`.
         """
-        data = {"method": "sms",
-                "token": token_reason}
+        data = {"method": "sms", "token": token_reason}
 
         headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Referer': 'https://iqoption.com/en/login',
-            'Sec-Fetch-Mode': 'cors',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
-            }
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Referer": "https://iqoption.com/en/login",
+            "Sec-Fetch-Mode": "cors",
+            "User-Agent": USER_AGENT,
+        }
 
         return self._post(data=data, headers=headers)

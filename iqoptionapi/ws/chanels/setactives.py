@@ -5,6 +5,7 @@ from iqoptionapi.ws.chanels.base import Base
 
 class SetActives(Base):
     """Class for IQ option setactives websocket chanel."""
+
     # pylint: disable=too-few-public-methods
 
     name = "setActives"

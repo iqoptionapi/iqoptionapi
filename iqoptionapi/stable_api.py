@@ -1,18 +1,17 @@
 # python
-from iqoptionapi.api import IQOptionAPI
-import iqoptionapi.constants as OP_code
-import iqoptionapi.country_id as Country
-import threading
-import time
 import json
 import logging
 import operator
-import iqoptionapi.global_value as global_value
-from collections import defaultdict
-from collections import deque
-from iqoptionapi.expiration import get_expiration_time, get_remaning_time
+import time
+from collections import defaultdict, deque
 from datetime import datetime, timedelta
 from random import randint
+
+import iqoptionapi.constants as OP_code
+import iqoptionapi.country_id as Country
+import iqoptionapi.global_value as global_value
+from iqoptionapi.api import IQOptionAPI
+from iqoptionapi.expiration import get_expiration_time, get_remaning_time
 
 
 def nested_dict(n, type):
@@ -22,12 +21,39 @@ def nested_dict(n, type):
         return defaultdict(lambda: nested_dict(n - 1, type))
 
 
+USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/66.0.3359.139 "
+    "Safari/537.36"
+)
+
+
 class IQ_Option:
     __version__ = "7.0.0"
 
     def __init__(self, email, password, active_account_type="PRACTICE"):
-        self.size = [1, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800,
-                     3600, 7200, 14400, 28800, 43200, 86400, 604800, 2592000]
+        self.size = [
+            1,
+            5,
+            10,
+            15,
+            30,
+            60,
+            120,
+            300,
+            600,
+            900,
+            1800,
+            3600,
+            7200,
+            14400,
+            28800,
+            43200,
+            86400,
+            604800,
+            2592000,
+        ]
         self.email = email
         self.password = password
         self.suspend = 0.5
@@ -41,8 +67,10 @@ class IQ_Option:
         self.get_realtime_strike_list_temp_data = {}
         self.get_realtime_strike_list_temp_expiration = 0
         self.SESSION_HEADER = {
-            "User-Agent": r"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"}
+            "User-Agent": USER_AGENT
+        }
         self.SESSION_COOKIE = {}
+        self.api = None
         #
         # --start
         # self.connect()
@@ -84,8 +112,7 @@ class IQ_Option:
             pass
             # logging.error('**warning** self.api.close() fail')
 
-        self.api = IQOptionAPI(
-            "iqoption.com", self.email, self.password)
+        self.api = IQOptionAPI("iqoption.com", self.email, self.password)
         check = None
 
         # 2FA--
@@ -101,20 +128,19 @@ class IQ_Option:
 
         check, reason = self.api.connect()
 
-        if check == True:
+        if check:
             # -------------reconnect subscribe_candle
             self.re_subscribe_stream()
 
             # ---------for async get name: "position-changed", microserviceName
-            while global_value.balance_id == None:
+            while global_value.balance_id is None:
                 pass
 
-            self.position_change_all(
-                "subscribeMessage", global_value.balance_id)
+            self.position_change_all("subscribeMessage",
+                                     global_value.balance_id)
 
             self.order_changed_all("subscribeMessage")
             self.api.setOptions(1, True)
-
             """
             self.api.subscribe_position_changed(
                 "position-changed", "multi-option", 2)
@@ -138,11 +164,11 @@ class IQ_Option:
             # self.get_balance_id()
             return True, None
         else:
-            if json.loads(reason)['code'] == 'verify':
-                response = self.api.send_sms_code(json.loads(reason)['token'])
+            if json.loads(reason)["code"] == "verify":
+                response = self.api.send_sms_code(json.loads(reason)["token"])
 
-                if response.json()['code'] != 'success':
-                    return False, response.json()['message']
+                if response.json()["code"] != "success":
+                    return False, response.json()["message"]
 
                 # token_sms
                 self.resp_sms = response
@@ -188,18 +214,38 @@ class IQ_Option:
     def get_financial_information(self, activeId):
         self.api.financial_information = None
         self.api.get_financial_information(activeId)
-        while self.api.financial_information == None:
+        while self.api.financial_information is None:
             pass
         return self.api.financial_information
 
-    def get_leader_board(self, country, from_position, to_position, near_traders_count, user_country_id=0, near_traders_country_count=0, top_country_count=0, top_count=0, top_type=2):
+    def get_leader_board(
+        self,
+        country,
+        from_position,
+        to_position,
+        near_traders_count,
+        user_country_id=0,
+        near_traders_country_count=0,
+        top_country_count=0,
+        top_count=0,
+        top_type=2,
+    ):
         self.api.leaderboard_deals_client = None
 
         country_id = Country.ID[country]
-        self.api.Get_Leader_Board(country_id, user_country_id, from_position, to_position,
-                                  near_traders_country_count, near_traders_count, top_country_count, top_count, top_type)
+        self.api.Get_Leader_Board(
+            country_id,
+            user_country_id,
+            from_position,
+            to_position,
+            near_traders_country_count,
+            near_traders_count,
+            top_country_count,
+            top_count,
+            top_type,
+        )
 
-        while self.api.leaderboard_deals_client == None:
+        while self.api.leaderboard_deals_client is None:
             pass
         return self.api.leaderboard_deals_client
 
@@ -207,14 +253,14 @@ class IQ_Option:
         # type="crypto"/"forex"/"cfd"
         time.sleep(self.suspend)
         self.api.instruments = None
-        while self.api.instruments == None:
+        while self.api.instruments is None:
             try:
                 self.api.get_instruments(type)
                 start = time.time()
-                while self.api.instruments == None and time.time() - start < 10:
+                while self.api.instruments is None and time.time() - start < 10:
                     pass
             except:
-                logging.error('**error** api.get_instruments need reconnect')
+                logging.error("**error** api.get_instruments need reconnect")
                 self.connect()
         return self.api.instruments
 
@@ -230,10 +276,10 @@ class IQ_Option:
 
     def get_ALL_Binary_ACTIVES_OPCODE(self):
         init_info = self.get_all_init()
-        for dirr in (["binary", "turbo"]):
+        for dirr in ["binary", "turbo"]:
             for i in init_info["result"][dirr]["actives"]:
-                OP_code.ACTIVES[(init_info["result"][dirr]
-                                 ["actives"][i]["name"]).split(".")[1]] = int(i)
+                OP_code.ACTIVES[(init_info["result"][dirr]["actives"][i]
+                                 ["name"]).split(".")[1]] = int(i)
 
     # _________________________self.api.get_api_option_init_all() wss______________________
     def get_all_init(self):
@@ -245,21 +291,21 @@ class IQ_Option:
                     self.api.get_api_option_init_all()
                     break
                 except:
-                    logging.error('**error** get_all_init need reconnect')
+                    logging.error("**error** get_all_init need reconnect")
                     self.connect()
                     time.sleep(5)
             start = time.time()
             while True:
                 if time.time() - start > 30:
-                    logging.error('**warning** get_all_init late 30 sec')
+                    logging.error("**warning** get_all_init late 30 sec")
                     break
                 try:
-                    if self.api.api_option_init_all_result != None:
+                    if self.api.api_option_init_all_result is not None:
                         break
                 except:
                     pass
             try:
-                if self.api.api_option_init_all_result["isSuccessful"] == True:
+                if self.api.api_option_init_all_result["isSuccessful"]:
                     return self.api.api_option_init_all_result
             except:
                 pass
@@ -267,14 +313,14 @@ class IQ_Option:
     def get_all_init_v2(self):
         self.api.api_option_init_all_result_v2 = None
 
-        if self.check_connect() == False:
+        if not self.check_connect():
             self.connect()
 
         self.api.get_api_option_init_all_v2()
         start_t = time.time()
-        while self.api.api_option_init_all_result_v2 == None:
+        while self.api.api_option_init_all_result_v2 is None:
             if time.time() - start_t >= 30:
-                logging.error('**warning** get_all_init_v2 late 30 sec')
+                logging.error("**warning** get_all_init_v2 late 30 sec")
                 return None
         return self.api.api_option_init_all_result_v2
 
@@ -292,8 +338,8 @@ class IQ_Option:
                 for actives_id in binary_data[option]["actives"]:
                     active = binary_data[option]["actives"][actives_id]
                     name = str(active["name"]).split(".")[1]
-                    if active["enabled"] == True:
-                        if active["is_suspended"] == True:
+                    if active["enabled"]:
+                        if active["is_suspended"]:
                             OPEN_TIME[option][name]["open"] = False
                         else:
                             OPEN_TIME[option][name]["open"] = True
@@ -336,12 +382,14 @@ class IQ_Option:
         for actives in init_info["result"]["turbo"]["actives"]:
             name = init_info["result"]["turbo"]["actives"][actives]["name"]
             name = name[name.index(".") + 1:len(name)]
-            detail[name]["turbo"] = init_info["result"]["turbo"]["actives"][actives]
+            detail[name]["turbo"] = init_info["result"]["turbo"]["actives"][
+                actives]
 
         for actives in init_info["result"]["binary"]["actives"]:
             name = init_info["result"]["binary"]["actives"][actives]["name"]
             name = name[name.index(".") + 1:len(name)]
-            detail[name]["binary"] = init_info["result"]["binary"]["actives"][actives]
+            detail[name]["binary"] = init_info["result"]["binary"]["actives"][
+                actives]
         return detail
 
     def get_all_profit(self):
@@ -350,18 +398,15 @@ class IQ_Option:
         for actives in init_info["result"]["turbo"]["actives"]:
             name = init_info["result"]["turbo"]["actives"][actives]["name"]
             name = name[name.index(".") + 1:len(name)]
-            all_profit[name]["turbo"] = (
-                100.0 -
-                init_info["result"]["turbo"]["actives"][actives]["option"]["profit"][
-                    "commission"]) / 100.0
+            all_profit[name]["turbo"] = (100.0 - init_info["result"]["turbo"][
+                "actives"][actives]["option"]["profit"]["commission"]) / 100.0
 
         for actives in init_info["result"]["binary"]["actives"]:
             name = init_info["result"]["binary"]["actives"][actives]["name"]
             name = name[name.index(".") + 1:len(name)]
             all_profit[name]["binary"] = (
-                100.0 -
-                init_info["result"]["binary"]["actives"][actives]["option"]["profit"][
-                    "commission"]) / 100.0
+                100.0 - init_info["result"]["binary"]["actives"][actives]
+                ["option"]["profit"]["commission"]) / 100.0
         return all_profit
 
     # ----------------------------------------
@@ -369,7 +414,7 @@ class IQ_Option:
     # ______________________________________self.api.getprofile() https________________________________
 
     def get_profile_ansyc(self):
-        while self.api.profile.msg == None:
+        while self.api.profile.msg is None:
             pass
         return self.api.profile.msg
 
@@ -380,7 +425,7 @@ class IQ_Option:
                 respon = self.api.getprofile().json()
                 time.sleep(self.suspend)
 
-                if respon["isSuccessful"] == True:
+                if respon["isSuccessful"]:
                     return respon
             except:
                 logging.error('**error** get_profile try reconnect')
@@ -418,7 +463,7 @@ class IQ_Option:
     def get_balances(self):
         self.api.balances_raw = None
         self.api.get_balances()
-        while self.api.balances_raw == None:
+        while self.api.balances_raw is None:
             pass
         return self.api.balances_raw
 
@@ -438,29 +483,46 @@ class IQ_Option:
     def reset_practice_balance(self):
         self.api.training_balance_reset_request = None
         self.api.reset_training_balance()
-        while self.api.training_balance_reset_request == None:
+        while self.api.training_balance_reset_request is None:
             pass
         return self.api.training_balance_reset_request
 
     def position_change_all(self, Main_Name, user_balance_id):
-        instrument_type = ["cfd", "forex", "crypto",
-                           "digital-option", "turbo-option", "binary-option"]
-        for ins in instrument_type:
-            self.api.portfolio(Main_Name=Main_Name, name="portfolio.position-changed",
-                               instrument_type=ins, user_balance_id=user_balance_id)
-
-    def order_changed_all(self, Main_Name):
-        instrument_type = ["cfd", "forex", "crypto",
-                           "digital-option", "turbo-option", "binary-option"]
+        instrument_type = [
+            "cfd",
+            "forex",
+            "crypto",
+            "digital-option",
+            "turbo-option",
+            "binary-option",
+        ]
         for ins in instrument_type:
             self.api.portfolio(
-                Main_Name=Main_Name, name="portfolio.order-changed", instrument_type=ins)
+                Main_Name=Main_Name,
+                name="portfolio.position-changed",
+                instrument_type=ins,
+                user_balance_id=user_balance_id,
+            )
+
+    def order_changed_all(self, Main_Name):
+        instrument_type = [
+            "cfd",
+            "forex",
+            "crypto",
+            "digital-option",
+            "turbo-option",
+            "binary-option",
+        ]
+        for ins in instrument_type:
+            self.api.portfolio(Main_Name=Main_Name,
+                               name="portfolio.order-changed",
+                               instrument_type=ins)
 
     def change_balance(self, Balance_MODE):
         def set_id(b_id):
-            if global_value.balance_id != None:
-                self.position_change_all(
-                    "unsubscribeMessage", global_value.balance_id)
+            if global_value.balance_id is not None:
+                self.position_change_all("unsubscribeMessage",
+                                         global_value.balance_id)
 
             global_value.balance_id = b_id
 
@@ -500,14 +562,14 @@ class IQ_Option:
         self.api.candles.candles_data = None
         while True:
             try:
-                self.api.getcandles(
-                    OP_code.ACTIVES[ACTIVES], interval, count, endtime)
-                while self.check_connect and self.api.candles.candles_data == None:
+                self.api.getcandles(OP_code.ACTIVES[ACTIVES], interval, count,
+                                    endtime)
+                while self.check_connect and self.api.candles.candles_data is None:
                     pass
-                if self.api.candles.candles_data != None:
+                if self.api.candles.candles_data is not None:
                     break
             except:
-                logging.error('**error** get_candles need reconnect')
+                logging.error("**error** get_candles need reconnect")
                 self.connect()
 
         return self.api.candles.candles_data
@@ -532,7 +594,7 @@ class IQ_Option:
 
         else:
             logging.error(
-                '**error** start_candles_stream please input right size')
+                "**error** start_candles_stream please input right size")
 
     def stop_candles_stream(self, ACTIVE, size):
         if size == "all":
@@ -541,7 +603,7 @@ class IQ_Option:
             self.stop_candles_one_stream(ACTIVE, size)
         else:
             logging.error(
-                '**error** start_candles_stream please input right size')
+                "**error** start_candles_stream please input right size")
 
     def get_realtime_candles(self, ACTIVE, size):
         if size == "all":
@@ -549,14 +611,15 @@ class IQ_Option:
                 return self.api.real_time_candles[ACTIVE]
             except:
                 logging.error(
-                    '**error** get_realtime_candles() size="all" can not get candle')
+                    '**error** get_realtime_candles() size="all" can not get candle'
+                )
                 return False
         elif size in self.size:
             try:
                 return self.api.real_time_candles[ACTIVE][size]
             except:
-                logging.error(
-                    '**error** get_realtime_candles() size=' + str(size) + ' can not get candle')
+                logging.error("**error** get_realtime_candles() size="
+                              + str(size) + " can not get candle")
                 return False
         else:
             logging.error(
@@ -571,25 +634,26 @@ class IQ_Option:
     # ---------------------full dict get_candle-----------------------
 
     def full_realtime_get_candle(self, ACTIVE, size, maxdict):
-        candles = self.get_candles(
-            ACTIVE, size, maxdict, self.api.timesync.server_timestamp)
+        candles = self.get_candles(ACTIVE, size, maxdict,
+                                   self.api.timesync.server_timestamp)
         for can in candles:
-            self.api.real_time_candles[str(
-                ACTIVE)][int(size)][can["from"]] = can
+            self.api.real_time_candles[str(ACTIVE)][int(size)][
+                can["from"]] = can
 
     # ------------------------Subscribe ONE SIZE-----------------------
     def start_candles_one_stream(self, ACTIVE, size):
-        if (str(ACTIVE + "," + str(size)) in self.subscribe_candle) == False:
+        if (str(ACTIVE + "," + str(size)) not in self.subscribe_candle):
             self.subscribe_candle.append((ACTIVE + "," + str(size)))
         start = time.time()
         self.api.candle_generated_check[str(ACTIVE)][int(size)] = {}
         while True:
             if time.time() - start > 20:
                 logging.error(
-                    '**error** start_candles_one_stream late for 20 sec')
+                    "**error** start_candles_one_stream late for 20 sec")
                 return False
             try:
-                if self.api.candle_generated_check[str(ACTIVE)][int(size)] == True:
+                if self.api.candle_generated_check[str(ACTIVE)][int(
+                        size)]:
                     return True
             except:
                 pass
@@ -597,16 +661,17 @@ class IQ_Option:
 
                 self.api.subscribe(OP_code.ACTIVES[ACTIVE], size)
             except:
-                logging.error('**error** start_candles_stream reconnect')
+                logging.error("**error** start_candles_stream reconnect")
                 self.connect()
             time.sleep(1)
 
     def stop_candles_one_stream(self, ACTIVE, size):
-        if ((ACTIVE + "," + str(size)) in self.subscribe_candle) == True:
+        if ((ACTIVE + "," + str(size)) in self.subscribe_candle):
             self.subscribe_candle.remove(ACTIVE + "," + str(size))
         while True:
             try:
-                if self.api.candle_generated_check[str(ACTIVE)][int(size)] == {}:
+                if self.api.candle_generated_check[str(ACTIVE)][int(
+                        size)] == {}:
                     return True
             except:
                 pass
@@ -618,16 +683,17 @@ class IQ_Option:
 
     def start_candles_all_size_stream(self, ACTIVE):
         self.api.candle_generated_all_size_check[str(ACTIVE)] = {}
-        if (str(ACTIVE) in self.subscribe_candle_all_size) == False:
+        if (str(ACTIVE) not in self.subscribe_candle_all_size):
             self.subscribe_candle_all_size.append(str(ACTIVE))
         start = time.time()
         while True:
             if time.time() - start > 20:
-                logging.error('**error** fail ' + ACTIVE +
-                              ' start_candles_all_size_stream late for 10 sec')
+                logging.error("**error** fail " + ACTIVE
+                              + " start_candles_all_size_stream late for 10 sec")
                 return False
             try:
-                if self.api.candle_generated_all_size_check[str(ACTIVE)] == True:
+                if self.api.candle_generated_all_size_check[str(
+                        ACTIVE)]:
                     return True
             except:
                 pass
@@ -635,12 +701,12 @@ class IQ_Option:
                 self.api.subscribe_all_size(OP_code.ACTIVES[ACTIVE])
             except:
                 logging.error(
-                    '**error** start_candles_all_size_stream reconnect')
+                    "**error** start_candles_all_size_stream reconnect")
                 self.connect()
             time.sleep(1)
 
     def stop_candles_all_size_stream(self, ACTIVE):
-        if (str(ACTIVE) in self.subscribe_candle_all_size) == True:
+        if (str(ACTIVE) in self.subscribe_candle_all_size):
             self.subscribe_candle_all_size.remove(str(ACTIVE))
         while True:
             try:
@@ -683,12 +749,12 @@ class IQ_Option:
     # -----------------traders_mood----------------------
 
     def start_mood_stream(self, ACTIVES, instrument="turbo-option"):
-        if ACTIVES in self.subscribe_mood == False:
+        if ACTIVES not in self.subscribe_mood:
             self.subscribe_mood.append(ACTIVES)
 
         while True:
-            self.api.subscribe_Traders_mood(
-                OP_code.ACTIVES[ACTIVES], instrument)
+            self.api.subscribe_Traders_mood(OP_code.ACTIVES[ACTIVES],
+                                            instrument)
             try:
                 self.api.traders_mood[OP_code.ACTIVES[ACTIVES]]
                 break
@@ -696,7 +762,7 @@ class IQ_Option:
                 time.sleep(5)
 
     def stop_mood_stream(self, ACTIVES, instrument="turbo-option"):
-        if ACTIVES in self.subscribe_mood == True:
+        if ACTIVES in self.subscribe_mood:
             del self.subscribe_mood[ACTIVES]
         self.api.unsubscribe_Traders_mood(OP_code.ACTIVES[ACTIVES], instrument)
 
@@ -708,21 +774,20 @@ class IQ_Option:
         # return highter %
         return self.api.traders_mood
 
-##############################################################################################
+    ##############################################################################################
 
     # -----------------technical_indicators----------------------
 
     def get_technical_indicators(self, ACTIVES):
         request_id = self.api.get_Technical_indicators(
             OP_code.ACTIVES[ACTIVES])
-        while self.api.technical_indicators.get(request_id) == None:
+        while self.api.technical_indicators.get(request_id) is None:
             pass
         return self.api.technical_indicators[request_id]
 
-##############################################################################################
+    ##############################################################################################
 
-
-##############################################################################################
+    ##############################################################################################
 
     def check_binary_order(self, order_id):
         while order_id not in self.api.order_binary:
@@ -750,8 +815,8 @@ class IQ_Option:
             if check and win != "":
                 try:
 
-                    return data["result"]["data"][str(id_number)]["profit"] - data["result"]["data"][str(id_number)][
-                        "deposit"]
+                    return (data["result"]["data"][str(id_number)]["profit"]
+                            - data["result"]["data"][str(id_number)]["deposit"])
                 except:
                     pass
             time.sleep(polling_time)
@@ -762,18 +827,26 @@ class IQ_Option:
     def check_win_v4(self, id_number):
         while True:
             try:
-                if self.api.socket_option_closed[id_number] != None:
+                if self.api.socket_option_closed[id_number] is not None:
                     break
             except:
                 pass
         x = self.api.socket_option_closed[id_number]
-        return x['msg']['win'], (0 if x['msg']['win'] == 'equal' else float(x['msg']['sum']) * -1 if x['msg']['win'] == 'loose' else float(x['msg']['win_amount']) - float(x['msg']['sum']))
+        return x["msg"]["win"], (
+            0 if x["msg"]["win"] == "equal" else float(x["msg"]["sum"]) * -1
+            if x["msg"]["win"] == "loose" else float(x["msg"]["win_amount"])
+            - float(x["msg"]["sum"]))
 
     def check_win_v3(self, id_number):
         while True:
             result = self.get_optioninfo_v2(10)
-            if result['msg']['closed_options'][0]['id'][0] == id_number and result['msg']['closed_options'][0]['id'][0] != None:
-                return result['msg']['closed_options'][0]['win'], (result['msg']['closed_options'][0]['win_amount'] - result['msg']['closed_options'][0]['amount'] if result['msg']['closed_options'][0]['win'] != 'equal' else 0)
+            if (result["msg"]["closed_options"][0]["id"][0] == id_number
+                    and result["msg"]["closed_options"][0]["id"][0] is not None):
+                return result["msg"]["closed_options"][0]["win"], (
+                    result["msg"]["closed_options"][0]["win_amount"]
+                    - result["msg"]["closed_options"][0]["amount"]
+                    if result["msg"]["closed_options"][0]["win"] != "equal"
+                    else 0)
                 break
             time.sleep(1)
 
@@ -788,16 +861,17 @@ class IQ_Option:
                 self.api.get_betinfo(id_number)
             except:
                 logging.error(
-                    '**error** def get_betinfo  self.api.get_betinfo reconnect')
+                    "**error** def get_betinfo  self.api.get_betinfo reconnect"
+                )
                 self.connect()
-            while self.api.game_betinfo.isSuccessful == None:
+            while self.api.game_betinfo.isSuccessful is None:
                 if time.time() - start > 10:
                     logging.error(
-                        '**error** get_betinfo time out need reconnect')
+                        "**error** get_betinfo time out need reconnect")
                     self.connect()
                     self.api.get_betinfo(id_number)
                     time.sleep(self.suspend * 10)
-            if self.api.game_betinfo.isSuccessful == True:
+            if self.api.game_betinfo.isSuccessful:
                 return self.api.game_betinfo.isSuccessful, self.api.game_betinfo.dict
             else:
                 return self.api.game_betinfo.isSuccessful, None
@@ -806,7 +880,7 @@ class IQ_Option:
     def get_optioninfo(self, limit):
         self.api.api_game_getoptions_result = None
         self.api.get_options(limit)
-        while self.api.api_game_getoptions_result == None:
+        while self.api.api_game_getoptions_result is None:
             pass
 
         return self.api.api_game_getoptions_result
@@ -814,7 +888,7 @@ class IQ_Option:
     def get_optioninfo_v2(self, limit):
         self.api.get_options_v2_data = None
         self.api.get_options_v2(limit, "binary,turbo")
-        while self.api.get_options_v2_data == None:
+        while self.api.get_options_v2_data is None:
             pass
 
         return self.api.get_options_v2_data
@@ -829,7 +903,12 @@ class IQ_Option:
             buy_len = len(price)
             for idx in range(buy_len):
                 self.api.buyv3(
-                    price[idx], OP_code.ACTIVES[ACTIVES[idx]], ACTION[idx], expirations[idx], idx)
+                    price[idx],
+                    OP_code.ACTIVES[ACTIVES[idx]],
+                    ACTION[idx],
+                    expirations[idx],
+                    idx,
+                )
             while len(self.api.buy_multi_option) < buy_len:
                 pass
             buy_id = []
@@ -842,16 +921,17 @@ class IQ_Option:
 
             return buy_id
         else:
-            logging.error('buy_multi error please input all same len')
+            logging.error("buy_multi error please input all same len")
 
     def get_remaning(self, duration):
         for remaning in get_remaning_time(self.api.timesync.server_timestamp):
             if remaning[0] == duration:
                 return remaning[1]
-        logging.error('get_remaning(self,duration) ERROR duration')
+        logging.error("get_remaning(self,duration) ERROR duration")
         return "ERROR duration"
 
-    def buy_by_raw_expirations(self, price, active, direction, option, expired):
+    def buy_by_raw_expirations(self, price, active, direction, option,
+                               expired):
 
         self.api.buy_multi_option = {}
         self.api.buy_successful = None
@@ -861,15 +941,22 @@ class IQ_Option:
         except:
             pass
         self.api.buyv3_by_raw_expired(
-            price, OP_code.ACTIVES[active], direction, option, expired, request_id=req_id)
+            price,
+            OP_code.ACTIVES[active],
+            direction,
+            option,
+            expired,
+            request_id=req_id,
+        )
         start_t = time.time()
         id = None
         self.api.result = None
-        while self.api.result == None or id == None:
+        while self.api.result is None or id is None:
             try:
                 if "message" in self.api.buy_multi_option[req_id].keys():
                     logging.error(
-                        '**warning** buy' + str(self.api.buy_multi_option[req_id]["message"]))
+                        "**warning** buy"
+                        + str(self.api.buy_multi_option[req_id]["message"]))
                     return False, self.api.buy_multi_option[req_id]["message"]
             except:
                 pass
@@ -878,7 +965,7 @@ class IQ_Option:
             except:
                 pass
             if time.time() - start_t >= 5:
-                logging.error('**warning** buy late 5 sec')
+                logging.error("**warning** buy late 5 sec")
                 return False, None
 
         return self.api.result, self.api.buy_multi_option[req_id]["id"]
@@ -893,11 +980,16 @@ class IQ_Option:
         except:
             pass
         self.api.buyv3(
-            float(price), OP_code.ACTIVES[ACTIVES], str(ACTION), int(expirations), req_id)
+            float(price),
+            OP_code.ACTIVES[ACTIVES],
+            str(ACTION),
+            int(expirations),
+            req_id,
+        )
         start_t = time.time()
         id = None
         self.api.result = None
-        while self.api.result == None or id == None:
+        while self.api.result is None or id is None:
             try:
                 if "message" in self.api.buy_multi_option[req_id].keys():
                     return False, self.api.buy_multi_option[req_id]["message"]
@@ -908,7 +1000,7 @@ class IQ_Option:
             except:
                 pass
             if time.time() - start_t >= 5:
-                logging.error('**warning** buy late 5 sec')
+                logging.error("**warning** buy late 5 sec")
                 return False, None
 
         return self.api.result, self.api.buy_multi_option[req_id]["id"]
@@ -916,26 +1008,27 @@ class IQ_Option:
     def sell_option(self, options_ids):
         self.api.sell_option(options_ids)
         self.api.sold_options_respond = None
-        while self.api.sold_options_respond == None:
+        while self.api.sold_options_respond is None:
             pass
         return self.api.sold_options_respond
 
     def sell_digital_option(self, options_ids):
         self.api.sell_digital_option(options_ids)
         self.api.sold_digital_options_respond = None
-        while self.api.sold_digital_options_respond == None:
+        while self.api.sold_digital_options_respond is None:
             pass
         return self.api.sold_digital_options_respond
-# __________________for Digital___________________
+
+    # __________________for Digital___________________
 
     def get_digital_underlying_list_data(self):
         self.api.underlying_list_data = None
         self.api.get_digital_underlying()
         start_t = time.time()
-        while self.api.underlying_list_data == None:
+        while self.api.underlying_list_data is None:
             if time.time() - start_t >= 30:
                 logging.error(
-                    '**warning** get_digital_underlying_list_data late 30 sec')
+                    "**warning** get_digital_underlying_list_data late 30 sec")
                 return None
 
         return self.api.underlying_list_data
@@ -944,7 +1037,7 @@ class IQ_Option:
         self.api.strike_list = None
         self.api.get_strike_list(ACTIVES, duration)
         ans = {}
-        while self.api.strike_list == None:
+        while self.api.strike_list is None:
             pass
         try:
             for data in self.api.strike_list["msg"]["strike"]:
@@ -953,13 +1046,13 @@ class IQ_Option:
                 temp["put"] = data["put"]["id"]
                 ans[("%.6f" % (float(data["value"]) * 10e-7))] = temp
         except:
-            logging.error('**error** get_strike_list read problem...')
+            logging.error("**error** get_strike_list read problem...")
             return self.api.strike_list, None
         return self.api.strike_list, ans
 
     def subscribe_strike_list(self, ACTIVE, expiration_period):
-        self.api.subscribe_instrument_quites_generated(
-            ACTIVE, expiration_period)
+        self.api.subscribe_instrument_quites_generated(ACTIVE,
+                                                       expiration_period)
 
     def unsubscribe_strike_list(self, ACTIVE, expiration_period):
         del self.api.instrument_quites_generated_data[ACTIVE]
@@ -967,13 +1060,17 @@ class IQ_Option:
             ACTIVE, expiration_period)
 
     def get_instrument_quites_generated_data(self, ACTIVE, duration):
-        while self.api.instrument_quotes_generated_raw_data[ACTIVE][duration * 60] == {}:
+        while (self.api.instrument_quotes_generated_raw_data[ACTIVE][duration
+                                                                     * 60] == {}
+               ):
             pass
-        return self.api.instrument_quotes_generated_raw_data[ACTIVE][duration * 60]
+        return self.api.instrument_quotes_generated_raw_data[ACTIVE][duration
+                                                                     * 60]
 
     def get_realtime_strike_list(self, ACTIVE, duration):
         while True:
-            if not self.api.instrument_quites_generated_data[ACTIVE][duration * 60]:
+            if not self.api.instrument_quites_generated_data[ACTIVE][duration
+                                                                     * 60]:
                 pass
             else:
                 break
@@ -981,17 +1078,21 @@ class IQ_Option:
         strike_list dict: price:{call:id,put:id}
         """
         ans = {}
-        now_timestamp = self.api.instrument_quites_generated_timestamp[ACTIVE][duration * 60]
+        now_timestamp = self.api.instrument_quites_generated_timestamp[ACTIVE][
+            duration * 60]
 
         while ans == {}:
-            if self.get_realtime_strike_list_temp_data == {} or now_timestamp != self.get_realtime_strike_list_temp_expiration:
+            if (self.get_realtime_strike_list_temp_data == {} or now_timestamp
+                    != self.get_realtime_strike_list_temp_expiration):
                 raw_data, strike_list = self.get_strike_list(ACTIVE, duration)
-                self.get_realtime_strike_list_temp_expiration = raw_data["msg"]["expiration"]
+                self.get_realtime_strike_list_temp_expiration = raw_data[
+                    "msg"]["expiration"]
                 self.get_realtime_strike_list_temp_data = strike_list
             else:
                 strike_list = self.get_realtime_strike_list_temp_data
 
-            profit = self.api.instrument_quites_generated_data[ACTIVE][duration * 60]
+            profit = self.api.instrument_quites_generated_data[ACTIVE][duration
+                                                                       * 60]
             for price_key in strike_list:
                 try:
                     side_data = {}
@@ -1008,7 +1109,8 @@ class IQ_Option:
         return ans
 
     def get_digital_current_profit(self, ACTIVE, duration):
-        profit = self.api.instrument_quites_generated_data[ACTIVE][duration * 60]
+        profit = self.api.instrument_quites_generated_data[ACTIVE][duration
+                                                                   * 60]
         for key in profit:
             if key.find("SPT") != -1:
                 return profit[key]
@@ -1023,35 +1125,36 @@ class IQ_Option:
 
         # Type - P or C
         action = action.lower()
-        if action == 'put':
-            action = 'P'
-        elif action == 'call':
-            action = 'C'
+        if action == "put":
+            action = "P"
+        elif action == "call":
+            action = "C"
         else:
-            logging.error('buy_digital_spot active error')
+            logging.error("buy_digital_spot active error")
             return -1, None
         # doEURUSD201907191250PT5MPSPT
         timestamp = int(self.api.timesync.server_timestamp)
         if duration == 1:
             exp, _ = get_expiration_time(timestamp, duration)
         else:
-            now_date = datetime.fromtimestamp(
-                timestamp) + timedelta(minutes=1, seconds=30)
+            now_date = datetime.fromtimestamp(timestamp) + timedelta(
+                minutes=1, seconds=30)
             while True:
-                if now_date.minute % duration == 0 and time.mktime(now_date.timetuple()) - timestamp > 30:
+                if (now_date.minute % duration == 0
+                        and time.mktime(now_date.timetuple()) - timestamp > 30):
                     break
                 now_date = now_date + timedelta(minutes=1)
             exp = time.mktime(now_date.timetuple())
 
-        dateFormated = str(datetime.utcfromtimestamp(
-            exp).strftime("%Y%m%d%H%M"))
-        instrument_id = "do" + active + dateFormated + \
-                        "PT" + str(duration) + "M" + action + "SPT"
+        dateFormated = str(
+            datetime.utcfromtimestamp(exp).strftime("%Y%m%d%H%M"))
+        instrument_id = ("do" + active + dateFormated + "PT" + str(duration)
+                         + "M" + action + "SPT")
         # self.api.digital_option_placed_id = None
 
         request_id = self.api.place_digital_option(instrument_id, amount)
 
-        while self.api.digital_option_placed_id.get(request_id) == None:
+        while self.api.digital_option_placed_id.get(request_id) is None:
             pass
         digital_order_id = self.api.digital_option_placed_id.get(request_id)
         if isinstance(digital_order_id, int):
@@ -1059,7 +1162,7 @@ class IQ_Option:
         else:
             return False, digital_order_id
 
-        # while self.api.digital_option_placed_id == None:
+        # while self.api.digital_option_placed_id is None:
         #     pass
         # if isinstance(self.api.digital_option_placed_id, int):
         #     return True, self.api.digital_option_placed_id
@@ -1088,77 +1191,93 @@ class IQ_Option:
         elif position["instrument_id"].find("MCSPT"):
             z = True
         else:
-            logging.error(
-                'get_digital_spot_profit_after_sale position error' + str(position["instrument_id"]))
+            logging.error("get_digital_spot_profit_after_sale position error"
+                          + str(position["instrument_id"]))
 
-        ACTIVES = position['raw_event']['instrument_underlying']
-        amount = max(position['raw_event']["buy_amount"],
-                     position['raw_event']["sell_amount"])
+        ACTIVES = position["raw_event"]["instrument_underlying"]
+        amount = max(position["raw_event"]["buy_amount"],
+                     position["raw_event"]["sell_amount"])
         start_duration = position["instrument_id"].find("PT") + 2
-        end_duration = start_duration + \
-            position["instrument_id"][start_duration:].find("M")
+        end_duration = start_duration + position["instrument_id"][
+            start_duration:].find("M")
 
         duration = int(position["instrument_id"][start_duration:end_duration])
         z2 = False
 
-        getAbsCount = position['raw_event']["count"]
-        instrumentStrikeValue = position['raw_event']["instrument_strike_value"] / 1000000.0
-        spotLowerInstrumentStrike = position['raw_event']["extra_data"]["lower_instrument_strike"] / 1000000.0
-        spotUpperInstrumentStrike = position['raw_event']["extra_data"]["upper_instrument_strike"] / 1000000.0
+        getAbsCount = position["raw_event"]["count"]
+        instrumentStrikeValue = (
+            position["raw_event"]["instrument_strike_value"] / 1000000.0)
+        spotLowerInstrumentStrike = (
+            position["raw_event"]["extra_data"]["lower_instrument_strike"]
+            / 1000000.0)
+        spotUpperInstrumentStrike = (
+            position["raw_event"]["extra_data"]["upper_instrument_strike"]
+            / 1000000.0)
 
-        aVar = position['raw_event']["extra_data"]["lower_instrument_id"]
-        aVar2 = position['raw_event']["extra_data"]["upper_instrument_id"]
-        getRate = position['raw_event']["currency_rate"]
+        aVar = position["raw_event"]["extra_data"]["lower_instrument_id"]
+        aVar2 = position["raw_event"]["extra_data"]["upper_instrument_id"]
+        getRate = position["raw_event"]["currency_rate"]
 
         # ___________________/*position*/_________________
         instrument_quites_generated_data = self.get_instrument_quites_generated_data(
             ACTIVES, duration)
 
         # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.5.1/sources/com/iqoption/dto/entity/position/Position.java#L493
-        f_tmp = get_instrument_id_to_bid(
-            instrument_quites_generated_data, aVar)
+        f_tmp = get_instrument_id_to_bid(instrument_quites_generated_data,
+                                         aVar)
         # f is bidprice of lower_instrument_id ,f2 is bidprice of upper_instrument_id
-        if f_tmp != None:
-            self.get_digital_spot_profit_after_sale_data[position_id]["f"] = f_tmp
+        if f_tmp is not None:
+            self.get_digital_spot_profit_after_sale_data[position_id][
+                "f"] = f_tmp
             f = f_tmp
         else:
             f = self.get_digital_spot_profit_after_sale_data[position_id]["f"]
 
-        f2_tmp = get_instrument_id_to_bid(
-            instrument_quites_generated_data, aVar2)
-        if f2_tmp != None:
-            self.get_digital_spot_profit_after_sale_data[position_id]["f2"] = f2_tmp
+        f2_tmp = get_instrument_id_to_bid(instrument_quites_generated_data,
+                                          aVar2)
+        if f2_tmp is not None:
+            self.get_digital_spot_profit_after_sale_data[position_id][
+                "f2"] = f2_tmp
             f2 = f2_tmp
         else:
-            f2 = self.get_digital_spot_profit_after_sale_data[position_id]["f2"]
+            f2 = self.get_digital_spot_profit_after_sale_data[position_id][
+                "f2"]
 
-        if (spotLowerInstrumentStrike != instrumentStrikeValue) and f != None and f2 != None:
+        if ((spotLowerInstrumentStrike != instrumentStrikeValue) and f is not None
+                and f2 is not None):
 
-            if (spotLowerInstrumentStrike > instrumentStrikeValue or instrumentStrikeValue > spotUpperInstrumentStrike):
+            if (spotLowerInstrumentStrike > instrumentStrikeValue
+                    or instrumentStrikeValue > spotUpperInstrumentStrike):
                 if z:
-                    instrumentStrikeValue = (spotUpperInstrumentStrike - instrumentStrikeValue) / abs(
-                        spotUpperInstrumentStrike - spotLowerInstrumentStrike)
+                    instrumentStrikeValue = (spotUpperInstrumentStrike
+                                             - instrumentStrikeValue) / abs(
+                                                 spotUpperInstrumentStrike
+                                                 - spotLowerInstrumentStrike)
                     f = abs(f2 - f)
                 else:
-                    instrumentStrikeValue = (instrumentStrikeValue - spotUpperInstrumentStrike) / abs(
-                        spotUpperInstrumentStrike - spotLowerInstrumentStrike)
+                    instrumentStrikeValue = (instrumentStrikeValue
+                                             - spotUpperInstrumentStrike) / abs(
+                                                 spotUpperInstrumentStrike
+                                                 - spotLowerInstrumentStrike)
                     f = abs(f2 - f)
 
             elif z:
-                f += ((instrumentStrikeValue - spotLowerInstrumentStrike) /
-                      (spotUpperInstrumentStrike - spotLowerInstrumentStrike)) * (f2 - f)
+                f += ((instrumentStrikeValue - spotLowerInstrumentStrike)
+                      / (spotUpperInstrumentStrike
+                         - spotLowerInstrumentStrike)) * (f2 - f)
             else:
-                instrumentStrikeValue = (spotUpperInstrumentStrike - instrumentStrikeValue) / (
-                    spotUpperInstrumentStrike - spotLowerInstrumentStrike)
+                instrumentStrikeValue = (
+                    spotUpperInstrumentStrike - instrumentStrikeValue) / (
+                        spotUpperInstrumentStrike - spotLowerInstrumentStrike)
                 f -= f2
             f = f2 + (instrumentStrikeValue * f)
 
         if z2:
             pass
-        if f != None:
+        if f is not None:
             # price=f/getRate
             # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.27.0/sources/com/iqoption/dto/entity/position/Position.java#L603
-            price = (f / getRate)
+            price = f / getRate
             # getAbsCount Reference
             # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.27.0/sources/com/iqoption/dto/entity/position/Position.java#L450
             return price * getAbsCount - amount
@@ -1169,9 +1288,9 @@ class IQ_Option:
         self.api.digital_option_placed_id = None
         self.api.place_digital_option(instrument_id, amount)
         start_t = time.time()
-        while self.api.digital_option_placed_id == None:
+        while self.api.digital_option_placed_id is None:
             if time.time() - start_t > 30:
-                logging.error('buy_digital loss digital_option_placed_id')
+                logging.error("buy_digital loss digital_option_placed_id")
                 return False, None
         return True, self.api.digital_option_placed_id
 
@@ -1182,7 +1301,7 @@ class IQ_Option:
         position_changed = self.get_async_order(
             position_id)["position-changed"]["msg"]
         self.api.close_digital_option(position_changed["external_id"])
-        while self.api.result == None:
+        while self.api.result is None:
             pass
         return self.api.result
 
@@ -1195,7 +1314,8 @@ class IQ_Option:
                 if data["msg"]["position"]["close_reason"] == "default":
                     return data["msg"]["position"]["pnl_realized"]
                 elif data["msg"]["position"]["close_reason"] == "expired":
-                    return data["msg"]["position"]["pnl_realized"] - data["msg"]["position"]["buy_amount"]
+                    return (data["msg"]["position"]["pnl_realized"]
+                            - data["msg"]["position"]["buy_amount"])
 
     def check_win_digital_v2(self, buy_order_id):
 
@@ -1203,10 +1323,11 @@ class IQ_Option:
             pass
         order_data = self.get_async_order(
             buy_order_id)["position-changed"]["msg"]
-        if order_data != None:
+        if order_data is not None:
             if order_data["status"] == "closed":
                 if order_data["close_reason"] == "expired":
-                    return True, order_data["close_profit"] - order_data["invest"]
+                    return True, order_data["close_profit"] - order_data[
+                        "invest"]
                 elif order_data["close_reason"] == "default":
                     return True, order_data["pnl_realized"]
             else:
@@ -1217,28 +1338,44 @@ class IQ_Option:
     # ----------------------------------------------------------
     # -----------------BUY_for__Forex__&&__stock(cfd)__&&__ctrpto
 
-    def buy_order(self,
-                  instrument_type, instrument_id,
-                  side, amount, leverage,
-                  type, limit_price=None, stop_price=None,
-
-                  stop_lose_kind=None, stop_lose_value=None,
-                  take_profit_kind=None, take_profit_value=None,
-
-                  use_trail_stop=False, auto_margin_call=False,
-                  use_token_for_commission=False):
+    def buy_order(
+        self,
+        instrument_type,
+        instrument_id,
+        side,
+        amount,
+        leverage,
+        type,
+        limit_price=None,
+        stop_price=None,
+        stop_lose_kind=None,
+        stop_lose_value=None,
+        take_profit_kind=None,
+        take_profit_value=None,
+        use_trail_stop=False,
+        auto_margin_call=False,
+        use_token_for_commission=False,
+    ):
         self.api.buy_order_id = None
         self.api.buy_order(
-            instrument_type=instrument_type, instrument_id=instrument_id,
-            side=side, amount=amount, leverage=leverage,
-            type=type, limit_price=limit_price, stop_price=stop_price,
-            stop_lose_value=stop_lose_value, stop_lose_kind=stop_lose_kind,
-            take_profit_value=take_profit_value, take_profit_kind=take_profit_kind,
-            use_trail_stop=use_trail_stop, auto_margin_call=auto_margin_call,
-            use_token_for_commission=use_token_for_commission
+            instrument_type=instrument_type,
+            instrument_id=instrument_id,
+            side=side,
+            amount=amount,
+            leverage=leverage,
+            type=type,
+            limit_price=limit_price,
+            stop_price=stop_price,
+            stop_lose_value=stop_lose_value,
+            stop_lose_kind=stop_lose_kind,
+            take_profit_value=take_profit_value,
+            take_profit_kind=take_profit_kind,
+            use_trail_stop=use_trail_stop,
+            auto_margin_call=auto_margin_call,
+            use_token_for_commission=use_token_for_commission,
         )
 
-        while self.api.buy_order_id == None:
+        while self.api.buy_order_id is None:
             pass
         check, data = self.get_order(self.api.buy_order_id)
         while data["status"] == "pending_new":
@@ -1257,17 +1394,24 @@ class IQ_Option:
     def change_auto_margin_call(self, ID_Name, ID, auto_margin_call):
         self.api.auto_margin_call_changed_respond = None
         self.api.change_auto_margin_call(ID_Name, ID, auto_margin_call)
-        while self.api.auto_margin_call_changed_respond == None:
+        while self.api.auto_margin_call_changed_respond is None:
             pass
         if self.api.auto_margin_call_changed_respond["status"] == 2000:
             return True, self.api.auto_margin_call_changed_respond
         else:
             return False, self.api.auto_margin_call_changed_respond
 
-    def change_order(self, ID_Name, order_id,
-                     stop_lose_kind, stop_lose_value,
-                     take_profit_kind, take_profit_value,
-                     use_trail_stop, auto_margin_call):
+    def change_order(
+        self,
+        ID_Name,
+        order_id,
+        stop_lose_kind,
+        stop_lose_value,
+        take_profit_kind,
+        take_profit_value,
+        use_trail_stop,
+        auto_margin_call,
+    ):
         check = True
         if ID_Name == "position_id":
             check, order_data = self.get_order(order_id)
@@ -1276,25 +1420,30 @@ class IQ_Option:
         elif ID_Name == "order_id":
             ID = order_id
         else:
-            logging.error('change_order input error ID_Name')
+            logging.error("change_order input error ID_Name")
 
         if check:
             self.api.tpsl_changed_respond = None
             self.api.change_order(
-                ID_Name=ID_Name, ID=ID,
-                stop_lose_kind=stop_lose_kind, stop_lose_value=stop_lose_value,
-                take_profit_kind=take_profit_kind, take_profit_value=take_profit_value,
-                use_trail_stop=use_trail_stop)
-            self.change_auto_margin_call(
-                ID_Name=ID_Name, ID=ID, auto_margin_call=auto_margin_call)
-            while self.api.tpsl_changed_respond == None:
+                ID_Name=ID_Name,
+                ID=ID,
+                stop_lose_kind=stop_lose_kind,
+                stop_lose_value=stop_lose_value,
+                take_profit_kind=take_profit_kind,
+                take_profit_value=take_profit_value,
+                use_trail_stop=use_trail_stop,
+            )
+            self.change_auto_margin_call(ID_Name=ID_Name,
+                                         ID=ID,
+                                         auto_margin_call=auto_margin_call)
+            while self.api.tpsl_changed_respond is None:
                 pass
             if self.api.tpsl_changed_respond["status"] == 2000:
                 return True, self.api.tpsl_changed_respond["msg"]
             else:
                 return False, self.api.tpsl_changed_respond
         else:
-            logging.error('change_order fail to get position_id')
+            logging.error("change_order fail to get position_id")
             return False, None
 
     def get_async_order(self, buy_order_id):
@@ -1309,7 +1458,7 @@ class IQ_Option:
         # new
         self.api.order_data = None
         self.api.get_order(buy_order_id)
-        while self.api.order_data == None:
+        while self.api.order_data is None:
             pass
         if self.api.order_data["status"] == 2000:
             return True, self.api.order_data["msg"]
@@ -1319,7 +1468,7 @@ class IQ_Option:
     def get_pending(self, instrument_type):
         self.api.deferred_orders = None
         self.api.get_pending(instrument_type)
-        while self.api.deferred_orders == None:
+        while self.api.deferred_orders is None:
             pass
         if self.api.deferred_orders["status"] == 2000:
             return True, self.api.deferred_orders["msg"]
@@ -1330,7 +1479,7 @@ class IQ_Option:
     def get_positions(self, instrument_type):
         self.api.positions = None
         self.api.get_positions(instrument_type)
-        while self.api.positions == None:
+        while self.api.positions is None:
             pass
         if self.api.positions["status"] == 2000:
             return True, self.api.positions["msg"]
@@ -1342,7 +1491,7 @@ class IQ_Option:
         check, order_data = self.get_order(buy_order_id)
         position_id = order_data["position_id"]
         self.api.get_position(position_id)
-        while self.api.position == None:
+        while self.api.position is None:
             pass
         if self.api.position["status"] == 2000:
             return True, self.api.position["msg"]
@@ -1354,7 +1503,7 @@ class IQ_Option:
     def get_digital_position_by_position_id(self, position_id):
         self.api.position = None
         self.api.get_digital_position(position_id)
-        while self.api.position == None:
+        while self.api.position is None:
             pass
         return self.api.position
 
@@ -1365,14 +1514,14 @@ class IQ_Option:
         position_id = self.get_async_order(
             order_id)["position-changed"]["msg"]["external_id"]
         self.api.get_digital_position(position_id)
-        while self.api.position == None:
+        while self.api.position is None:
             pass
         return self.api.position
 
     def get_position_history(self, instrument_type):
         self.api.position_history = None
         self.api.get_position_history(instrument_type)
-        while self.api.position_history == None:
+        while self.api.position_history is None:
             pass
 
         if self.api.position_history["status"] == 2000:
@@ -1380,12 +1529,13 @@ class IQ_Option:
         else:
             return False, None
 
-    def get_position_history_v2(self, instrument_type, limit, offset, start, end):
+    def get_position_history_v2(self, instrument_type, limit, offset, start,
+                                end):
         # instrument_type=crypto forex fx-option multi-option cfd digital-option turbo-option
         self.api.position_history_v2 = None
-        self.api.get_position_history_v2(
-            instrument_type, limit, offset, start, end)
-        while self.api.position_history_v2 == None:
+        self.api.get_position_history_v2(instrument_type, limit, offset, start,
+                                         end)
+        while self.api.position_history_v2 is None:
             pass
 
         if self.api.position_history_v2["status"] == 2000:
@@ -1398,9 +1548,9 @@ class IQ_Option:
         if actives == "":
             self.api.get_available_leverages(instrument_type, "")
         else:
-            self.api.get_available_leverages(
-                instrument_type, OP_code.ACTIVES[actives])
-        while self.api.available_leverages == None:
+            self.api.get_available_leverages(instrument_type,
+                                             OP_code.ACTIVES[actives])
+        while self.api.available_leverages is None:
             pass
         if self.api.available_leverages["status"] == 2000:
             return True, self.api.available_leverages["msg"]
@@ -1410,7 +1560,7 @@ class IQ_Option:
     def cancel_order(self, buy_order_id):
         self.api.order_canceled = None
         self.api.cancel_order(buy_order_id)
-        while self.api.order_canceled == None:
+        while self.api.order_canceled is None:
             pass
         if self.api.order_canceled["status"] == 2000:
             return True
@@ -1419,10 +1569,10 @@ class IQ_Option:
 
     def close_position(self, position_id):
         check, data = self.get_order(position_id)
-        if data["position_id"] != None:
+        if data["position_id"] is not None:
             self.api.close_position_data = None
             self.api.close_position(data["position_id"])
-            while self.api.close_position_data == None:
+            while self.api.close_position_data is None:
                 pass
             if self.api.close_position_data["status"] == 2000:
                 return True
@@ -1432,11 +1582,11 @@ class IQ_Option:
             return False
 
     def close_position_v2(self, position_id):
-        while self.get_async_order(position_id) == None:
+        while self.get_async_order(position_id) is None:
             pass
         position_changed = self.get_async_order(position_id)
         self.api.close_position(position_changed["id"])
-        while self.api.close_position_data == None:
+        while self.api.close_position_data is None:
             pass
         if self.api.close_position_data["status"] == 2000:
             return True
@@ -1446,7 +1596,7 @@ class IQ_Option:
     def get_overnight_fee(self, instrument_type, active):
         self.api.overnight_fee = None
         self.api.get_overnight_fee(instrument_type, OP_code.ACTIVES[active])
-        while self.api.overnight_fee == None:
+        while self.api.overnight_fee is None:
             pass
         if self.api.overnight_fee["status"] == 2000:
             return True, self.api.overnight_fee["msg"]
@@ -1462,7 +1612,8 @@ class IQ_Option:
     # -----------------------------------------------------------------
 
     def opcode_to_name(self, opcode):
-        return list(OP_code.ACTIVES.keys())[list(OP_code.ACTIVES.values()).index(opcode)]
+        return list(OP_code.ACTIVES.keys())[list(
+            OP_code.ACTIVES.values()).index(opcode)]
 
     # name:
     # "live-deal-binary-option-placed"
@@ -1509,7 +1660,7 @@ class IQ_Option:
     def get_user_profile_client(self, user_id):
         self.api.user_profile_client = None
         self.api.Get_User_Profile_Client(user_id)
-        while self.api.user_profile_client == None:
+        while self.api.user_profile_client is None:
             pass
 
         return self.api.user_profile_client
@@ -1519,7 +1670,8 @@ class IQ_Option:
 
         while True:
             try:
-                if self.api.leaderboard_userinfo_deals_client["isSuccessful"] == True:
+                if self.api.leaderboard_userinfo_deals_client[
+                        "isSuccessful"]:
                     break
             except:
                 pass
@@ -1532,7 +1684,7 @@ class IQ_Option:
     def get_users_availability(self, user_id):
         self.api.users_availability = None
 
-        while self.api.users_availability == None:
+        while self.api.users_availability is None:
             self.api.Get_Users_Availability(user_id)
             time.sleep(0.2)
         return self.api.users_availability

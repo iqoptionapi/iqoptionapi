@@ -2,10 +2,12 @@
 
 import json
 import logging
+from threading import Thread
+
 import websocket
+
 import iqoptionapi.constants as OP_code
 import iqoptionapi.global_value as global_value
-from threading import Thread
 
 
 class WebsocketClient(object):
@@ -18,9 +20,12 @@ class WebsocketClient(object):
         """
         self.api = api
         self.wss = websocket.WebSocketApp(
-            self.api.wss_url, on_message=self.on_message,
-            on_error=self.on_error, on_close=self.on_close,
-            on_open=self.on_open)
+            self.api.wss_url,
+            on_message=self.on_message,
+            on_error=self.on_error,
+            on_close=self.on_close,
+            on_open=self.on_open,
+        )
 
     def dict_queue_add(self, dict, maxdict, key1, key2, key3, value):
         if key3 in dict[key1][key2]:
@@ -36,8 +41,9 @@ class WebsocketClient(object):
                     break
                 else:
                     # del mini key
-                    del dict[key1][key2][sorted(
-                        dict[key1][key2].keys(), reverse=False)[0]]
+                    del dict[key1][key2][
+                        sorted(dict[key1][key2].keys(), reverse=False)[0]
+                    ]
 
     def api_dict_clean(self, obj):
         if len(obj) > 5000:
@@ -55,12 +61,13 @@ class WebsocketClient(object):
 
         if message["name"] == "timeSync":
             self.api.timesync.server_timestamp = message["msg"]
-         #######################################################
+        #######################################################
         # ---------------------for_realtime_candle______________
         #######################################################
         elif message["name"] == "candle-generated":
-            Active_name = list(OP_code.ACTIVES.keys())[list(
-                OP_code.ACTIVES.values()).index(message["msg"]["active_id"])]
+            Active_name = list(OP_code.ACTIVES.keys())[
+                list(OP_code.ACTIVES.values()).index(message["msg"]["active_id"])
+            ]
 
             active = str(Active_name)
             size = int(message["msg"]["size"])
@@ -68,15 +75,17 @@ class WebsocketClient(object):
             msg = message["msg"]
             maxdict = self.api.real_time_candles_maxdict_table[Active_name][size]
 
-            self.dict_queue_add(self.api.real_time_candles,
-                                maxdict, active, size, from_, msg)
+            self.dict_queue_add(
+                self.api.real_time_candles, maxdict, active, size, from_, msg
+            )
             self.api.candle_generated_check[active][size] = True
 
         elif message["name"] == "options":
             self.api.get_options_v2_data = message
         elif message["name"] == "candles-generated":
-            Active_name = list(OP_code.ACTIVES.keys())[list(
-                OP_code.ACTIVES.values()).index(message["msg"]["active_id"])]
+            Active_name = list(OP_code.ACTIVES.keys())[
+                list(OP_code.ACTIVES.values()).index(message["msg"]["active_id"])
+            ]
             active = str(Active_name)
             for k, v in message["msg"]["candles"].items():
                 v["active_id"] = message["msg"]["active_id"]
@@ -89,18 +98,21 @@ class WebsocketClient(object):
                 from_ = int(v["from"])
                 maxdict = self.api.real_time_candles_maxdict_table[Active_name][size]
                 msg = v
-                self.dict_queue_add(self.api.real_time_candles,
-                                    maxdict, active, size, from_, msg)
+                self.dict_queue_add(
+                    self.api.real_time_candles, maxdict, active, size, from_, msg
+                )
 
             self.api.candle_generated_all_size_check[active] = True
         elif message["name"] == "commission-changed":
             instrument_type = message["msg"]["instrument_type"]
             active_id = message["msg"]["active_id"]
-            Active_name = list(OP_code.ACTIVES.keys())[list(
-                OP_code.ACTIVES.values()).index(active_id)]
+            Active_name = list(OP_code.ACTIVES.keys())[
+                list(OP_code.ACTIVES.values()).index(active_id)
+            ]
             commission = message["msg"]["commission"]["value"]
-            self.api.subscribe_commission_changed_data[instrument_type][Active_name][self.api.timesync.server_timestamp] = int(
-                commission)
+            self.api.subscribe_commission_changed_data[instrument_type][Active_name][
+                self.api.timesync.server_timestamp
+            ] = int(commission)
 
         #######################################################
         # ______________________________________________________
@@ -116,14 +128,14 @@ class WebsocketClient(object):
         elif message["name"] == "profile":
             # --------------all-------------
             self.api.profile.msg = message["msg"]
-            if self.api.profile.msg != False:
+            if self.api.profile.msg:
                 # ---------------------------
                 try:
                     self.api.profile.balance = message["msg"]["balance"]
                 except:
                     pass
                 # Set Default account
-                if global_value.balance_id == None:
+                if global_value.balance_id is None:
                     for balance in message["msg"]["balances"]:
                         if balance["type"] == 4:
                             global_value.balance_id = balance["id"]
@@ -143,8 +155,8 @@ class WebsocketClient(object):
                 except:
                     pass
 
-        elif message['name'] == 'balance-changed':
-            balance = message['msg']['current_balance']
+        elif message["name"] == "balance-changed":
+            balance = message["msg"]["current_balance"]
             # if self.api.get_active_account_type() == balance['type']:
             try:
                 self.api.profile.balance = balance["amount"]
@@ -180,13 +192,13 @@ class WebsocketClient(object):
         # *********************buyv3
         # buy_multi_option
         elif message["name"] == "option":
-            self.api.buy_multi_option[str(
-                message["request_id"])] = message["msg"]
+            self.api.buy_multi_option[str(message["request_id"])] = message["msg"]
         # **********************************************************
         elif message["name"] == "listInfoData":
             for get_m in message["msg"]:
                 self.api.listinfodata.set(
-                    get_m["win"], get_m["game_state"], get_m["id"])
+                    get_m["win"], get_m["game_state"], get_m["id"]
+                )
         elif message["name"] == "socket-option-opened":
             id = message["msg"]["id"]
             self.api.socket_option_opened[id] = message
@@ -203,29 +215,40 @@ class WebsocketClient(object):
             self.api.financial_information = message
         elif message["name"] == "position-changed":
 
-            if message["microserviceName"] == "portfolio" and (message["msg"]["source"] == "digital-options") or message["msg"]["source"] == "trading":
-                self.api.order_async[int(
-                    message["msg"]["raw_event"]["order_ids"][0])][message["name"]] = message
-            elif message["microserviceName"] == "portfolio" and message["msg"]["source"] == "binary-options":
-                self.api.order_async[int(
-                    message["msg"]["external_id"])][message["name"]] = message
+            if (
+                message["microserviceName"] == "portfolio"
+                and (message["msg"]["source"] == "digital-options")
+                or message["msg"]["source"] == "trading"
+            ):
+                self.api.order_async[int(message["msg"]["raw_event"]["order_ids"][0])][
+                    message["name"]
+                ] = message
+            elif (
+                message["microserviceName"] == "portfolio"
+                and message["msg"]["source"] == "binary-options"
+            ):
+                self.api.order_async[int(message["msg"]["external_id"])][
+                    message["name"]
+                ] = message
                 # print(message)
 
         elif message["name"] == "option-opened":
-            self.api.order_async[int(
-                message["msg"]["option_id"])][message["name"]] = message
+            self.api.order_async[int(message["msg"]["option_id"])][
+                message["name"]
+            ] = message
 
         elif message["name"] == "option-closed":
 
-            self.api.order_async[int(
-                message["msg"]["option_id"])][message["name"]] = message
+            self.api.order_async[int(message["msg"]["option_id"])][
+                message["name"]
+            ] = message
             if message["microserviceName"] == "binary-options":
-                self.api.order_binary[
-                    message["msg"]["option_id"]] = message['msg']
+                self.api.order_binary[message["msg"]["option_id"]] = message["msg"]
 
         elif message["name"] == "top-assets-updated":
-            self.api.top_assets_updated_data[str(
-                message["msg"]["instrument_type"])] = message["msg"]["data"]
+            self.api.top_assets_updated_data[
+                str(message["msg"]["instrument_type"])
+            ] = message["msg"]["data"]
         elif message["name"] == "strike-list":
             self.api.strike_list = message
         elif message["name"] == "api_game_betinfo_result":
@@ -235,8 +258,7 @@ class WebsocketClient(object):
             except:
                 pass
         elif message["name"] == "traders-mood-changed":
-            self.api.traders_mood[message["msg"]
-                                  ["asset_id"]] = message["msg"]["value"]
+            self.api.traders_mood[message["msg"]["asset_id"]] = message["msg"]["value"]
         # ------for forex&cfd&crypto..
         elif message["name"] == "order-placed-temp":
             self.api.buy_order_id = message["msg"]["id"]
@@ -250,14 +272,15 @@ class WebsocketClient(object):
             self.api.deferred_orders = message
 
         elif message["name"] == "technical-indicators":
-            if message["msg"].get("indicators") != None:
+            if message["msg"].get("indicators") is not None:
                 self.api_dict_clean(self.api.technical_indicators)
-                self.api.technical_indicators[message["request_id"]
-                                              ] = message["msg"]["indicators"]
+                self.api.technical_indicators[message["request_id"]] = message["msg"][
+                    "indicators"
+                ]
             else:
                 self.api.technical_indicators[message["request_id"]] = {
                     "code": "no_technical_indicator_available",
-                    "message": message["msg"]["message"]
+                    "message": message["msg"]["message"],
                 }
         elif message["name"] == "position-history":
             self.api.position_history = message
@@ -283,32 +306,34 @@ class WebsocketClient(object):
         elif message["name"] == "auto-margin-call-changed":
             self.api.auto_margin_call_changed_respond = message
         elif message["name"] == "digital-option-placed":
-            if message["msg"].get("id") != None:
+            if message["msg"].get("id") is not None:
                 self.api_dict_clean(self.api.digital_option_placed_id)
-                self.api.digital_option_placed_id[message["request_id"]
-                                                  ] = message["msg"]["id"]
+                self.api.digital_option_placed_id[message["request_id"]] = message[
+                    "msg"
+                ]["id"]
             else:
                 self.api.digital_option_placed_id[message["request_id"]] = {
                     "code": "error_place_digital_order",
-                    "message": message["msg"]["message"]
+                    "message": message["msg"]["message"],
                 }
 
         elif message["name"] == "result":
             self.api.result = message["msg"]["success"]
         elif message["name"] == "instrument-quotes-generated":
 
-            Active_name = list(OP_code.ACTIVES.keys())[list(
-                OP_code.ACTIVES.values()).index(message["msg"]["active"])]
+            Active_name = list(OP_code.ACTIVES.keys())[
+                list(OP_code.ACTIVES.values()).index(message["msg"]["active"])
+            ]
             period = message["msg"]["expiration"]["period"]
             ans = {}
             for data in message["msg"]["quotes"]:
                 # FROM IQ OPTION SOURCE CODE
                 # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.5.1/sources/com/iqoption/dto/entity/strike/Quote.java#L91
-                if data["price"]["ask"] == None:
+                if data["price"]["ask"] is None:
                     ProfitPercent = None
                 else:
                     askPrice = (float)(data["price"]["ask"])
-                    ProfitPercent = ((100-askPrice)*100)/askPrice
+                    ProfitPercent = ((100 - askPrice) * 100) / askPrice
 
                 for symble in data["symbols"]:
                     try:
@@ -324,7 +349,8 @@ class WebsocketClient(object):
                     except:
                         pass
             self.api.instrument_quites_generated_timestamp[Active_name][
-                period] = message["msg"]["expiration"]["timestamp"]
+                period
+            ] = message["msg"]["expiration"]["timestamp"]
             self.api.instrument_quites_generated_data[Active_name][period] = ans
 
             self.api.instrument_quotes_generated_raw_data[Active_name][period] = message
@@ -337,18 +363,17 @@ class WebsocketClient(object):
             # name = message["name"]
             active_id = message["msg"]["active_id"]
             active = list(OP_code.ACTIVES.keys())[
-                list(OP_code.ACTIVES.values()).index(active_id)]
-            _type = message["msg"]["option_type"]
+                list(OP_code.ACTIVES.values()).index(active_id)
+            ]
+
             try:
                 # self.api.live_deal_data[name][active][_type].appendleft(
                 #     message["msg"])
-                if hasattr(self.api.binary_live_deal_cb, '__call__'):
-                    cb_data = {
-                        "active": active,
-                        **message["msg"]
-                    }
-                    realbinary = Thread(target=self.api.binary_live_deal_cb,
-                                        kwargs=(cb_data))
+                if hasattr(self.api.binary_live_deal_cb, "__call__"):
+                    cb_data = {"active": active, **message["msg"]}
+                    realbinary = Thread(
+                        target=self.api.binary_live_deal_cb, kwargs=(cb_data)
+                    )
                     realbinary.daemon = True
                     realbinary.start()
             except:
@@ -357,18 +382,17 @@ class WebsocketClient(object):
             # name = message["name"]
             active_id = message["msg"]["instrument_active_id"]
             active = list(OP_code.ACTIVES.keys())[
-                list(OP_code.ACTIVES.values()).index(active_id)]
-            _type = message["msg"]["expiration_type"]
+                list(OP_code.ACTIVES.values()).index(active_id)
+            ]
+
             try:
                 # self.api.live_deal_data[name][active][_type].appendleft(
                 #     message["msg"])
-                if hasattr(self.api.digital_live_deal_cb, '__call__'):
-                    cb_data = {
-                        "active": active,
-                        **message["msg"]
-                    }
-                    realdigital = Thread(target=self.api.digital_live_deal_cb,
-                                         kwargs=(cb_data))
+                if hasattr(self.api.digital_live_deal_cb, "__call__"):
+                    cb_data = {"active": active, **message["msg"]}
+                    realdigital = Thread(
+                        target=self.api.digital_live_deal_cb, kwargs=(cb_data)
+                    )
                     realdigital.daemon = True
                     realdigital.start()
             except:
@@ -380,18 +404,15 @@ class WebsocketClient(object):
             # name = message["name"]
             active_id = message["msg"]["instrument_active_id"]
             active = list(OP_code.ACTIVES.keys())[
-                list(OP_code.ACTIVES.values()).index(active_id)]
-            _type = message["msg"]["instrument_type"]
+                list(OP_code.ACTIVES.values()).index(active_id)
+            ]
+
             try:
                 # self.api.live_deal_data[name][active][_type].appendleft(
                 #     message["msg"])
-                if hasattr(self.api.live_deal_cb, '__call__'):
-                    cb_data = {
-                        "active": active,
-                        **message["msg"]
-                    }
-                    livedeal = Thread(target=self.api.live_deal_cb,
-                                      kwargs=(cb_data))
+                if hasattr(self.api.live_deal_cb, "__call__"):
+                    cb_data = {"active": active, **message["msg"]}
+                    livedeal = Thread(target=self.api.live_deal_cb, kwargs=(cb_data))
                     livedeal.daemon = True
                     livedeal.start()
             except:
@@ -405,7 +426,7 @@ class WebsocketClient(object):
             self.api.users_availability = message["msg"]
         elif message["name"] == "client-price-generated":
             ask_price = [d for d in message["msg"]["prices"] if d['strike'] == 'SPT'][0]['call']['ask']
-            self.api.digital_payout = int(((100-ask_price)*100)/ask_price)
+            self.api.digital_payout = int(((100 - ask_price) * 100) / ask_price)
             self.api.client_price_generated = message["msg"]
         else:
             pass

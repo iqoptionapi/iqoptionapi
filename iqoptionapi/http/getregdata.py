@@ -1,11 +1,12 @@
 """Module for IQ Option http getregdata resource."""
 
-from iqoptionapi.http.resource import Resource
 from iqoptionapi.http.register import Register
+from iqoptionapi.http.resource import Resource
 
 
 class Getprofile(Resource):
     """Class for IQ option getregdata resource."""
+
     # pylint: disable=too-few-public-methods
 
     url = "/".join((Register.url, "getregdata"))

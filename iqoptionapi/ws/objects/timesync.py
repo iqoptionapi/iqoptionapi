@@ -1,7 +1,7 @@
 """Module for IQ Option TimeSync websocket object."""
 
-import time
 import datetime
+import time
 
 from iqoptionapi.ws.objects.base import Base
 
@@ -21,9 +21,8 @@ class TimeSync(Base):
 
         :returns: The server timestamp.
         """
-        while self.__server_timestamp==None:
+        while not self.__server_timestamp:
             time.sleep(0.2)
-            pass
 
         return self.__server_timestamp / 1000
 
@@ -62,7 +61,8 @@ class TimeSync(Base):
 
         :returns: The expiration datetime.
         """
-        return self.server_datetime + datetime.timedelta(minutes=self.expiration_time)
+        return self.server_datetime + datetime.timedelta(
+            minutes=self.expiration_time)
 
     @property
     def expiration_timestamp(self):

@@ -1,73 +1,99 @@
 """Module for IQ Option API."""
-
-import time
+import atexit
 import json
 import logging
-import threading
-import requests
 import ssl
-import atexit
-from collections import deque
-from iqoptionapi.http.login import Login
-from iqoptionapi.http.loginv2 import Loginv2
-from iqoptionapi.http.logout import Logout
-from iqoptionapi.http.login2fa import Login2FA
-from iqoptionapi.http.send_sms import SMS_Sender
-from iqoptionapi.http.verify import Verify
-from iqoptionapi.http.getprofile import Getprofile
-from iqoptionapi.http.auth import Auth
-from iqoptionapi.http.token import Token
+import threading
+from collections import defaultdict, deque
+from typing import Any, Dict, List
+
+import requests
+
+import iqoptionapi.global_value as global_value
 from iqoptionapi.http.appinit import Appinit
+from iqoptionapi.http.auth import Auth
 from iqoptionapi.http.billing import Billing
 from iqoptionapi.http.buyback import Buyback
 from iqoptionapi.http.changebalance import Changebalance
 from iqoptionapi.http.events import Events
-from iqoptionapi.ws.client import WebsocketClient
-from iqoptionapi.ws.chanels.get_balances import *
-
-from iqoptionapi.ws.chanels.ssid import Ssid
-from iqoptionapi.ws.chanels.subscribe import *
-from iqoptionapi.ws.chanels.unsubscribe import *
-from iqoptionapi.ws.chanels.setactives import SetActives
-from iqoptionapi.ws.chanels.candles import GetCandles
-from iqoptionapi.ws.chanels.buyv2 import Buyv2
-from iqoptionapi.ws.chanels.buyv3 import *
-from iqoptionapi.ws.chanels.user import *
+from iqoptionapi.http.getprofile import Getprofile
+from iqoptionapi.http.login import Login
+from iqoptionapi.http.login2fa import Login2FA
+from iqoptionapi.http.loginv2 import Loginv2
+from iqoptionapi.http.logout import Logout
+from iqoptionapi.http.send_sms import SMS_Sender
+from iqoptionapi.http.token import Token
+from iqoptionapi.http.verify import Verify
 from iqoptionapi.ws.chanels.api_game_betinfo import Game_betinfo
-from iqoptionapi.ws.chanels.instruments import Get_instruments
-from iqoptionapi.ws.chanels.get_financial_information import GetFinancialInformation
-from iqoptionapi.ws.chanels.strike_list import Strike_list
-from iqoptionapi.ws.chanels.leaderboard import Leader_Board
-
-from iqoptionapi.ws.chanels.traders_mood import Traders_mood_subscribe
-from iqoptionapi.ws.chanels.traders_mood import Traders_mood_unsubscribe
-from iqoptionapi.ws.chanels.technical_indicators import Technical_indicators
+from iqoptionapi.ws.chanels.api_game_getoptions import Get_options, Get_options_v2
 from iqoptionapi.ws.chanels.buy_place_order_temp import Buy_place_order_temp
-from iqoptionapi.ws.chanels.get_order import Get_order
-from iqoptionapi.ws.chanels.get_deferred_orders import GetDeferredOrders
-from iqoptionapi.ws.chanels.get_positions import *
-
-from iqoptionapi.ws.chanels.get_available_leverages import Get_available_leverages
+from iqoptionapi.ws.chanels.buyv2 import Buyv2
+from iqoptionapi.ws.chanels.buyv3 import Buyv3, Buyv3_by_raw_expired
 from iqoptionapi.ws.chanels.cancel_order import Cancel_order
-from iqoptionapi.ws.chanels.close_position import Close_position
-from iqoptionapi.ws.chanels.get_overnight_fee import Get_overnight_fee
-from iqoptionapi.ws.chanels.heartbeat import Heartbeat
-
-
-from iqoptionapi.ws.chanels.digital_option import *
-from iqoptionapi.ws.chanels.api_game_getoptions import *
-from iqoptionapi.ws.chanels.sell_option import Sell_Option
-from iqoptionapi.ws.chanels.sell_digital_option import Sell_Digital_Option
-from iqoptionapi.ws.chanels.change_tpsl import Change_Tpsl
+from iqoptionapi.ws.chanels.candles import GetCandles
 from iqoptionapi.ws.chanels.change_auto_margin_call import ChangeAutoMarginCall
-
-from iqoptionapi.ws.objects.timesync import TimeSync
-from iqoptionapi.ws.objects.profile import Profile
+from iqoptionapi.ws.chanels.change_tpsl import Change_Tpsl
+from iqoptionapi.ws.chanels.close_position import Close_position
+from iqoptionapi.ws.chanels.digital_option import (
+    Digital_options_close_position,
+    Digital_options_place_digital_option,
+    DigitalOptionsPlaceDigitalOptionV2,
+)
+from iqoptionapi.ws.chanels.get_available_leverages import Get_available_leverages
+from iqoptionapi.ws.chanels.get_balances import Get_Balances
+from iqoptionapi.ws.chanels.get_deferred_orders import GetDeferredOrders
+from iqoptionapi.ws.chanels.get_financial_information import GetFinancialInformation
+from iqoptionapi.ws.chanels.get_order import Get_order
+from iqoptionapi.ws.chanels.get_overnight_fee import Get_overnight_fee
+from iqoptionapi.ws.chanels.get_positions import (
+    Get_digital_position,
+    Get_position,
+    Get_position_history,
+    Get_position_history_v2,
+    Get_positions,
+)
+from iqoptionapi.ws.chanels.heartbeat import Heartbeat
+from iqoptionapi.ws.chanels.instruments import Get_instruments
+from iqoptionapi.ws.chanels.leaderboard import Leader_Board
+from iqoptionapi.ws.chanels.sell_digital_option import Sell_Digital_Option
+from iqoptionapi.ws.chanels.sell_option import Sell_Option
+from iqoptionapi.ws.chanels.setactives import SetActives
+from iqoptionapi.ws.chanels.ssid import Ssid
+from iqoptionapi.ws.chanels.strike_list import Strike_list
+from iqoptionapi.ws.chanels.subscribe import (
+    Subscribe,
+    Subscribe_candles,
+    Subscribe_commission_changed,
+    Subscribe_Instrument_Quites_Generated,
+    Subscribe_live_deal,
+    Subscribe_top_assets_updated,
+    SubscribeDigitalPriceSplitter,
+)
+from iqoptionapi.ws.chanels.technical_indicators import Technical_indicators
+from iqoptionapi.ws.chanels.traders_mood import (
+    Traders_mood_subscribe,
+    Traders_mood_unsubscribe,
+)
+from iqoptionapi.ws.chanels.unsubscribe import (
+    Unscribe_live_deal,
+    Unsubscribe,
+    Unsubscribe_candles,
+    Unsubscribe_commission_changed,
+    Unsubscribe_Instrument_Quites_Generated,
+    Unsubscribe_top_assets_updated,
+    UnsubscribeDigitalPriceSplitter,
+)
+from iqoptionapi.ws.chanels.user import (
+    Get_user_profile_client,
+    Get_users_availability,
+    Request_leaderboard_userinfo_deals_client,
+)
+from iqoptionapi.ws.client import WebsocketClient
+from iqoptionapi.ws.objects.betinfo import Game_betinfo_data
 from iqoptionapi.ws.objects.candles import Candles
 from iqoptionapi.ws.objects.listinfodata import ListInfoData
-from iqoptionapi.ws.objects.betinfo import Game_betinfo_data
-import iqoptionapi.global_value as global_value
-from collections import defaultdict
+from iqoptionapi.ws.objects.profile import Profile
+from iqoptionapi.ws.objects.timesync import TimeSync
 
 
 def nested_dict(n, type):
@@ -83,18 +109,18 @@ def nested_dict(n, type):
 requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
 
 
-class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
+class IQOptionAPI:  # pylint: disable=too-many-instance-attributes
     """Class for communication with IQ Option API."""
 
     # pylint: disable=too-many-public-methods
-    socket_option_opened = {}
-    socket_option_closed = {}
+    socket_option_opened: Dict[str, Any] = {}
+    socket_option_closed: Dict[str, Any] = {}
     timesync = TimeSync()
     profile = Profile()
     candles = Candles()
     listinfodata = ListInfoData()
-    api_option_init_all_result = []
-    api_option_init_all_result_v2 = []
+    api_option_init_all_result: List[Any] = []
+    api_option_init_all_result_v2: List[Any] = []
     # for digital
     underlying_list_data = None
     position_changed = None
@@ -103,17 +129,17 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     instrument_quites_generated_timestamp = nested_dict(2, dict)
     strike_list = None
     leaderboard_deals_client = None
-    #position_changed_data = nested_dict(2, dict)
+    # position_changed_data = nested_dict(2, dict)
     # microserviceName_binary_options_name_option=nested_dict(2,dict)
     order_async = nested_dict(2, dict)
-    order_binary = {}
+    order_binary: Dict[str, Any] = {}
     game_betinfo = Game_betinfo_data()
     instruments = None
     financial_information = None
     buy_id = None
     buy_order_id = None
-    traders_mood = {}  # get hight(put) %
-    technical_indicators = {}
+    traders_mood: Dict[str, Any] = {}  # get hight(put) %
+    technical_indicators: Dict[str, Any] = {}
     order_data = None
     positions = None
     position = None
@@ -125,7 +151,7 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     close_position_data = None
     overnight_fee = None
     # ---for real time
-    digital_option_placed_id = {}
+    digital_option_placed_id: Dict[str, Any] = {}
     live_deal_data = nested_dict(3, deque)
 
     subscribe_commission_changed_data = nested_dict(2, dict)
@@ -139,11 +165,11 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     sold_digital_options_respond = None
     tpsl_changed_respond = None
     auto_margin_call_changed_respond = None
-    top_assets_updated_data = {}
+    top_assets_updated_data: Dict[str, Any] = {}
     get_options_v2_data = None
     # --for binary option multi buy
     buy_multi_result = None
-    buy_multi_option = {}
+    buy_multi_option: Dict[str, Any] = {}
     #
     result = None
     training_balance_reset_request = None
@@ -151,6 +177,7 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     user_profile_client = None
     leaderboard_userinfo_deals_client = None
     users_availability = None
+
     # ------------------
     digital_payout = None
 
@@ -189,7 +216,9 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
         """
         return "/".join((self.https_url, resource.url))
 
-    def send_http_request(self, resource, method, data=None, params=None, headers=None):  # pylint: disable=too-many-arguments
+    def send_http_request(
+        self, resource, method, data=None, params=None, headers=None
+    ):  # pylint: disable=too-many-arguments
         """Send http request to IQ Option server.
 
         :param resource: The instance of
@@ -206,12 +235,14 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
 
         logger.debug(url)
 
-        response = self.session.request(method=method,
-                                        url=url,
-                                        data=data,
-                                        params=params,
-                                        headers=headers,
-                                        proxies=self.proxies)
+        response = self.session.request(
+            method=method,
+            url=url,
+            data=data,
+            params=params,
+            headers=headers,
+            proxies=self.proxies,
+        )
         logger.debug(response)
         logger.debug(response.text)
         logger.debug(response.headers)
@@ -220,7 +251,9 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
         response.raise_for_status()
         return response
 
-    def send_http_request_v2(self, url, method, data=None, params=None, headers=None):  # pylint: disable=too-many-arguments
+    def send_http_request_v2(
+        self, url, method, data=None, params=None, headers=None
+    ):  # pylint: disable=too-many-arguments
         """Send http request to IQ Option server.
 
         :param resource: The instance of
@@ -234,15 +267,24 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
         """
         logger = logging.getLogger(__name__)
 
-        logger.debug(method + ": " + url + " headers: " + str(self.session.headers) +
-                     " cookies:  " + str(self.session.cookies.get_dict()))
+        logger.debug(
+            method
+            + ": "
+            + url
+            + " headers: "
+            + str(self.session.headers)
+            + " cookies: "
+            + str(self.session.cookies.get_dict())
+        )
 
-        response = self.session.request(method=method,
-                                        url=url,
-                                        data=data,
-                                        params=params,
-                                        headers=headers,
-                                        proxies=self.proxies)
+        response = self.session.request(
+            method=method,
+            url=url,
+            data=data,
+            params=params,
+            headers=headers,
+            proxies=self.proxies,
+        )
         logger.debug(response)
         logger.debug(response.text)
         logger.debug(response.headers)
@@ -268,10 +310,11 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
 
         logger = logging.getLogger(__name__)
 
-        data = json.dumps(dict(name=name,
-                               msg=msg, request_id=request_id))
+        data = json.dumps(dict(name=name, msg=msg, request_id=request_id))
 
-        while (global_value.ssl_Mutual_exclusion or global_value.ssl_Mutual_exclusion_write) and no_force_send:
+        while (
+            global_value.ssl_Mutual_exclusion or global_value.ssl_Mutual_exclusion_write
+        ) and no_force_send:
             pass
         global_value.ssl_Mutual_exclusion_write = True
         self.websocket.send(data)
@@ -371,8 +414,9 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
         # sendResults True/False
         # {"name":"sendMessage","request_id":"142","msg":{"name":"reset-training-balance","version":"2.0"}}
 
-        self.send_websocket_request(name="sendMessage", msg={"name": "reset-training-balance",
-                                                             "version": "2.0"})
+        self.send_websocket_request(
+            name="sendMessage", msg={"name": "reset-training-balance", "version": "2.0"}
+        )
 
     @property
     def changebalance(self):
@@ -404,7 +448,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
             <iqoptionapi.http.buyback.Buyback>`.
         """
         return Buyback(self)
-# ------------------------------------------------------------------------
+
+    # ------------------------------------------------------------------------
 
     @property
     def getprofile(self):
@@ -414,7 +459,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
             <iqoptionapi.http.getprofile.Getprofile>`.
         """
         return Getprofile(self)
-# for active code ...
+
+    # for active code ...
 
     @property
     def get_balances(self):
@@ -432,7 +478,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     @property
     def get_financial_information(self):
         return GetFinancialInformation(self)
-# ----------------------------------------------------------------------------
+
+    # ----------------------------------------------------------------------------
 
     @property
     def ssid(self):
@@ -442,7 +489,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
             <iqoptionapi.ws.chanels.ssid.Ssid>`.
         """
         return Ssid(self)
-# --------------------------------------------------------------------------------
+
+    # --------------------------------------------------------------------------------
 
     @property
     def Subscribe_Live_Deal(self):
@@ -451,8 +499,9 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     @property
     def Unscribe_Live_Deal(self):
         return Unscribe_live_deal(self)
-# --------------------------------------------------------------------------------
-# trader mood
+
+    # --------------------------------------------------------------------------------
+    # trader mood
 
     @property
     def subscribe_Traders_mood(self):
@@ -462,16 +511,16 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def unsubscribe_Traders_mood(self):
         return Traders_mood_unsubscribe(self)
 
-# --------------------------------------------------------------------------------
-# tecnical indicators
+    # --------------------------------------------------------------------------------
+    # tecnical indicators
 
     @property
     def get_Technical_indicators(self):
         return Technical_indicators(self)
 
-# --------------------------------------------------------------------------------
-# --------------------------subscribe&unsubscribe---------------------------------
-# --------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------
+    # --------------------------subscribe&unsubscribe---------------------------------
+    # --------------------------------------------------------------------------------
     @property
     def subscribe(self):
         "candle-generated"
@@ -499,77 +548,82 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def unsubscribe_all_size(self):
         return Unsubscribe_candles(self)
 
-    def portfolio(self, Main_Name, name, instrument_type, user_balance_id="", limit=1, offset=0, request_id=""):
+    def portfolio(
+        self,
+        Main_Name,
+        name,
+        instrument_type,
+        user_balance_id="",
+        limit=1,
+        offset=0,
+        request_id="",
+    ):
         # Main name:"unsubscribeMessage"/"subscribeMessage"/"sendMessage"(only for portfolio.get-positions")
         # name:"portfolio.order-changed"/"portfolio.get-positions"/"portfolio.position-changed"
         # instrument_type="cfd"/"forex"/"crypto"/"digital-option"/"turbo-option"/"binary-option"
-        logger = logging.getLogger(__name__)
         M_name = Main_Name
         request_id = str(request_id)
         if name == "portfolio.order-changed":
-            msg = {"name": name,
-                   "version": "1.0",
-                   "params": {
-                       "routingFilters": {"instrument_type": str(instrument_type)}
-                   }
-                   }
+            msg = {
+                "name": name,
+                "version": "1.0",
+                "params": {"routingFilters": {"instrument_type": str(instrument_type)}},
+            }
 
         elif name == "portfolio.get-positions":
-            msg = {"name": name,
-                   "version": "3.0",
-                   "body": {
-                       "instrument_type": str(instrument_type),
-                       "limit": int(limit),
-                       "offset": int(offset)
-                   }
-                   }
+            msg = {
+                "name": name,
+                "version": "3.0",
+                "body": {
+                    "instrument_type": str(instrument_type),
+                    "limit": int(limit),
+                    "offset": int(offset),
+                },
+            }
 
         elif name == "portfolio.position-changed":
-            msg = {"name": name,
-                   "version": "2.0",
-                   "params": {
-                       "routingFilters": {"instrument_type": str(instrument_type),
-                                          "user_balance_id": user_balance_id
+            msg = {
+                "name": name,
+                "version": "2.0",
+                "params": {
+                    "routingFilters": {
+                        "instrument_type": str(instrument_type),
+                        "user_balance_id": user_balance_id,
+                    }
+                },
+            }
 
-                                          }
-                   }
-                   }
-
-        self.send_websocket_request(
-            name=M_name, msg=msg, request_id=request_id)
+        self.send_websocket_request(name=M_name, msg=msg, request_id=request_id)
 
     def set_user_settings(self, balanceId, request_id=""):
         # Main name:"unsubscribeMessage"/"subscribeMessage"/"sendMessage"(only for portfolio.get-positions")
         # name:"portfolio.order-changed"/"portfolio.get-positions"/"portfolio.position-changed"
         # instrument_type="cfd"/"forex"/"crypto"/"digital-option"/"turbo-option"/"binary-option"
 
-        msg = {"name": "set-user-settings",
-               "version": "1.0",
-               "body": {
-                   "name": "traderoom_gl_common",
-                   "version": 3,
-                   "config": {
-                       "balanceId": balanceId
-
-                   }
-
-               }
-               }
+        msg = {
+            "name": "set-user-settings",
+            "version": "1.0",
+            "body": {
+                "name": "traderoom_gl_common",
+                "version": 3,
+                "config": {"balanceId": balanceId},
+            },
+        }
         self.send_websocket_request(
-            name="sendMessage", msg=msg, request_id=str(request_id))
+            name="sendMessage", msg=msg, request_id=str(request_id)
+        )
 
     def subscribe_position_changed(self, name, instrument_type, request_id):
         # instrument_type="multi-option","crypto","forex","cfd"
         # name="position-changed","trading-fx-option.position-changed",digital-options.position-changed
-        msg = {"name": name,
-               "version": "1.0",
-               "params": {
-                   "routingFilters": {"instrument_type": str(instrument_type)}
-
-               }
-               }
+        msg = {
+            "name": name,
+            "version": "1.0",
+            "params": {"routingFilters": {"instrument_type": str(instrument_type)}},
+        }
         self.send_websocket_request(
-            name="subscribeMessage", msg=msg, request_id=str(request_id))
+            name="subscribeMessage", msg=msg, request_id=str(request_id)
+        )
 
     def setOptions(self, request_id, sendResults):
         # sendResults True/False
@@ -577,7 +631,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
         msg = {"sendResults": sendResults}
 
         self.send_websocket_request(
-            name="setOptions", msg=msg, request_id=str(request_id))
+            name="setOptions", msg=msg, request_id=str(request_id)
+        )
 
     @property
     def Subscribe_Top_Assets_Updated(self):
@@ -595,8 +650,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def Unsubscribe_Commission_Changed(self):
         return Unsubscribe_commission_changed(self)
 
-# --------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------
 
     @property
     def setactives(self):
@@ -625,12 +680,10 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
 
     def get_api_option_init_all_v2(self):
 
-        msg = {"name": "get-initialization-data",
-               "version": "3.0",
-               "body": {}
-               }
+        msg = {"name": "get-initialization-data", "version": "3.0", "body": {}}
         self.send_websocket_request(name="sendMessage", msg=msg)
-# -------------get information-------------
+
+    # -------------get information-------------
 
     @property
     def get_betinfo(self):
@@ -644,7 +697,7 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def get_options_v2(self):
         return Get_options_v2(self)
 
-# ____________for_______binary_______option_____________
+    # ____________for_______binary_______option_____________
 
     @property
     def buyv3(self):
@@ -671,13 +724,15 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     @property
     def sell_digital_option(self):
         return Sell_Digital_Option(self)
-# ____________________for_______digital____________________
+
+    # ____________________for_______digital____________________
 
     def get_digital_underlying(self):
-        msg = {"name": "get-underlying-list",
-               "version": "2.0",
-               "body": {"type": "digital-option"}
-               }
+        msg = {
+            "name": "get-underlying-list",
+            "version": "2.0",
+            "body": {"type": "digital-option"},
+        }
         self.send_websocket_request(name="sendMessage", msg=msg)
 
     @property
@@ -700,7 +755,7 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def close_digital_option(self):
         return Digital_options_close_position(self)
 
-# ____BUY_for__Forex__&&__stock(cfd)__&&__ctrpto_____
+    # ____BUY_for__Forex__&&__stock(cfd)__&&__ctrpto_____
     @property
     def buy_order(self):
         return Buy_place_order_temp(self)
@@ -756,12 +811,14 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     @property
     def get_overnight_fee(self):
         return Get_overnight_fee(self)
-# -------------------------------------------------------
+
+    # -------------------------------------------------------
 
     @property
     def heartbeat(self):
         return Heartbeat(self)
-# -------------------------------------------------------
+
+    # -------------------------------------------------------
 
     def set_session(self, cookies, headers):
         """Method to set session cookies."""
@@ -778,8 +835,16 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
 
         self.websocket_client = WebsocketClient(self)
 
-        self.websocket_thread = threading.Thread(target=self.websocket.run_forever, kwargs={'sslopt': {
-                                                 "check_hostname": False, "cert_reqs": ssl.CERT_NONE, "ca_certs": "cacert.pem"}})  # for fix pyinstall error: cafile, capath and cadata cannot be all omitted
+        self.websocket_thread = threading.Thread(
+            target=self.websocket.run_forever,
+            kwargs={
+                "sslopt": {
+                    "check_hostname": False,
+                    "cert_reqs": ssl.CERT_NONE,
+                    "ca_certs": "cacert.pem",
+                }
+            },
+        )  # for fix pyinstall error: cafile, capath and cadata cannot be all omitted
         self.websocket_thread.daemon = True
         self.websocket_thread.start()
         while True:
@@ -793,16 +858,14 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
             except:
                 pass
 
-            pass
-
     # @tokensms.setter
     def setTokenSMS(self, response):
-        token_sms = response.json()['token']
+        token_sms = response.json()["token"]
         self.token_sms = token_sms
 
     # @token2fa.setter
     def setToken2FA(self, response):
-        token_2fa = response.json()['token']
+        token_2fa = response.json()["token"]
         self.token_login2fa = token_2fa
 
     def get_ssid(self):
@@ -810,10 +873,13 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
         try:
             if self.token_login2fa is None:
                 response = self.login(
-                    self.username, self.password)  # pylint: disable=not-callable
+                    self.username, self.password
+                )  # pylint: disable=not-callable
+
             else:
                 response = self.login_2fa(
-                    self.username, self.password, self.token_login2fa)
+                    self.username, self.password, self.token_login2fa
+                )
         except Exception as e:
             logger = logging.getLogger(__name__)
             logger.error(e)
@@ -823,9 +889,9 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def send_ssid(self):
         self.profile.msg = None
         self.ssid(global_value.SSID)  # pylint: disable=not-callable
-        while self.profile.msg == None:
+        while self.profile.msg is None:
             pass
-        if self.profile.msg == False:
+        if not self.profile.msg:
             return False
         else:
             return True
@@ -841,15 +907,15 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
             pass
         check_websocket, websocket_reason = self.start_websocket()
 
-        if check_websocket == False:
+        if not check_websocket:
             return check_websocket, websocket_reason
 
         # doing temp ssid reconnect for speed up
-        if global_value.SSID != None:
+        if global_value.SSID is not None:
 
             check_ssid = self.send_ssid()
 
-            if check_ssid == False:
+            if not check_ssid:
                 # ssdi time out need reget,if sent error ssid,the weksocket will close by iqoption server
                 response = self.get_ssid()
                 try:
@@ -873,12 +939,13 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
 
         # set ssis cookie
         requests.utils.add_dict_to_cookiejar(
-            self.session.cookies, {"ssid": global_value.SSID})
+            self.session.cookies, {"ssid": global_value.SSID}
+        )
 
         self.timesync.server_timestamp = None
         while True:
             try:
-                if self.timesync.server_timestamp != None:
+                if self.timesync.server_timestamp is not None:
                     break
             except:
                 pass
@@ -887,8 +954,8 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     def connect2fa(self, sms_code):
         response = self.verify_2fa(sms_code, self.token_sms)
 
-        if response.json()['code'] != 'success':
-            return False, response.json()['message']
+        if response.json()["code"] != "success":
+            return False, response.json()["message"]
 
         # token_2fa
         self.setToken2FA(response)

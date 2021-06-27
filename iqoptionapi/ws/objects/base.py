@@ -3,6 +3,7 @@
 
 class Base(object):
     """Class for IQ Option Base websocket object."""
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self):

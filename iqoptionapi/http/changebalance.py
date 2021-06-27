@@ -1,11 +1,12 @@
 """Module for IQ option changebalance resource."""
 
-from iqoptionapi.http.resource import Resource
 from iqoptionapi.http.profile import Profile
+from iqoptionapi.http.resource import Resource
 
 
 class Changebalance(Resource):
     """Class for IQ option changebalance resource."""
+
     # pylint: disable=too-few-public-methods
 
     url = "/".join((Profile.url, "changebalance"))
@@ -17,7 +18,7 @@ class Changebalance(Resource):
         """
         return self.send_http_request("POST", data=data, headers=headers)
 
-    def __call__(self,balance_id):
+    def __call__(self, balance_id):
         """Method to get IQ Option API changebalance http request.
 
         :param str balance_id: The balance identifier.

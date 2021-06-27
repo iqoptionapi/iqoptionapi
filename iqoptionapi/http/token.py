@@ -1,11 +1,12 @@
 """Module for IQ Option http token resource."""
 
-from iqoptionapi.http.resource import Resource
 from iqoptionapi.http.auth import Auth
+from iqoptionapi.http.resource import Resource
 
 
 class Token(Resource):
     """Class for IQ Option http token resource."""
+
     # pylint: disable=too-few-public-methods
 
     url = "/".join((Auth.url, "token"))

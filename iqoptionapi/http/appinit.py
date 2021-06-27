@@ -5,6 +5,7 @@ from iqoptionapi.http.resource import Resource
 
 class Appinit(Resource):
     """Class for IQ option login resource."""
+
     # pylint: disable=too-few-public-methods
 
     url = "appinit"

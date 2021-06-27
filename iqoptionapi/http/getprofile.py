@@ -5,6 +5,7 @@ from iqoptionapi.http.resource import Resource
 
 class Getprofile(Resource):
     """Class for IQ option getprofile resource."""
+
     # pylint: disable=too-few-public-methods
 
     url = "getprofile"

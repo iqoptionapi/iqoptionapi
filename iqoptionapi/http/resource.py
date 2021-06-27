@@ -3,6 +3,7 @@
 
 class Resource(object):
     """Class for base IQ Option API http resource."""
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self, api):
@@ -22,4 +23,6 @@ class Resource(object):
 
         :returns: The instance of :class:`requests.Response`.
         """
-        return self.api.send_http_request(self, method, data=data, params=params, headers=headers)
+        return self.api.send_http_request(
+            self, method, data=data, params=params, headers=headers
+        )

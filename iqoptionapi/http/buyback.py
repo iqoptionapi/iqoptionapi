@@ -1,11 +1,12 @@
 """Module for IQ option buyback resource."""
 
-from iqoptionapi.http.resource import Resource
 from iqoptionapi.http.billing import Billing
+from iqoptionapi.http.resource import Resource
 
 
 class Buyback(Resource):
     """Class for IQ option buyback resource."""
+
     # pylint: disable=too-few-public-methods
 
     url = "/".join((Billing.url, "buyback"))
