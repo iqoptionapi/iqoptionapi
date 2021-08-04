@@ -156,8 +156,9 @@ class IQ_Option:
 
     def check_connect(self):
         # True/False
-
-        if global_value.check_websocket_if_connect == 0:
+        # if not connected, sometimes it's None, sometimes its '0', so
+        # both will fall on this first case
+        if not global_value.check_websocket_if_connect:
             return False
         else:
             return True
@@ -1072,10 +1073,6 @@ class IQ_Option:
                     return row["price"]["bid"]
             return None
 
-        # Author:Lu-Yi-Hsun 2019/11/04
-        # email:yihsun1992@gmail.com
-        # Source code reference
-        # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.27.0/sources/com/iqoption/dto/entity/position/Position.java#L564
         while self.get_async_order(position_id)["position-changed"] == {}:
             pass
         # ___________________/*position*/_________________
@@ -1113,7 +1110,7 @@ class IQ_Option:
         instrument_quites_generated_data = self.get_instrument_quites_generated_data(
             ACTIVES, duration)
 
-        # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.5.1/sources/com/iqoption/dto/entity/position/Position.java#L493
+
         f_tmp = get_instrument_id_to_bid(
             instrument_quites_generated_data, aVar)
         # f is bidprice of lower_instrument_id ,f2 is bidprice of upper_instrument_id
@@ -1156,10 +1153,8 @@ class IQ_Option:
             pass
         if f != None:
             # price=f/getRate
-            # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.27.0/sources/com/iqoption/dto/entity/position/Position.java#L603
             price = (f / getRate)
             # getAbsCount Reference
-            # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.27.0/sources/com/iqoption/dto/entity/position/Position.java#L450
             return price * getAbsCount - amount
         else:
             return None

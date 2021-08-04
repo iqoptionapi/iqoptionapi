@@ -303,7 +303,6 @@ class WebsocketClient(object):
             ans = {}
             for data in message["msg"]["quotes"]:
                 # FROM IQ OPTION SOURCE CODE
-                # https://github.com/Lu-Yi-Hsun/Decompiler-IQ-Option/blob/master/Source%20Code/5.5.1/sources/com/iqoption/dto/entity/strike/Quote.java#L91
                 if data["price"]["ask"] == None:
                     ProfitPercent = None
                 else:
