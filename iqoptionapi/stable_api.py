@@ -287,18 +287,19 @@ class IQ_Option:
         OPEN_TIME = nested_dict(3, dict)
         binary_data = self.get_all_init_v2()
         binary_list = ["binary", "turbo"]
-        for option in binary_list:
-            if option in binary_data:
-                for actives_id in binary_data[option]["actives"]:
-                    active = binary_data[option]["actives"][actives_id]
-                    name = str(active["name"]).split(".")[1]
-                    if active["enabled"] == True:
-                        if active["is_suspended"] == True:
-                            OPEN_TIME[option][name]["open"] = False
+        if binary_data:
+            for option in binary_list:
+                if option in binary_data:
+                    for actives_id in binary_data[option]["actives"]:
+                        active = binary_data[option]["actives"][actives_id]
+                        name = str(active["name"]).split(".")[1]
+                        if active["enabled"] == True:
+                            if active["is_suspended"] == True:
+                                OPEN_TIME[option][name]["open"] = False
+                            else:
+                                OPEN_TIME[option][name]["open"] = True
                         else:
-                            OPEN_TIME[option][name]["open"] = True
-                    else:
-                        OPEN_TIME[option][name]["open"] = active["enabled"]
+                            OPEN_TIME[option][name]["open"] = active["enabled"]
 
         # for digital
         digital_data = self.get_digital_underlying_list_data()["underlying"]
