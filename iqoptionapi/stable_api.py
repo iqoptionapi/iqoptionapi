@@ -1545,7 +1545,7 @@ class IQ_Option:
 
         self.api.unsubscribe_digital_price_splitter(asset_id)
 
-        return self.api.digital_payout
+        return self.api.digital_payout if self.api.digital_payout else 0
 
     def logout(self):
         self.api.logout()
