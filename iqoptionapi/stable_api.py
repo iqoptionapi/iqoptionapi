@@ -525,6 +525,9 @@ class IQ_Option:
             except:
                 logging.error('**error** get_candles need reconnect')
                 self.connect()
+               
+            for item in self.api.candles.candles_data:
+                item['direction'] = 'RED' if item['open'] > item['close'] else 'GREEN' if item['open'] < item['close'] else 'DOJI'
 
         return self.api.candles.candles_data
 
