@@ -60,7 +60,7 @@ from iqoptionapi.ws.received.user_profile_client import user_profile_client
 from iqoptionapi.ws.received.leaderboard_userinfo_deals_client import leaderboard_userinfo_deals_client
 from iqoptionapi.ws.received.client_price_generated import client_price_generated
 from iqoptionapi.ws.received.users_availability import users_availability
-
+from iqoptionapi.ws.received.alert import alert
 
 class WebsocketClient(object):
     """Class for work with IQ option websocket."""
@@ -135,6 +135,7 @@ class WebsocketClient(object):
         strike_list(self.api, message)
         api_game_betinfo_result(self.api, message)
         traders_mood_changed(self.api, message)
+        alert(self.api, message)
          # ------for forex&cfd&crypto..
         order_placed_temp(self.api, message)
         order(self.api, message)
