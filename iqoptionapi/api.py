@@ -44,6 +44,7 @@ from iqoptionapi.ws.chanels.traders_mood import Traders_mood_unsubscribe
 from iqoptionapi.ws.chanels.technical_indicators import Technical_indicators
 from iqoptionapi.ws.chanels.buy_place_order_temp import Buy_place_order_temp
 from iqoptionapi.ws.chanels.get_order import Get_order
+from iqoptionapi.ws.chanels.alert import *
 from iqoptionapi.ws.chanels.get_deferred_orders import GetDeferredOrders
 from iqoptionapi.ws.chanels.get_positions import *
 
@@ -89,6 +90,9 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-public-methods
     socket_option_opened = {}
     socket_option_closed = {}
+    alert = {}
+    alerts = None
+    alert_triggered = {}
     timesync = TimeSync()
     profile = Profile()
     candles = Candles()
@@ -619,6 +623,22 @@ class IQOptionAPI(object):  # pylint: disable=too-many-instance-attributes
             <iqoptionapi.ws.chanels.candles.GetCandles>`.
         """
         return GetCandles(self)
+    
+    @property
+    def create_alert(self):
+        return CreateAlert(self)
+
+    @property
+    def delete_alert(self):
+        return DeleteAlert(self)
+
+    @property
+    def get_alerts(self):
+        return GetAlerts(self)
+
+    @property
+    def subscribe_alert(self):
+        return SubscribeAlertTriggered(self)
 
     def get_api_option_init_all(self):
         self.send_websocket_request(name="api_option_init_all", msg="")

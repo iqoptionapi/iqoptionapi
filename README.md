@@ -893,6 +893,36 @@ action="call"#put
 print(Iq.buy_digital_spot(ACTIVES,amount,action,duration))
 ```
 
+#### Operações por meio de alertas de toque na taxa
+
+Limpa, cria e verifica toque em alertas criado na corretora
+
+```python
+from iqoptionapi.stable_api import IQ_Option
+
+API = IQ_Option('email','password')
+API.connect()
+
+# Limpa os alertas existente
+API.clear_alerts()
+
+active = 'EURUSD'
+price_values = [1.07256, 1.07194, 1.0722]
+triggered = False
+
+# Varre a lista para criar os alertas
+for value in price_values:
+    API.create_alert(active, value)
+
+# Varre a lista para verificar toque na taxa
+while triggered == False:
+    for value in price_values:
+        triggered = API.check_alert(active, value)
+        if triggered:
+            print(f'Taxa {value} atingida')
+            API.buy(2, active, 'call', 1)
+```
+
 #### Pegar lucro pós venda com get_digital_spot_profit_after_sale()
 
 ![](image/profit_after_sale.png)

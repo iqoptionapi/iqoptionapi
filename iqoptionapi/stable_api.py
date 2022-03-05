@@ -1608,3 +1608,33 @@ class IQ_Option:
             return True, digital_order_id
         else:
             return False, digital_order_id
+        
+    def clear_alerts(self):
+        self.api.subscribe_alert()
+        self.api.get_alerts()
+
+        while self.api.alerts == None:
+            pass
+        
+        for alert in self.api.alerts:
+            self.api.delete_alert(alert['id'])
+
+        self.api.alerts = None
+
+    def get_alert_status(self, request_id):
+        alert_data = None
+
+        while alert_data is None:
+            alert_data = self.api.alert[request_id]['msg'] if request_id in self.api.alert else None
+
+        return False if 'error' in alert_data else True
+
+    def create_alert(self, active, value):
+        asset_id = OP_code.ACTIVES[active]
+        request_id = self.api.create_alert(asset_id, value)
+
+        return True if self.get_alert_status(request_id) else False
+
+    def check_alert(self, active, value):
+        asset_id = OP_code.ACTIVES[active]
+        return True if value in self.api.alert_triggered and self.api.alert_triggered[value] == asset_id else False

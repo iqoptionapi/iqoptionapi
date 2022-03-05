@@ -158,3 +158,13 @@ class SubscribeDigitalPriceSplitter(Base):
         }
 
         self.send_websocket_request(self.name, msg=data)
+
+class SubscribeAlertTriggered(Base):
+    name = "subscribeMessage"
+
+    def __call__(self):
+        data = {
+            "name": "alert-triggered"
+        }
+
+        self.send_websocket_request(self.name, msg=data)
