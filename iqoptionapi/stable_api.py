@@ -46,7 +46,10 @@ class IQ_Option:
         self.SESSION_COOKIE = {}
         #
         # --start
-        # self.connect()
+        ## self.api is only created on this function and it's needed
+        ## for every function of this class, so force starting it on the
+        ## constructor
+        self.connect()
         # this auto function delay too long
 
     # --------------------------------------------------------------------------
