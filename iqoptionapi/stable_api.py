@@ -793,7 +793,7 @@ class IQ_Option:
                 break
             time.sleep(1)
 
-    # -------------------get infomation only for binary option------------------------
+    # -------------------get information only for binary option------------------------
 
     def get_betinfo(self, id_number):
         # INPUT:int

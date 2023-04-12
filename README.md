@@ -1,4 +1,5 @@
 ## AJUDE A MANTER O PROJETO ATIVO
+
 EN: HELP KEEPING THIS PROJECT ACTIVE <br>
 
 Para manter o projeto continuamente atualizado contribua com uma doação, com alguma correção ou melhoria.
@@ -7,7 +8,9 @@ As doações serão usadas para adicionar novas features citadas abaixo.
 
 https://streamelements.com/iqoptionapi/tip
 <br><br>
-## Español - AYUDA A MANTENER ESTE PROYECTO ACTIVO 
+
+## Español - AYUDA A MANTENER ESTE PROYECTO ACTIVO
+
 Para mantener el proyecto continuamente actualizado, contribuye con una donación, con cualquier corrección o mejora.
 
 Las donaciones se utilizarán para agregar nuevas funciones que se mencionan a continuación.
@@ -26,27 +29,27 @@ Donations will be used to add new features mentioned below.
 https://streamelements.com/iqoptionapi/tip
 <br><br>
 
-## PLANEJAMENTO DE NOVAS FEATURES 
+## PLANEJAMENTO DE NOVAS FEATURES
+
 EN: NEW FEATURES PLANNING<br>
 ES: PLANIFICACIÓN DE NUEVAS CARACTERÍSTICAS
 
-
 - CALENDARIO ECONOMICO / ECONOMIC CALENDAR (UNDER DEVELOPMENT)
-<br><br>
-Descrição: 
-Pega o calendario econimico da iqoption.
-Essa feature vai possibilitar que vocês possar evitar fazer operações quando estiver muito arriscado.
-<br/><br/>
+  <br><br>
+  Descrição:
+  Pega o calendario econimico da iqoption.
+  Essa feature vai possibilitar que vocês possar evitar fazer operações quando estiver muito arriscado.
+  <br/><br/>
 
 ![ECONOMIC CALENDAR](image/econimic_calendar.png)
 <br/>
 
-- FEED DE NOTICIAS/ NEWS FEED 
-<br><br>
-Descrição: 
-Noticias sobre o mercado 
-![NEWS FEED](image/news_feed.png)
-<br/><br/>
+- FEED DE NOTICIAS/ NEWS FEED
+  <br><br>
+  Descrição:
+  Noticias sobre o mercado
+  ![NEWS FEED](image/news_feed.png)
+  <br/><br/>
 
 ## IQOPTION API SUPPORTED BY COMMUNITY
 
@@ -59,16 +62,15 @@ este é um repositório não oficial, significa que é mantido pela comunidade
 Esta API está destinada a ser un proyecto de código abierto para comunicarse con el sitio de IqIoption.
 este es un repositorio no oficial, significa que es mantenido por la comunidad
 
-
-### IMPORTANT NOTE / NOTA IMPORTANTE 
+### IMPORTANT NOTE / NOTA IMPORTANTE
 
 Due to the large amount of scammers that have appeared in the market, it is recommended that you DO NOT enter your password into an unknown exe or robot site that operates on iqoption because many of those have stolen people's passwords so be careful. It's best if you develop your robot or hire someone you trust.
 
-Devido a grande quantidade de golpistas que tem aparecido no mercado, recomenda-se que você NÃO inserir sua senha em exe ou sites de robo desconhecidos que opera na iqoption porque muitos desses tem roubado as senhas das pessoas então tomem cuidado. O melhor é você desenvolver seu robo ou contratar alguem de confiança. 
+Devido a grande quantidade de golpistas que tem aparecido no mercado, recomenda-se que você NÃO inserir sua senha em exe ou sites de robo desconhecidos que opera na iqoption porque muitos desses tem roubado as senhas das pessoas então tomem cuidado. O melhor é você desenvolver seu robo ou contratar alguem de confiança.
 
 ### Canal no youtube explicando com trabalhar com a api
 
-Kodandao com Faria 
+Kodandao com Faria
 
 https://www.youtube.com/channel/UCetDOTbLD_gCy0aI4aQwMsg
 
@@ -144,7 +146,7 @@ Now you can install this project as library:
 ```bash
 sudo pip install -U git+git://github.com/iqoptionapi/iqoptionapi.git
 
-OR 
+OR
 
 pip install -U https://github.com/iqoptionapi/iqoptionapi/archive/refs/heads/master.zip
 ```
@@ -1620,7 +1622,7 @@ Iq.get_all_traders_mood(goal)
 
 #### How to Get Technical indicators
 
-It get technical indicator from any asset cointains it
+It get technical indicator from any asset cointains it except OTC
 
 ```python
 ## api auth then
