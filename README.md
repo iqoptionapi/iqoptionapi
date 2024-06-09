@@ -193,7 +193,7 @@ sudo pip3 install websocket-client==0.47.0
 
 ---
 
-## Littile sample
+## Little sample
 
 ```python
 import time
