@@ -356,25 +356,40 @@ class IQ_Option:
             name = name[name.index(".") + 1:len(name)]
             detail[name]["binary"] = init_info["result"]["binary"]["actives"][actives]
         return detail
-
+        
     def get_all_profit(self):
         all_profit = nested_dict(2, dict)
+    
+        # Obtém os dados mais recentes
         init_info = self.get_all_init()
-        for actives in init_info["result"]["turbo"]["actives"]:
-            name = init_info["result"]["turbo"]["actives"][actives]["name"]
-            name = name[name.index(".") + 1:len(name)]
-            all_profit[name]["turbo"] = (
-                100.0 -
-                init_info["result"]["turbo"]["actives"][actives]["option"]["profit"][
-                    "commission"]) / 100.0
+    
+        if "result" not in init_info or "turbo" not in init_info["result"] or "binary" not in init_info["result"]:
+            raise Exception("Estrutura de dados inesperada em init_info")
 
-        for actives in init_info["result"]["binary"]["actives"]:
-            name = init_info["result"]["binary"]["actives"][actives]["name"]
+        # Processa os dados de opções turbo
+        for actives in init_info["result"]["turbo"]["actives"]:
+            active_info = init_info["result"]["turbo"]["actives"][actives]
+            name = active_info["name"]
             name = name[name.index(".") + 1:len(name)]
-            all_profit[name]["binary"] = (
-                100.0 -
-                init_info["result"]["binary"]["actives"][actives]["option"]["profit"][
-                    "commission"]) / 100.0
+        
+            if "option" in active_info and "profit" in active_info["option"]:
+                commission = active_info["option"]["profit"].get("commission", 0)
+                all_profit[name]["turbo"] = (100.0 - commission) / 100.0
+            else:
+                all_profit[name]["turbo"] = 0  # Ou qualquer valor padrão
+
+            # Processa os dados de opções binary
+        for actives in init_info["result"]["binary"]["actives"]:
+            active_info = init_info["result"]["binary"]["actives"][actives]
+            name = active_info["name"]
+            name = name[name.index(".") + 1:len(name)]
+        
+            if "option" in active_info and "profit" in active_info["option"]:
+                commission = active_info["option"]["profit"].get("commission", 0)
+                all_profit[name]["binary"] = (100.0 - commission) / 100.0
+            else:
+                all_profit[name]["binary"] = 0  # Ou qualquer valor padrão
+
         return all_profit
 
     # ----------------------------------------
@@ -899,7 +914,7 @@ class IQ_Option:
 
         return self.api.result, self.api.buy_multi_option[req_id]["id"]
 
-    def buy(self, price, ACTIVES, ACTION, expirations):
+    '''def buy(self, price, ACTIVES, ACTION, expirations):
         self.api.buy_multi_option = {}
         self.api.buy_successful = None
         # req_id = "buy"
@@ -927,7 +942,42 @@ class IQ_Option:
                 logging.error('**warning** buy late 5 sec')
                 return False, None
 
-        return self.api.result, self.api.buy_multi_option[req_id]["id"]
+        return self.api.result, self.api.buy_multi_option[req_id]["id"]'''
+        
+    def buy(self, price, ACTIVES, ACTION, expirations):
+        self.api.buy_multi_option = {}
+        self.api.buy_successful = None
+        req_id = str(randint(0, 10000))
+        self.api.buy_multi_option[req_id] = {}  # Inicializa o dicionário para o req_id
+
+        try:
+            self.api.buyv3(
+                float(price), OP_code.ACTIVES[ACTIVES], str(ACTION), int(expirations), req_id)
+            start_t = time.time()
+            id = None
+            self.api.result = None
+        
+            while self.api.result is None or id is None:
+                if time.time() - start_t >= 5:
+                    logging.error('**warning** buy late 5 sec')
+                    return False, None
+
+                try:
+                    # Verifica se a chave "message" está presente
+                    if "message" in self.api.buy_multi_option.get(req_id, {}):
+                        return False, self.api.buy_multi_option[req_id].get("message", "Unknown error")
+                
+                    id = self.api.buy_multi_option[req_id].get("id")
+                
+                except Exception as e:
+                    logging.error(f"Erro durante a verificação do resultado: {e}")
+                    return False, None
+
+            return self.api.result, self.api.buy_multi_option[req_id].get("id", None)
+        
+        except Exception as e:
+            logging.error(f"Erro ao executar a compra: {e}")
+            return False, None
 
     def sell_option(self, options_ids):
         self.api.sell_option(options_ids)
