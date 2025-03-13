@@ -12,7 +12,7 @@ from collections import defaultdict
 from collections import deque
 from iqoptionapi.expiration import get_expiration_time, get_remaning_time
 from iqoptionapi.version_control import api_version
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from random import randint
 
 
@@ -44,6 +44,7 @@ class IQ_Option:
         self.SESSION_HEADER = {
             "User-Agent": r"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"}
         self.SESSION_COOKIE = {}
+        self.OPEN_TIME = nested_dict(3, dict)
         #
         # --start
         # self.connect()
@@ -268,8 +269,14 @@ class IQ_Option:
     def get_all_init_v2(self):
         self.api.api_option_init_all_result_v2 = None
 
-        if self.check_connect() == False:
-            self.connect()
+        while self.check_connect() == False:
+            logging.error('Desconectado, tentando reconectar...')
+            check,reason=self.connect()
+            if check:
+                print("Reconnect successfully")
+            else:
+                print(f"{reason}")
+
 
         self.api.get_api_option_init_all_v2()
         start_t = time.time()
@@ -277,6 +284,7 @@ class IQ_Option:
             if time.time() - start_t >= 30:
                 logging.error('**warning** get_all_init_v2 late 30 sec')
                 return None
+            time.sleep(0.1)
         return self.api.api_option_init_all_result_v2
 
         # return OP_code.ACTIVES
@@ -285,40 +293,44 @@ class IQ_Option:
 
     def __get_binary_open(self):
         # for turbo and binary pairs
-        binary_data = self.get_all_init_v2()
-        binary_list = ["binary", "turbo"]
+        binary_data = self.get_all_init_v2()   
         if binary_data:
-            for option in binary_list:
-                if option in binary_data:
-                    for actives_id in binary_data[option]["actives"]:
-                        active = binary_data[option]["actives"][actives_id]
-                        name = str(active["name"]).split(".")[1]
-                        if active["enabled"] == True:
-                            if active["is_suspended"] == True:
-                                self.OPEN_TIME[option][name]["open"] = False
-                            else:
-                                self.OPEN_TIME[option][name]["open"] = True
+            for option in ['turbo', 'binary']:
+                for actives_id in binary_data[option]["actives"]:
+                    active = binary_data[option]["actives"][actives_id]
+                    name = str(active["name"]).split(".")[1]
+                    if active["enabled"] == True:
+                        if active["is_suspended"] == True:
+                            self.OPEN_TIME[option][name]["open"] = False
                         else:
-                            self.OPEN_TIME[option][name]["open"] = active["enabled"]    
 
+                            self.OPEN_TIME[option][name]["open"] = True
+                    else:
+                        self.OPEN_TIME[option][name]["open"] = active["enabled"]
+
+                    OP_code.ACTIVES[name] = int(actives_id)
+                  
     def __get_digital_open(self):
-        # for digital options
-        digital_data = self.get_digital_underlying_list_data()["underlying"]
-        for digital in digital_data:
-            name = digital["underlying"]
-            schedule = digital["schedule"]
-            self.OPEN_TIME["digital"][name]["open"] = False
-            for schedule_time in schedule:
-                start = schedule_time["open"]
-                end = schedule_time["close"]
-                if start < time.time() < end:
-                    self.OPEN_TIME["digital"][name]["open"] = True
+        data = self.get_digital_underlying_list_data()
+        if data:
+            digital_data = data.get("underlying", [])
+            current_time = time.time()
+            for item in digital_data:
+                name = item.get("underlying")
+                schedule = item.get("schedule", [])
+                is_open = any(
+                    sch.get("open") < current_time < sch.get("close") for sch in schedule
+                )
+                self.OPEN_TIME["digital"][name]["open"] = is_open
+                OP_code.ACTIVES[name] = item.get('active_id')
 
     def __get_other_open(self):
         # Crypto and etc pairs
-        instrument_list = ["cfd", "forex", "crypto"]
+        instrument_list = ["crypto","forex","cfd"]
         for instruments_type in instrument_list:
-            ins_data = self.get_instruments(instruments_type)["instruments"]
+            #print(f"{self.get_instruments(instruments_type)}")
+            ins_data = self.get_instruments(instruments_type)["instruments"]  
+
             for detail in ins_data:
                 name = detail["name"]
                 schedule = detail["schedule"]
@@ -328,17 +340,20 @@ class IQ_Option:
                     end = schedule_time["close"]
                     if start < time.time() < end:
                         self.OPEN_TIME[instruments_type][name]["open"] = True
+                OP_code.ACTIVES[name] = detail.get('active_id')
 
-    def get_all_open_time(self):
-        # all pairs openned
-        self.OPEN_TIME = nested_dict(3, dict)
-        binary = threading.Thread(target=self.__get_binary_open)
-        digital = threading.Thread(target=self.__get_digital_open)
-        other = threading.Thread(target=self.__get_other_open)
+    def get_all_open_time(self, type='all'):   
+        if type == 'digital': self.__get_digital_open()           
+        elif type == 'binary': self.__get_binary_open()     
+        elif type == 'trade':  self.__get_other_open()                    
+        else:
+            binary_thread = threading.Thread(target=self.__get_binary_open)
+            digital_thread = threading.Thread(target=self.__get_digital_open)
+            other = threading.Thread(target=self.__get_other_open)
 
-        binary.start(), digital.start(), other.start()
+            binary_thread.start(), digital_thread.start(), other.start()
+            binary_thread.join(), digital_thread.join(), other.join()
 
-        binary.join(), digital.join(), other.join()
         return self.OPEN_TIME
 
     # --------for binary option detail
@@ -364,17 +379,17 @@ class IQ_Option:
             name = init_info["result"]["turbo"]["actives"][actives]["name"]
             name = name[name.index(".") + 1:len(name)]
             all_profit[name]["turbo"] = (
-                100.0 -
+                100 -
                 init_info["result"]["turbo"]["actives"][actives]["option"]["profit"][
-                    "commission"]) / 100.0
+                    "commission"])
 
         for actives in init_info["result"]["binary"]["actives"]:
             name = init_info["result"]["binary"]["actives"][actives]["name"]
             name = name[name.index(".") + 1:len(name)]
             all_profit[name]["binary"] = (
-                100.0 -
+                100 -
                 init_info["result"]["binary"]["actives"][actives]["option"]["profit"][
-                    "commission"]) / 100.0
+                    "commission"])
         return all_profit
 
     # ----------------------------------------
@@ -422,7 +437,6 @@ class IQ_Option:
         return self.api.profile.balance"""
 
     def get_balance(self):
-
         balances_raw = self.get_balances()
         for balance in balances_raw["msg"]:
             if balance["id"] == global_value.balance_id:
@@ -511,22 +525,34 @@ class IQ_Option:
 
     def get_candles(self, ACTIVES, interval, count, endtime):
         self.api.candles.candles_data = None
+        
+        if ACTIVES not in OP_code.ACTIVES:
+            print('Asset {} not found in constants'.format(ACTIVES))
+            return None
+        
         while True:
             try:
-                if ACTIVES not in OP_code.ACTIVES:
-                    print('Asset {} not found on consts'.format(ACTIVES))
-                    break
-                self.api.getcandles(
-                    OP_code.ACTIVES[ACTIVES], interval, count, endtime)
-                while self.check_connect and self.api.candles.candles_data == None:
-                    pass
-                if self.api.candles.candles_data != None:
-                    break
-            except:
-                logging.error('**error** get_candles need reconnect')
+                self.api.getcandles(OP_code.ACTIVES[ACTIVES], interval, count, endtime)
+                
+                # Adiciona um pequeno atraso para evitar busy-waiting
+                start_time = time.time()
+                while self.check_connect() and self.api.candles.candles_data is None:
+                    if time.time() - start_time > 10:  # Tempo limite de 10 segundos
+                        raise TimeoutError('Timeout while waiting for candles data')
+                    time.sleep(0.1)
+                    
+                if self.api.candles.candles_data is not None:
+                    return self.api.candles.candles_data
+                    
+            except TimeoutError as te:
+                logging.error(te)
                 self.connect()
+            except Exception as e:
+                logging.error('**error** get_candles need reconnect: {}'.format(e))
+                self.connect()
+            
+            time.sleep(1)  # Aguarde um segundo antes de tentar novamente
 
-        return self.api.candles.candles_data
 
     #######################################################
     # ______________________________________________________
@@ -776,14 +802,11 @@ class IQ_Option:
         # Function only work with Options!
 
     def check_win_v4(self, id_number):
-        while True:
-            try:
-                if self.api.socket_option_closed[id_number] != None:
-                    break
-            except:
-                pass
-        x = self.api.socket_option_closed[id_number]
-        return x['msg']['win'], (0 if x['msg']['win'] == 'equal' else float(x['msg']['sum']) * -1 if x['msg']['win'] == 'loose' else float(x['msg']['win_amount']) - float(x['msg']['sum']))
+        try:
+            x = self.api.socket_option_closed[id_number]
+            return x['msg']['win'], (0 if x['msg']['win'] == 'equal' else float(x['msg']['sum']) * -1 if x['msg']['win'] == 'loose' else float(x['msg']['win_amount']) - float(x['msg']['sum']))
+        except:
+            return False, None
 
     def check_win_v3(self, id_number):
         while True:
@@ -923,8 +946,8 @@ class IQ_Option:
                 id = self.api.buy_multi_option[req_id]["id"]
             except:
                 pass
-            if time.time() - start_t >= 5:
-                logging.error('**warning** buy late 5 sec')
+            if time.time() - start_t >= 20:
+                logging.error('**warning** buy late 20 sec')
                 return False, None
 
         return self.api.result, self.api.buy_multi_option[req_id]["id"]
@@ -953,7 +976,7 @@ class IQ_Option:
                 logging.error(
                     '**warning** get_digital_underlying_list_data late 30 sec')
                 return None
-
+            time.sleep(0.1) 
         return self.api.underlying_list_data
 
     def get_strike_list(self, ACTIVES, duration):
@@ -1210,9 +1233,11 @@ class IQ_Option:
     def check_win_digital_v2(self, buy_order_id):
 
         while self.get_async_order(buy_order_id)["position-changed"] == {}:
-            pass
+            time.sleep(0.01)
+
         order_data = self.get_async_order(
             buy_order_id)["position-changed"]["msg"]
+        
         if order_data != None:
             if order_data["status"] == "closed":
                 if order_data["close_reason"] == "expired":
@@ -1560,14 +1585,15 @@ class IQ_Option:
 
         self.api.unsubscribe_digital_price_splitter(asset_id)
 
-        return self.api.digital_payout if self.api.digital_payout else 0
+        return min(self.api.digital_payout, 92) if self.api.digital_payout else 75
 
     def logout(self):
         self.api.logout()
 
     def buy_digital_spot_v2(self, active, amount, action, duration):
         action = action.lower()
-
+        amount = round(amount, 2)
+        
         if action == 'put':
             action = 'P'
         elif action == 'call':
@@ -1591,20 +1617,38 @@ class IQ_Option:
 
             exp = time.mktime(now_date.timetuple())
 
-        date_formated = str(datetime.utcfromtimestamp(exp).strftime("%Y%m%d%H%M"))
+        date_formated = str(datetime.fromtimestamp(exp, tz=timezone.utc).strftime("%Y%m%d%H%M"))
         active_id = str(OP_code.ACTIVES[active])
         instrument_id = "do" + active_id + "A" + \
             date_formated[:8] + "D" + date_formated[8:] + \
             "00T" + str(duration) + "M" + action + "SPT"
         logger = logging.getLogger(__name__)
         logger.info(instrument_id)
+
+        if not self.check_connect():
+            logger.error("WebSocket connection lost. Reconnecting...")
+            if not self.connect():
+                logger.error("Failed to reconnect. Exiting buy process.")
+                return False, None
+
         request_id = self.api.place_digital_option_v2(instrument_id, active_id, amount)
 
+        start_time = time.time()
+        timeout = 15  # seconds
         while self.api.digital_option_placed_id.get(request_id) is None:
-            pass
+            if time.time() - start_time > timeout:
+                logger.error("Timeout while waiting for digital option placement.")
+                return False, None
+            time.sleep(0.01)
 
         digital_order_id = self.api.digital_option_placed_id.get(request_id)
+        if digital_order_id is None:
+            logger.error(f"No response for request ID {request_id}.")
+            return False, None
         if isinstance(digital_order_id, int):
             return True, digital_order_id
         else:
+            logger.error(f"Unexpected response format: {digital_order_id}")
             return False, digital_order_id
+
+   
