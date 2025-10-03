@@ -518,10 +518,12 @@ class IQ_Option:
                     break
                 self.api.getcandles(
                     OP_code.ACTIVES[ACTIVES], interval, count, endtime)
-                while self.check_connect and self.api.candles.candles_data == None:
+                while self.check_connect() and self.api.candles.candles_data == None:
                     pass
                 if self.api.candles.candles_data != None:
                     break
+                elif self.check_connect() is False:
+                    raise Exception()
             except:
                 logging.error('**error** get_candles need reconnect')
                 self.connect()
