@@ -99,7 +99,7 @@ class WebsocketClient(object):
                 del obj[k]
                 break
 
-    def on_message(self, message):  # pylint: disable=unused-argument
+    def on_message(self, wss, message):  # pylint: disable=unused-argument
         """Method to process websocket messages."""
         global_value.ssl_Mutual_exclusion = True
         logger = logging.getLogger(__name__)
@@ -183,7 +183,7 @@ class WebsocketClient(object):
         global_value.check_websocket_if_connect = 1
 
     @staticmethod
-    def on_close(wss):  # pylint: disable=unused-argument
+    def on_close(wss, close_status_code, close_msg):  # pylint: disable=unused-argument
         """Method to process websocket close."""
         logger = logging.getLogger(__name__)
         logger.debug("Websocket connection closed.")
